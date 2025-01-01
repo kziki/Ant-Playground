@@ -1,0 +1,252 @@
+[gd_scene load_steps=8 format=3 uid="uid://bsqnwlgseytya"]
+
+[ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://theme.tres" id="1_p66qh"]
+[ext_resource type="Script" uid="uid://oxxt34r7spnd" path="res://colour_state_edit_main.gd" id="2_ecw8u"]
+[ext_resource type="Script" uid="uid://e7p2n8vjytpk" path="res://SmoothScroll-5aba7cfe17f49b75987c65abab0d7b14bfc42603/addons/SmoothScroll/SmoothScrollContainer.gd" id="3_685p6"]
+[ext_resource type="Script" uid="uid://yt40awsagswl" path="res://SmoothScroll-5aba7cfe17f49b75987c65abab0d7b14bfc42603/addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="4_q56rk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ecw8u"]
+bg_color = Color(0.0646965, 0.0646965, 0.0646965, 1)
+
+[sub_resource type="Resource" id="Resource_4jwab"]
+script = ExtResource("4_q56rk")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_agqk2"]
+script = ExtResource("4_q56rk")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[node name="colour_state_edit_main" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_p66qh")
+script = ExtResource("2_ecw8u")
+
+[node name="bg" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="scroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="vbox" type="VBoxContainer" parent="scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="field_size" type="Control" parent="scroll/vbox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="hbox" type="HBoxContainer" parent="scroll/vbox/field_size"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="label" type="Label" parent="scroll/vbox/field_size/hbox"]
+layout_mode = 2
+text = "Field size - "
+
+[node name="x" type="SpinBox" parent="scroll/vbox/field_size/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 50.0
+max_value = 2000.0
+step = 50.0
+value = 500.0
+rounded = true
+prefix = "x:"
+select_all_on_focus = true
+
+[node name="y" type="SpinBox" parent="scroll/vbox/field_size/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 50.0
+max_value = 2000.0
+step = 50.0
+value = 500.0
+rounded = true
+prefix = "y:"
+select_all_on_focus = true
+
+[node name="ant_states" type="Control" parent="scroll/vbox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="hbox" type="HBoxContainer" parent="scroll/vbox/ant_states"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="label" type="Label" parent="scroll/vbox/ant_states/hbox"]
+layout_mode = 2
+text = "Ant states - "
+
+[node name="amt_s" type="SpinBox" parent="scroll/vbox/ant_states/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 2.0
+select_all_on_focus = true
+
+[node name="colours" type="Control" parent="scroll/vbox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="hbox" type="HBoxContainer" parent="scroll/vbox/colours"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="label" type="Label" parent="scroll/vbox/colours/hbox"]
+layout_mode = 2
+text = "Colours ---- "
+
+[node name="amt_c" type="SpinBox" parent="scroll/vbox/colours/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 2.0
+select_all_on_focus = true
+
+[node name="rand" type="Control" parent="scroll/vbox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="hbox" type="HBoxContainer" parent="scroll/vbox/rand"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="scroll/vbox/rand/hbox"]
+layout_mode = 2
+text = "Randomize ---"
+
+[node name="to_all" type="Button" parent="scroll/vbox/rand/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "To all"
+
+[node name="to_states" type="Button" parent="scroll/vbox/rand/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "To states"
+
+[node name="to_colour" type="Button" parent="scroll/vbox/rand/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "To colour"
+
+[node name="rotation" type="Button" parent="scroll/vbox/rand/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation"
+
+[node name="colours" type="Button" parent="scroll/vbox/rand/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Colours"
+
+[node name="edit_dict" type="Control" parent="scroll/vbox"]
+custom_minimum_size = Vector2(0, 320)
+layout_mode = 2
+
+[node name="bg" type="Panel" parent="scroll/vbox/edit_dict"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ecw8u")
+
+[node name="scroll_cont" type="ScrollContainer" parent="scroll/vbox/edit_dict"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_685p6")
+wheel_scroll_damper = SubResource("Resource_4jwab")
+dragging_scroll_damper = SubResource("Resource_agqk2")
+metadata/_custom_type_script = ExtResource("3_685p6")
+metadata/_edit_use_anchors_ = true
+
+[node name="main" type="Control" parent="scroll/vbox/edit_dict/scroll_cont"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="labels" type="Control" parent="scroll/vbox/edit_dict/scroll_cont/main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="edits" type="Control" parent="scroll/vbox/edit_dict/scroll_cont/main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="colours" type="Control" parent="scroll/vbox/edit_dict/scroll_cont/main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[connection signal="value_changed" from="scroll/vbox/field_size/hbox/x" to="." method="_on_x_value_changed"]
+[connection signal="value_changed" from="scroll/vbox/field_size/hbox/y" to="." method="_on_y_value_changed"]
+[connection signal="value_changed" from="scroll/vbox/ant_states/hbox/amt_s" to="." method="_on_amt_s_value_changed"]
+[connection signal="value_changed" from="scroll/vbox/colours/hbox/amt_c" to="." method="_on_amt_c_value_changed"]
+[connection signal="pressed" from="scroll/vbox/rand/hbox/to_all" to="." method="_on_to_all_pressed"]
+[connection signal="pressed" from="scroll/vbox/rand/hbox/to_states" to="." method="_on_to_states_pressed"]
+[connection signal="pressed" from="scroll/vbox/rand/hbox/to_colour" to="." method="_on_to_colour_pressed"]
+[connection signal="pressed" from="scroll/vbox/rand/hbox/rotation" to="." method="_on_rotation_pressed"]
