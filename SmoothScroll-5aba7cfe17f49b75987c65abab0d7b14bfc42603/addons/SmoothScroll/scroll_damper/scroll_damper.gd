@@ -18,19 +18,19 @@ var _attract_factor := 400.0:
 
 
 # Abstract method
-func _calculate_velocity_by_time(time: float) -> float:
+func _calculate_velocity_by_time(_time: float) -> float:
 	return 0.0
 
 # Abstract method
-func _calculate_time_by_velocity(velocity: float) -> float:
+func _calculate_time_by_velocity(_velocity: float) -> float:
 	return 0.0
 
 # Abstract method
-func _calculate_offset_by_time(time: float) -> float:
+func _calculate_offset_by_time(_time: float) -> float:
 	return 0.0
 
 # Abstract method
-func _calculate_time_by_offset(offset: float) -> float:
+func _calculate_time_by_offset(_offset: float) -> float:
 	return 0.0
 
 

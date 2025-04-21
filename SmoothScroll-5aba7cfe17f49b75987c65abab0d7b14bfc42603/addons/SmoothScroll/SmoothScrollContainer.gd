@@ -623,7 +623,7 @@ func get_spare_size() -> Vector2:
 	return Vector2(get_spare_size_x(), get_spare_size_y())
 
 # Calculate the size x difference between this container and child node
-func get_child_size_x_diff(child: Control, clamp: bool) -> float:
+func get_child_size_x_diff(child: Control, _clamp: bool) -> float:
 	var child_size_x = child.size.x * child.scale.x
 	# Falsify the size of the child node to avoid errors 
 	# when its size is smaller than this container 's
@@ -632,7 +632,7 @@ func get_child_size_x_diff(child: Control, clamp: bool) -> float:
 	return child_size_x - get_spare_size_x()
 
 # Calculate the size y difference between this container and child node
-func get_child_size_y_diff(child: Control, clamp: bool) -> float:
+func get_child_size_y_diff(child: Control, _clamp: bool) -> float:
 	var child_size_y = child.size.y * child.scale.y
 	# Falsify the size of the child node to avoid errors 
 	# when its size is smaller than this container 's
@@ -648,7 +648,7 @@ func get_child_size_diff(child: Control, clamp_x: bool, clamp_y: bool) -> Vector
 	)
 
 # Calculate distance to left
-func get_child_left_dist(child_pos_x: float, child_size_diff_x: float) -> float:
+func get_child_left_dist(child_pos_x: float, _child_size_diff_x: float) -> float:
 	return child_pos_x
 
 # Calculate distance to right
@@ -656,7 +656,7 @@ func get_child_right_dist(child_pos_x: float, child_size_diff_x: float) -> float
 	return child_pos_x + child_size_diff_x
 
 # Calculate distance to top
-func get_child_top_dist(child_pos_y: float, child_size_diff_y: float) -> float:
+func get_child_top_dist(child_pos_y: float, _child_size_diff_y: float) -> float:
 	return child_pos_y
 
 # Calculate distance to bottom
@@ -689,8 +689,8 @@ func kill_scroll_to_tweens() -> void:
 var debug_gradient := Gradient.new()
 
 func setup_debug_drawing() -> void:
-	debug_gradient.set_color(0.0, Color.GREEN)
-	debug_gradient.set_color(1.0, Color.RED)
+	debug_gradient.set_color(0, Color.GREEN)
+	debug_gradient.set_color(1, Color.RED)
 
 func draw_debug() -> void:
 	# Calculate the size difference between this container and content_node
