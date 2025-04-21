@@ -4,13 +4,13 @@
 [ext_resource type="PackedScene" uid="uid://bcp7plm6w02yv" path="res://state_number.tscn" id="1_yewj2"]
 [ext_resource type="Script" uid="uid://dvjlh6nleunjp" path="res://colour_picker.gd" id="2_fq6my"]
 
-[node name="colour_picker" type="ColorPickerButton"]
+[node name="ColourPicker" type="ColorPickerButton"]
 offset_right = 16.0
 offset_bottom = 16.0
 theme = ExtResource("1_o3r31")
 script = ExtResource("2_fq6my")
 
-[node name="c_number" parent="." instance=ExtResource("1_yewj2")]
+[node name="ColourNumber" parent="." instance=ExtResource("1_yewj2")]
 layout_mode = 0
 offset_left = -36.0
 offset_top = -2.0

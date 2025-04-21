@@ -1,9 +1,13 @@
 extends MultiMeshInstance2D
 
+# might replace with method that uses godot renderingserver to avoid high multimesh memory usage if possible
+# most of the memory usage comes from the float32 buffer array in each multimesh
+
 func _ready():
 	pass
 
-func init_multimesh(colour = Color.BLACK):
+
+func init_multimesh(colour = Color.BLACK): 
 	multimesh.instance_count = g.sq_chunksize * g.sq_chunksize
 	multimesh.visible_instance_count = 0
 	for r in g.sq_chunksize:

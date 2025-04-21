@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://gwikgpip264u" path="res://ui/ba18.png" id="5_8hx45"]
 [ext_resource type="Texture2D" uid="uid://54m4i7wrug84" path="res://ui/le18.png" id="6_1gsgk"]
 
-[node name="colour_state_edit" type="Control"]
+[node name="ColourStateEdit" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 60.0
@@ -18,7 +18,7 @@ theme = ExtResource("1_elk5m")
 script = ExtResource("2_7cm2r")
 metadata/_edit_use_anchors_ = true
 
-[node name="colour" type="OptionButton" parent="."]
+[node name="Colour" type="OptionButton" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.333333
@@ -26,7 +26,7 @@ anchor_bottom = 1.0
 text_overrun_behavior = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="state" type="OptionButton" parent="."]
+[node name="State" type="OptionButton" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.333333
@@ -34,7 +34,7 @@ anchor_right = 0.666667
 anchor_bottom = 1.0
 metadata/_edit_use_anchors_ = true
 
-[node name="rotation" type="OptionButton" parent="."]
+[node name="Rotation" type="OptionButton" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.666667
@@ -61,6 +61,6 @@ popup/item_3/icon = ExtResource("6_1gsgk")
 popup/item_3/id = 3
 metadata/_edit_use_anchors_ = true
 
-[connection signal="item_selected" from="colour" to="." method="_on_colour_item_selected"]
-[connection signal="item_selected" from="state" to="." method="_on_state_item_selected"]
-[connection signal="item_selected" from="rotation" to="." method="_on_rotation_item_selected"]
+[connection signal="item_selected" from="Colour" to="." method="_on_colour_item_selected"]
+[connection signal="item_selected" from="State" to="." method="_on_state_item_selected"]
+[connection signal="item_selected" from="Rotation" to="." method="_on_rotation_item_selected"]

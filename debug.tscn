@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://wqcabf51pljh"]
+
+[ext_resource type="Script" uid="uid://32j5l1rbjujb" path="res://debug.gd" id="1_1uwqr"]
+[ext_resource type="Texture2D" uid="uid://c35s8ly6267ga" path="res://sq/square.png" id="2_lvjdj"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_lvjdj"]
+_surfaces = [{
+"2d": true,
+"aabb": AABB(-8, -8, 0, 16, 16, 0),
+"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0),
+"format": 34393296913,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 2, 0, 2, 0, 1, 0, 0, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 193, 0, 0, 0, 193, 0, 0, 0, 193, 0, 0, 0, 65, 0, 0, 0, 65, 0, 0, 0, 65, 0, 0, 0, 65, 0, 0, 0, 193)
+}]
+
+[sub_resource type="MultiMesh" id="MultiMesh_txpwr"]
+mesh = SubResource("ArrayMesh_lvjdj")
+
+[node name="debug" type="Node2D"]
+script = ExtResource("1_1uwqr")
+
+[node name="MultiMeshInstance2D" type="MultiMeshInstance2D" parent="."]
+multimesh = SubResource("MultiMesh_txpwr")
+texture = ExtResource("2_lvjdj")

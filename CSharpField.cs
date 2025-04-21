@@ -11,7 +11,7 @@ public partial class CSharpField : Node
 
 	int[,] colours = { { } };
 
-    private uint _a = 0;
+	private uint _a = 0;
 	private ulong _b;
 	public override void _Ready(){
 		//var _c = Time.GetTicksUsec();
@@ -19,8 +19,8 @@ public partial class CSharpField : Node
 		
 		for (var i=0; i < 1000000; i++){
 			_a = GD.Randi();
-            //GD.Print(GD.Randi());
-        }
+			//GD.Print(GD.Randi());
+			}
 		
 		GD.Print(Time.GetTicksUsec() - _b);
 	}

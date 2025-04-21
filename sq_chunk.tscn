@@ -20,6 +20,6 @@ _surfaces = [{
 use_colors = true
 mesh = SubResource("ArrayMesh_o7ubl")
 
-[node name="sq_chunk" type="MultiMeshInstance2D"]
+[node name="SqChunk" type="MultiMeshInstance2D"]
 multimesh = SubResource("MultiMesh_n2b1n")
 script = ExtResource("1_gjixx")
