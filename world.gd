@@ -14,7 +14,7 @@ var sq_move:Array = [
 # UI
 var play:bool = true
 var turns:int = 0
-var wrap_around:bool = false
+var wrap_around:bool = true
 var ant_states:int = 1
 var time_state:int = 0
 var prev_state:int = 1
@@ -53,8 +53,8 @@ var ants = {
 func _ready():
 	RenderingServer.set_default_clear_color(colours[0])
 	
-	$Canvas/HSplit/RuleEdit/Scroll/VBox/FieldSize/HBox/X.step = g.sq_chunksize
-	$Canvas/HSplit/RuleEdit/Scroll/VBox/FieldSize/HBox/Y.step = g.sq_chunksize
+	$Canvas/HSplit/RuleEdit/TabCont/Field/Field/VBox/FieldSize/HBox/X.step = g.sq_chunksize
+	$Canvas/HSplit/RuleEdit/TabCont/Field/Field/VBox/FieldSize/HBox/Y.step = g.sq_chunksize
 	
 	g.world = self
 	set_physics_process(false)
@@ -77,14 +77,10 @@ func _ready():
 	$Camera.position = (Vector2(g.field_x,g.field_y)*16)/2
 	ants[0][0] = Vector2i(g.field_x,g.field_y)/2
 	
+	for ant in ants:
+		$Canvas/HSplit/RuleEdit.add_ant(ant, "ant "+str(ant))
+	
 	print($Canvas/HSplit/RuleEdit.get_colours())
-
-
-func get_default_multimesh(colour = Color.BLACK):
-	var temp = sq_chunk.instantiate()
-	temp.init_multimesh(colour)
-	default_multimesh = temp.multimesh
-	temp.queue_free()
 
 
 func resize():
@@ -105,6 +101,13 @@ func _physics_process(_delta):
 	$Canvas/HSplit/OnScreen/Info.text = str(int(turns - pq)) + "\n" + str(int(queue))
 	pq = turns
 	if queue > (turns - pq): queue = turns - pq
+
+
+func get_default_multimesh(colour = Color.BLACK):
+	var temp = sq_chunk.instantiate()
+	temp.init_multimesh(colour)
+	default_multimesh = temp.multimesh
+	temp.queue_free()
 
 
 func ant_ticks():
@@ -221,6 +224,7 @@ func _on_reverse_pressed():
 	if !ant_thread.is_started(): 
 		ant_thread.start(ant_ticks)
 
+
 func reverse_rules() -> void:
 	pass
 	#TODO
@@ -260,7 +264,7 @@ func update_field():
 	chunks.clear()
 	states.clear()
 	
-	for c in field.get_children():
+	for c in field.get_node("Chunks").get_children():
 		c.free()
 	
 	for r in int(g.field_y / g.sq_chunksize): 
@@ -297,7 +301,6 @@ func get_screenshot_rect() -> Rect2i:
 
 func _on_screenshot_pressed():
 	var rect = get_screenshot_rect()
-	
 	var image = Image.create_empty(rect.size.x*g.sq_chunksize,rect.size.y*g.sq_chunksize,false,Image.FORMAT_RGB8)
 	
 	for y in rect.size.y*g.sq_chunksize:
@@ -316,4 +319,9 @@ func new_chunk(pos:Vector2i):
 	chunks[pos] = new
 	states[pos] = PackedByteArray()
 	states[pos].resize(g.sq_chunksize*g.sq_chunksize)
-	field.add_child.call_deferred(new)
+	field.get_node("Chunks").add_child.call_deferred(new)
+
+
+func _on_h_split_dragged(offset):
+	$Canvas/HSplit/RuleEdit/TabCont/Ants/Ants/VBox.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 18
+	$Canvas/HSplit/RuleEdit/TabCont/Ants/Ants/Select/HBox.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 14

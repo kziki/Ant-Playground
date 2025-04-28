@@ -10,10 +10,11 @@ config_version=5
 
 [application]
 
-config/name="langton's ant"
+config/name="Turmite Playground"
+config/description="Langton's Ant / Turmite playground."
 run/main_scene="res://world.tscn"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://dmtolp5cql5xi"
 
 [autoload]
 
@@ -34,9 +35,18 @@ window/stretch/aspect="expand"
 
 project/assembly_name="langton-s ant"
 
+[gui]
+
+theme/custom="uid://bx3jvtk8472ag"
+
 [physics]
 
 2d/run_on_separate_thread=true
 common/physics_ticks_per_second=1
 2d/solver/solver_iterations=1
 common/enable_object_picking=false
+
+[rendering]
+
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true

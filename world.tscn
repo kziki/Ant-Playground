@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://ba7413b0niv7p"]
+[gd_scene load_steps=22 format=3 uid="uid://ba7413b0niv7p"]
 
 [ext_resource type="Script" uid="uid://bantfaxh1o1hc" path="res://world.gd" id="1_f3sb7"]
 [ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://theme.tres" id="2_fj7yv"]
@@ -15,6 +15,10 @@
 [ext_resource type="Texture2D" uid="uid://bs8erks0flsvk" path="res://ui/clear.png" id="11_2o6r5"]
 [ext_resource type="Texture2D" uid="uid://cg36jnkom5ccw" path="res://ui/camera.png" id="12_hiqwa"]
 [ext_resource type="Script" uid="uid://e4g3ecm5xd1w" path="res://CSharpField.cs" id="14_70uel"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hiqwa"]
+width = 2
+height = 64
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ioo17"]
 
@@ -146,6 +150,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_fj7yv")
+theme_override_constants/minimum_grab_thickness = 16
+theme_override_icons/grabber = SubResource("NoiseTexture2D_hiqwa")
 
 [node name="RuleEdit" parent="Canvas/HSplit" instance=ExtResource("3_dwbse")]
 layout_mode = 2
@@ -299,9 +305,12 @@ z_index = 10
 position = Vector2(856, 104)
 texture = ExtResource("4_aqk2v")
 
+[node name="Chunks" type="Node2D" parent="Field"]
+
 [node name="CsNode" type="Node" parent="."]
 script = ExtResource("14_70uel")
 
+[connection signal="dragged" from="Canvas/HSplit" to="." method="_on_h_split_dragged"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/HBox/Reverse" to="." method="_on_reverse_pressed"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/HBox/Stop" to="." method="_on_stop_pressed"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/HBox/Forward" to="." method="_on_forward_pressed"]

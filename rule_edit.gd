@@ -8,26 +8,38 @@ const GRID_SPACE = Vector2(64,24)
 var state_edits:Dictionary = {}
 var randomizing:bool = false
 
-@onready var main_labels = $Scroll/VBox/EditDict/ScrollCont/Main/Labels
-@onready var main_edits = $Scroll/VBox/EditDict/ScrollCont/Main/Edits
-@onready var main_colours = $Scroll/VBox/EditDict/ScrollCont/Main/Colours
+@onready var main_labels = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main/Labels
+@onready var main_edits = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main/Edits
+@onready var main_colours = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main/Colours
 
 func _ready():
+	get_tree().get_root().size_changed.connect(resize)
+	
 	g.edit_main = self
 	main_labels.mouse_filter = MOUSE_FILTER_IGNORE
 	main_edits.mouse_filter = MOUSE_FILTER_IGNORE
 	main_colours.mouse_filter = MOUSE_FILTER_IGNORE
 	init_grid()
 
+func resize():
+	pass
+	#$TabCont/Ants/Ants/VBox.position = Vector2i(8,40)
+	#$TabCont/Ants/Ants/VBox.size = Vector2(size.x - 16,size.y - 16)
+	#$TabCont/Ants/Ants/Select/HBox.size = Vector2(size.x - 16,24)
+
+func add_ant(x,ant_name):
+	var index:int = $TabCont/Ants/Ants/Select/HBox/AntChoose.item_count
+	$TabCont/Ants/Ants/Select/HBox/AntChoose.add_item("["+str(x)+"] - " + ant_name)
+
 
 func clear_grid():
-	for c in $Scroll/VBox/EditDict/ScrollCont/Main.get_children():
+	for c in $TabCont/Field/Field/VBox/RuleEdit/ScrollCont/Main.get_children():
 		c.queue_free()
 	state_edits.clear()
 
 
 func init_grid():
-	$Scroll/VBox/EditDict/ScrollCont/Main.custom_minimum_size = Vector2((g.colour_amt+1)*68,(g.state_amt+1)*28) + Vector2(32,32)
+	$TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main.custom_minimum_size = Vector2((g.colour_amt+1)*68,(g.state_amt+1)*28) + Vector2(32,32)
 	for c in g.colour_amt:
 		for s in g.state_amt:
 			new_edit(Vector2i(c,s))
@@ -40,7 +52,7 @@ func init_grid():
 	
 	for c in g.colour_amt:
 		var new = colour_picker.instantiate()
-		new.position = Vector2(c*GRID_SPACE.x+(GRID_SPACE.x/1.1),8)
+		new.position = Vector2(c * GRID_SPACE.x + (GRID_SPACE.x / 1.1), 8)
 		if c==0:new.color = Color.BLACK
 		else: new.color = Color.WHITE
 		new.get_child(0).text = str(int(c))
@@ -94,7 +106,7 @@ func update_grid(x=null,y=null):
 			for s in -y:
 				main_labels.get_child(g.state_amt-y-s-1).queue_free()
 			
-	$Scroll/VBox/EditDict/ScrollCont/Main.custom_minimum_size = Vector2((g.colour_amt)*GRID_SPACE.x,(g.state_amt+1)*GRID_SPACE.y) + GRID_SPACE
+	$TabCont/Field/Field/VBox/RuleEdit/ScrollCont/Main.custom_minimum_size = Vector2((g.colour_amt)*GRID_SPACE.x,(g.state_amt+1)*GRID_SPACE.y) + GRID_SPACE
 
 
 func new_edit(pos:Vector2i):
@@ -162,12 +174,12 @@ func randomize_colours():
 
 
 func _on_x_value_changed(value):
-	g.x = value
+	g.field_x = value
 	g.world.update_field()
 
 
 func _on_y_value_changed(value):
-	g.y = value
+	g.field_y = value
 	g.world.update_field()
 
 
@@ -191,17 +203,31 @@ func get_colours():
 
 
 func disable_elements():
-	$Scroll/VBox/FieldSize/HBox/X.editable = false
-	$Scroll/VBox/FieldSize/HBox/Y.editable = false
-	$Scroll/VBox/Colours/HBox/Colours.editable = false
-	$Scroll/VBox/AntStates/HBox/AntStates.editable = false
+	$DisableControls.show()
+	
+	$TabCont/Field/Field/VBox/FieldSize/HBox/X.editable = false
+	$TabCont/Field/Field/VBox/FieldSize/HBox/Y.editable = false
+	$TabCont/Field/Field/VBox/Colours/HBox/Colours.editable = false
+	$TabCont/Field/Field/VBox/AntStates/HBox/AntStates.editable = false
+	$TabCont/Field/Field/VBox/Rand/VBox/HBox/ToAll.disabled = true
+	$TabCont/Field/Field/VBox/Rand/VBox/HBox/ToStates.disabled = true
+	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/ToColour.disabled = true
+	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/Rotation.disabled = true
+	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/Colours.disabled = true
 
 
 func enable_elements():
-	$Scroll/VBox/FieldSize/HBox/X.editable = true
-	$Scroll/VBox/FieldSize/HBox/Y.editable = true
-	$Scroll/VBox/Colours/HBox/Colours.editable = true
-	$Scroll/VBox/AntStates/HBox/AntStates.editable = true
+	$DisableControls.hide()
+	
+	$TabCont/Field/Field/VBox/FieldSize/HBox/X.editable = true
+	$TabCont/Field/Field/VBox/FieldSize/HBox/Y.editable = true
+	$TabCont/Field/Field/VBox/Colours/HBox/Colours.editable = true
+	$TabCont/Field/Field/VBox/AntStates/HBox/AntStates.editable = true
+	$TabCont/Field/Field/VBox/Rand/VBox/HBox/ToAll.disabled = false
+	$TabCont/Field/Field/VBox/Rand/VBox/HBox/ToStates.disabled = false
+	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/ToColour.disabled = false
+	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/Rotation.disabled = false
+	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/Colours.disabled = false
 
 
 func _on_to_all_pressed():
