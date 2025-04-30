@@ -2,16 +2,17 @@ extends Node
 
 var field_x:int = 500
 var field_y:int = 500
-var state_amt:int = 2
+var state_amt:Array = []
 var colour_amt:int = 2
 var randomizing:bool = false
 var pppp:float #pixels per project pixel
 var ipppp:float #inverse pppp
 var int_scaling:float #pppp scaling rouded to nearest power of 2 or 0.5/0.25/0.125 etc
 var sq_chunksize:int = 50
+var selected_ant:int = 0
 
 # instances
-var edit_main
+var rule_edit
 var world
 
 

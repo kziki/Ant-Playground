@@ -11,40 +11,40 @@ var randomizing:bool = false
 @onready var main_labels = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main/Labels
 @onready var main_edits = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main/Edits
 @onready var main_colours = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main/Colours
+@onready var main = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main
+@onready var ant_select = $TabCont/Ants/Select/HBox/AntChoose
 
 func _ready():
-	get_tree().get_root().size_changed.connect(resize)
 	
-	g.edit_main = self
+	g.rule_edit = self
 	main_labels.mouse_filter = MOUSE_FILTER_IGNORE
 	main_edits.mouse_filter = MOUSE_FILTER_IGNORE
 	main_colours.mouse_filter = MOUSE_FILTER_IGNORE
-	init_grid()
-
-func resize():
-	pass
-	#$TabCont/Ants/Ants/VBox.position = Vector2i(8,40)
-	#$TabCont/Ants/Ants/VBox.size = Vector2(size.x - 16,size.y - 16)
-	#$TabCont/Ants/Ants/Select/HBox.size = Vector2(size.x - 16,24)
-
-func add_ant(x,ant_name):
-	var index:int = $TabCont/Ants/Ants/Select/HBox/AntChoose.item_count
-	$TabCont/Ants/Ants/Select/HBox/AntChoose.add_item("["+str(x)+"] - " + ant_name)
+	init_grid.call_deferred()
+	
+	$TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox/X.step = g.sq_chunksize
+	$TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox/Y.step = g.sq_chunksize
+	
+	$TabCont/Ants/Ants/VBox/Current.rule_edit = self
+	
+	select_ant.call_deferred(0)
 
 
-func clear_grid():
-	for c in $TabCont/Field/Field/VBox/RuleEdit/ScrollCont/Main.get_children():
-		c.queue_free()
-	state_edits.clear()
+func add_ant(id,ant_name):
+	$TabCont/Ants/Select/HBox/AntChoose.add_item("["+str(id)+"] - " + ant_name,id)
 
 
 func init_grid():
-	$TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main.custom_minimum_size = Vector2((g.colour_amt+1)*68,(g.state_amt+1)*28) + Vector2(32,32)
+	main.custom_minimum_size = Vector2((g.colour_amt+1)*68,(g.state_amt[g.selected_ant]+1)*28) + Vector2(32,32)
 	for c in g.colour_amt:
-		for s in g.state_amt:
-			new_edit(Vector2i(c,s))
+		for s in g.state_amt[g.selected_ant]:
+			var edit = new_edit(Vector2i(c,s))
+			var x = g.world.colour_state_rules[g.selected_ant][Vector2i(c,s)]
+			edit.set_colour(x[0])
+			edit.set_state(x[1])
+			edit.set_rotate(x[2])
 	
-	for s in g.state_amt:
+	for s in g.state_amt[g.selected_ant]:
 		var new = label_scene.instantiate()
 		new.position = Vector2(0,s*GRID_SPACE.y+32)
 		new.text = str(s)
@@ -59,13 +59,13 @@ func init_grid():
 		main_colours.add_child(new)
 
 
-func update_grid(x=null,y=null):
+func resize_grid(x=null,y=null):
 	for i in state_edits:
 		state_edits[i].reload(x,y)
 	if !x == null:
 		if x > 0: #add colours to grid
 			for c in x:
-				for s in g.state_amt:
+				for s in g.state_amt[g.selected_ant]:
 					new_edit(Vector2i(g.colour_amt-x+c,s))
 				
 				var new = colour_picker.instantiate()
@@ -81,7 +81,7 @@ func update_grid(x=null,y=null):
 			g.world.colours = get_colours()
 		else: #remove colours from grid
 			for c in -x:
-				for s in g.state_amt:
+				for s in g.state_amt[g.selected_ant]:
 					remove_edit(Vector2i(g.colour_amt+c,s))
 				main_colours.get_child(g.colour_amt-x-c-1).queue_free()
 			g.world.colours = get_colours()
@@ -89,24 +89,36 @@ func update_grid(x=null,y=null):
 		if y > 0: #add states to grid
 			for c in g.colour_amt:
 				for s in y:
-					new_edit(Vector2i(c,g.state_amt-s-1))
+					new_edit(Vector2i(c,g.state_amt[g.selected_ant]-s-1))
 			
 			for s in y:
 				var new = label_scene.instantiate()
 				
-				new.position = Vector2(0,(g.state_amt-y+s)*GRID_SPACE.y+32)
-				new.text = str(int(g.state_amt-y+s))
+				new.position = Vector2(0,(g.state_amt[g.selected_ant]-y+s)*GRID_SPACE.y+32)
+				new.text = str(int(g.state_amt[g.selected_ant]-y+s))
 				
 				main_labels.add_child(new)
 			
 		else: #remove states from grid
 			for c in g.colour_amt:
 				for s in -y:
-					remove_edit(Vector2i(c,g.state_amt+s))
+					remove_edit(Vector2i(c,g.state_amt[g.selected_ant]+s))
 			for s in -y:
-				main_labels.get_child(g.state_amt-y-s-1).queue_free()
+				main_labels.get_child(g.state_amt[g.selected_ant]-y-s-1).queue_free()
 			
-	$TabCont/Field/Field/VBox/RuleEdit/ScrollCont/Main.custom_minimum_size = Vector2((g.colour_amt)*GRID_SPACE.x,(g.state_amt+1)*GRID_SPACE.y) + GRID_SPACE
+	main.custom_minimum_size = Vector2((g.colour_amt)*GRID_SPACE.x,(g.state_amt[g.selected_ant]+1)*GRID_SPACE.y) + GRID_SPACE
+
+
+func swap_grid(id:int, old_id:int):
+	var state_difference:int = g.state_amt[id] - g.state_amt[old_id]
+	print(state_edits)
+	resize_grid(null,state_difference)
+	for c in g.colour_amt:
+		for s in g.state_amt[id]:
+			var x = g.world.colour_state_rules[g.selected_ant][Vector2i(c,s)]
+			state_edits[Vector2i(c,s)].set_colour(x[0])
+			state_edits[Vector2i(c,s)].set_state(x[1])
+			state_edits[Vector2i(c,s)].set_rotate(x[2])
 
 
 func new_edit(pos:Vector2i):
@@ -114,6 +126,8 @@ func new_edit(pos:Vector2i):
 	new.position = (Vector2(pos.x, pos.y) * GRID_SPACE) + Vector2(32, 32)
 	main_edits.add_child(new)
 	state_edits[pos] = new 
+	
+	return new
 
 
 func remove_edit(pos):
@@ -136,17 +150,17 @@ func randomize_edits():
 	randomize_rotate()
 	
 	
-	g.world.update_ant()
+	g.world.update_ant(ant_select.get_selected_id())
 
 
 func randomize_to_states():
 	g.randomizing = true
 	
 	for i in state_edits:
-		state_edits[i].get_child(1).select(randi()%g.state_amt)
+		state_edits[i].get_child(1).select(randi()%g.state_amt[g.selected_ant])
 	
 	g.randomizing = false
-	g.world.update_ant()
+	g.world.update_ant(ant_select.get_selected_id())
 
 
 func randomize_to_colours():
@@ -156,7 +170,7 @@ func randomize_to_colours():
 		state_edits[i].get_child(0).select(randi()%g.colour_amt)
 	
 	g.randomizing = false
-	g.world.update_ant()
+	g.world.update_ant(ant_select.get_selected_id())
 
 
 func randomize_rotate():
@@ -166,7 +180,7 @@ func randomize_rotate():
 		state_edits[i].get_child(2).select(randi()%4)
 	
 	g.randomizing = false
-	g.world.update_ant()
+	g.world.update_ant(ant_select.get_selected_id())
 
 
 func randomize_colours():
@@ -176,23 +190,26 @@ func randomize_colours():
 func _on_x_value_changed(value):
 	g.field_x = value
 	g.world.update_field()
+	update_field()
 
 
 func _on_y_value_changed(value):
 	g.field_y = value
 	g.world.update_field()
+	update_field()
 
 
 func _on_amt_s_value_changed(value):
-	var x = g.state_amt
-	g.state_amt = value
-	update_grid(null,value-x)
+	var x = g.state_amt[g.selected_ant]
+	g.state_amt[g.selected_ant] = value
+	resize_grid(null,value-x)
+	g.world.update_ant(g.rule_edit.ant_select.get_selected_id())
 
 
 func _on_amt_c_value_changed(value):
 	var x = g.colour_amt
 	g.colour_amt = value
-	update_grid(value-x)
+	resize_grid(value-x)
 
 
 func get_colours():
@@ -203,31 +220,11 @@ func get_colours():
 
 
 func disable_elements():
-	$DisableControls.show()
-	
-	$TabCont/Field/Field/VBox/FieldSize/HBox/X.editable = false
-	$TabCont/Field/Field/VBox/FieldSize/HBox/Y.editable = false
-	$TabCont/Field/Field/VBox/Colours/HBox/Colours.editable = false
-	$TabCont/Field/Field/VBox/AntStates/HBox/AntStates.editable = false
-	$TabCont/Field/Field/VBox/Rand/VBox/HBox/ToAll.disabled = true
-	$TabCont/Field/Field/VBox/Rand/VBox/HBox/ToStates.disabled = true
-	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/ToColour.disabled = true
-	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/Rotation.disabled = true
-	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/Colours.disabled = true
+	$TabCont/Ants/DisableControls.show()
 
 
 func enable_elements():
-	$DisableControls.hide()
-	
-	$TabCont/Field/Field/VBox/FieldSize/HBox/X.editable = true
-	$TabCont/Field/Field/VBox/FieldSize/HBox/Y.editable = true
-	$TabCont/Field/Field/VBox/Colours/HBox/Colours.editable = true
-	$TabCont/Field/Field/VBox/AntStates/HBox/AntStates.editable = true
-	$TabCont/Field/Field/VBox/Rand/VBox/HBox/ToAll.disabled = false
-	$TabCont/Field/Field/VBox/Rand/VBox/HBox/ToStates.disabled = false
-	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/ToColour.disabled = false
-	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/Rotation.disabled = false
-	$TabCont/Field/Field/VBox/Rand/VBox/HBox2/Colours.disabled = false
+	$TabCont/Ants/DisableControls.hide()
 
 
 func _on_to_all_pressed():
@@ -244,3 +241,82 @@ func _on_to_colour_pressed():
 
 func _on_rotation_pressed():
 	randomize_rotate()
+
+
+func get_selected_ant_id() -> int:
+	return $TabCont/Ants/Select/HBox/AntChoose.get_selected_id()
+
+
+func _on_tab_cont_tab_changed(tab):
+	if tab == 0:
+		$TabCont/Ants/Ants/VBox/Current.set_process(false)
+	elif tab == 1:
+		$TabCont/Ants/Ants/VBox/Current.set_process(true)
+
+
+func _on_ant_choose_item_selected(index):
+	select_ant(index)
+
+
+func select_ant(id):
+	var old_id = g.selected_ant
+	var ant = g.world.ants[id]
+	g.selected_ant = id
+	
+	$TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/X.set_value_no_signal(ant[4].x)
+	$TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/Y.set_value_no_signal(ant[4].y)
+	$TabCont/Ants/Ants/VBox/Start/VBox/Direction/Option.selected = ant[5]
+	$TabCont/Ants/Ants/VBox/Rules/VBox/States/Num.value = g.state_amt[id]
+	$TabCont/Ants/Ants/VBox/Info/VBox/Colour/ColorPickerButton.color = ant[3]
+	$TabCont/Ants/Ants/VBox/Info/VBox/Name/LineEdit.text = ant[6]
+	
+	swap_grid(id,old_id)
+	
+	#resize_grid(g.colour_amt, g.state_amt[g.selected_ant])
+
+
+func update_field():
+	print("updated field")
+	$TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/X.max_value = g.field_x - 1
+	$TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/Y.max_value = g.field_y - 1
+	$TabCont/Ants/Ants/VBox/Current/VBox/Position/HBox/X.max_value = g.field_x - 1
+	$TabCont/Ants/Ants/VBox/Current/VBox/Position/HBox/Y.max_value = g.field_y - 1
+	
+	var ant = g.world.ants[$TabCont/Ants/Select/HBox/AntChoose.get_selected_id()]
+	ant[4].x = min(g.field_x-1, ant[4].x)
+	ant[4].y = min(g.field_y-1, ant[4].y)
+
+
+func _on_new_ant_pressed():
+	var x = g.world.new_ant()
+	ant_select.select(x)
+	select_ant(x)
+	g.world.update_ant(g.rule_edit.ant_select.get_selected_id())
+
+
+func _on_start_x_value_changed(value):
+	g.world.ants[g.selected_ant][4].x = value
+	g.world.reset_ant(g.selected_ant)
+
+
+func _on_start_y_value_changed(value):
+	g.world.ants[g.selected_ant][4].y = value
+	g.world.reset_ant(g.selected_ant)
+
+
+func _on_start_direction_changed(direction):
+	g.world.ants[g.selected_ant][5] = direction
+	g.world.reset_ant(g.selected_ant)
+
+
+func _on_color_picker_button_color_changed(color):
+	g.world.set_ant_colour(g.selected_ant, color)
+
+
+func _on_line_edit_text_submitted(new_text):
+	g.world.ants[g.selected_ant][6] = new_text
+	$TabCont/Ants/Select/HBox/AntChoose.set_item_text(g.selected_ant,"["+str(g.selected_ant)+"] - "+new_text)
+
+
+func _on_show_ant_toggled(toggled_on):
+	g.world.set_ant_visibility(g.selected_ant,toggled_on)

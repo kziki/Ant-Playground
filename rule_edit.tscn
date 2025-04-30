@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://oxxt34r7spnd" path="res://rule_edit.gd" id="2_ecw8u"]
 [ext_resource type="Script" uid="uid://e7p2n8vjytpk" path="res://SmoothScroll-5aba7cfe17f49b75987c65abab0d7b14bfc42603/addons/SmoothScroll/SmoothScrollContainer.gd" id="3_685p6"]
 [ext_resource type="Script" uid="uid://yt40awsagswl" path="res://SmoothScroll-5aba7cfe17f49b75987c65abab0d7b14bfc42603/addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="4_q56rk"]
-[ext_resource type="FontFile" uid="uid://bixh6redaff4e" path="res://font/JetBrainsMono[wght].ttf" id="5_7qf4u"]
+[ext_resource type="LabelSettings" uid="uid://cywgm7vrsj63d" path="res://top_label.tres" id="5_7qf4u"]
+[ext_resource type="Script" uid="uid://dxaknlbcfpvvn" path="res://current.gd" id="6_h3ujd"]
 
 [sub_resource type="Resource" id="Resource_h3ujd"]
 script = ExtResource("4_q56rk")
@@ -18,6 +19,12 @@ friction = 4.0
 minimum_velocity = 0.4
 rebound_strength = 7.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3a1qm"]
+bg_color = Color(0.0562916, 0.0562916, 0.0562916, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7qf4u"]
+bg_color = Color(0.10748, 0.10748, 0.10748, 1)
+
 [sub_resource type="Resource" id="Resource_3a1qm"]
 script = ExtResource("4_q56rk")
 friction = 4.0
@@ -29,18 +36,6 @@ script = ExtResource("4_q56rk")
 friction = 4.0
 minimum_velocity = 0.4
 rebound_strength = 7.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h3ujd"]
-bg_color = Color(0.259294, 0.259294, 0.259294, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3a1qm"]
-bg_color = Color(0.0562916, 0.0562916, 0.0562916, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7qf4u"]
-bg_color = Color(0.10748, 0.10748, 0.10748, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_7qf4u"]
-font = ExtResource("5_7qf4u")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ecw8u"]
 bg_color = Color(0.0728427, 0.0728426, 0.0728427, 1)
@@ -56,6 +51,9 @@ script = ExtResource("4_q56rk")
 friction = 4.0
 minimum_velocity = 0.4
 rebound_strength = 7.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h3ujd"]
+bg_color = Color(0.259294, 0.259294, 0.259294, 1)
 
 [node name="RuleEdit" type="Control"]
 clip_contents = true
@@ -86,10 +84,9 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 1
+current_tab = 0
 
 [node name="Field" type="ScrollContainer" parent="TabCont"]
-visible = false
 custom_minimum_size = Vector2(0, 5.205)
 layout_mode = 2
 follow_focus = true
@@ -108,25 +105,34 @@ size_flags_vertical = 3
 mouse_filter = 1
 
 [node name="VBox" type="VBoxContainer" parent="TabCont/Field/Field"]
+custom_minimum_size = Vector2(242, 0)
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = 516.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 248.0
+offset_bottom = 512.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 8
 
-[node name="FieldSize" type="Control" parent="TabCont/Field/Field/VBox"]
-custom_minimum_size = Vector2(224, 32)
-layout_direction = 2
+[node name="Basic" type="Control" parent="TabCont/Field/Field/VBox"]
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 mouse_filter = 1
 
-[node name="HBox" type="HBoxContainer" parent="TabCont/Field/Field/VBox/FieldSize"]
+[node name="BG" type="Panel" parent="TabCont/Field/Field/VBox/Basic"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Field/Field/VBox/Basic"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -134,13 +140,66 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/FieldSize/HBox"]
-custom_minimum_size = Vector2(125, 0)
+[node name="Top" type="Control" parent="TabCont/Field/Field/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 mouse_filter = 1
-text = "Field size"
 
-[node name="X" type="SpinBox" parent="TabCont/Field/Field/VBox/FieldSize/HBox"]
+[node name="BG" type="Panel" parent="TabCont/Field/Field/VBox/Basic/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Basic/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Basic"
+label_settings = ExtResource("5_7qf4u")
+vertical_alignment = 1
+
+[node name="FieldSize" type="Control" parent="TabCont/Field/Field/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(224, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Basic/VBox/FieldSize"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Field size"
+vertical_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="TabCont/Field/Field/VBox/Basic/VBox/FieldSize"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="X" type="SpinBox" parent="TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -152,7 +211,7 @@ rounded = true
 prefix = "x:"
 select_all_on_focus = true
 
-[node name="Y" type="SpinBox" parent="TabCont/Field/Field/VBox/FieldSize/HBox"]
+[node name="Y" type="SpinBox" parent="TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -164,43 +223,93 @@ rounded = true
 prefix = "y:"
 select_all_on_focus = true
 
-[node name="Container" type="Container" parent="TabCont/Field/Field/VBox/FieldSize"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="AntStates" type="Control" parent="TabCont/Field/Field/VBox"]
-custom_minimum_size = Vector2(224, 32)
+[node name="WrapAround" type="Control" parent="TabCont/Field/Field/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 mouse_filter = 1
 
-[node name="HBox" type="HBoxContainer" parent="TabCont/Field/Field/VBox/AntStates"]
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Basic/VBox/WrapAround"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 8.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
+text = "Wrap Around"
+vertical_alignment = 1
 
-[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/AntStates/HBox"]
-custom_minimum_size = Vector2(125, 0)
+[node name="CheckButton" type="CheckButton" parent="TabCont/Field/Field/VBox/Basic/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+flat = true
+
+[node name="Type" type="Control" parent="TabCont/Field/Field/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 mouse_filter = 1
-text = "Ant states"
 
-[node name="AntStates" type="SpinBox" parent="TabCont/Field/Field/VBox/AntStates/HBox"]
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Basic/VBox/Type"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 1
-value = 2.0
-select_all_on_focus = true
+text = "Type"
+vertical_alignment = 1
+
+[node name="CheckButton" type="OptionButton" parent="TabCont/Field/Field/VBox/Basic/VBox/Type"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+alignment = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Square"
+popup/item_0/id = 0
+popup/item_1/text = "Hexagon"
+popup/item_1/id = 1
+popup/item_1/disabled = true
+popup/item_2/text = "Triangle"
+popup/item_2/id = 2
+popup/item_2/disabled = true
 
 [node name="Colours" type="Control" parent="TabCont/Field/Field/VBox"]
-custom_minimum_size = Vector2(224, 32)
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 2
 mouse_filter = 1
 
-[node name="HBox" type="HBoxContainer" parent="TabCont/Field/Field/VBox/Colours"]
+[node name="BG" type="Panel" parent="TabCont/Field/Field/VBox/Colours"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Field/Field/VBox/Colours"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -208,91 +317,99 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Colours/HBox"]
-custom_minimum_size = Vector2(125, 0)
+[node name="Top" type="Control" parent="TabCont/Field/Field/VBox/Colours/VBox"]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 mouse_filter = 1
-text = "Colours"
 
-[node name="Colours" type="SpinBox" parent="TabCont/Field/Field/VBox/Colours/HBox"]
+[node name="BG" type="Panel" parent="TabCont/Field/Field/VBox/Colours/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Colours/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Colours"
+label_settings = ExtResource("5_7qf4u")
+vertical_alignment = 1
+
+[node name="Colours" type="Control" parent="TabCont/Field/Field/VBox/Colours/VBox"]
+custom_minimum_size = Vector2(224, 24)
 layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Colours/VBox/Colours"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Colours"
+vertical_alignment = 1
+
+[node name="Colours" type="SpinBox" parent="TabCont/Field/Field/VBox/Colours/VBox/Colours"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 value = 2.0
 select_all_on_focus = true
 
-[node name="Ants" type="ScrollContainer" parent="TabCont"]
-layout_mode = 2
-vertical_scroll_mode = 2
-script = ExtResource("3_685p6")
-wheel_scroll_damper = SubResource("Resource_3a1qm")
-dragging_scroll_damper = SubResource("Resource_7qf4u")
-metadata/_custom_type_script = "uid://e7p2n8vjytpk"
-metadata/_tab_index = 1
-
-[node name="Ants" type="Control" parent="TabCont/Ants"]
+[node name="Ants" type="Control" parent="TabCont"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 1
+metadata/_tab_index = 1
 
-[node name="Select" type="Control" parent="TabCont/Ants/Ants"]
+[node name="Ants" type="ScrollContainer" parent="TabCont/Ants"]
 layout_mode = 1
-anchor_top = -0.00859599
-anchor_bottom = -0.00859599
-offset_left = 4.0
-offset_top = 11.0
-offset_right = 256.0
-offset_bottom = 35.0
-mouse_filter = 1
-metadata/_edit_use_anchors_ = true
-
-[node name="HBox" type="HBoxContainer" parent="TabCont/Ants/Ants/Select"]
-custom_minimum_size = Vector2(232, 0)
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 188.0
-grow_vertical = 2
-
-[node name="Label" type="Label" parent="TabCont/Ants/Ants/Select/HBox"]
-visible = false
-layout_mode = 2
-mouse_filter = 1
-text = "Select Ant:"
-
-[node name="AntChoose" type="OptionButton" parent="TabCont/Ants/Ants/Select/HBox"]
-custom_minimum_size = Vector2(132, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 1
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxFlat_h3ujd")
-
-[node name="NewButton" type="Button" parent="TabCont/Ants/Ants/Select/HBox"]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-mouse_filter = 1
-text = "+"
-
-[node name="DeleteButton" type="Button" parent="TabCont/Ants/Ants/Select/HBox"]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-mouse_filter = 1
-text = "-"
-
-[node name="VBox" type="VBoxContainer" parent="TabCont/Ants/Ants"]
-layout_mode = 1
+anchors_preset = -1
 offset_left = 8.0
 offset_top = 35.0
-offset_right = 260.0
-offset_bottom = 1032.0
+offset_right = 308.0
+offset_bottom = 1057.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_685p6")
+wheel_scroll_damper = SubResource("Resource_3a1qm")
+dragging_scroll_damper = SubResource("Resource_7qf4u")
+metadata/_custom_type_script = "uid://e7p2n8vjytpk"
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Ants/Ants"]
+custom_minimum_size = Vector2(0, 706)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 8
 
 [node name="Info" type="Control" parent="TabCont/Ants/Ants/VBox"]
-custom_minimum_size = Vector2(0, 84)
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 mouse_filter = 1
 
@@ -340,7 +457,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 text = "Basic"
-label_settings = SubResource("LabelSettings_7qf4u")
+label_settings = ExtResource("5_7qf4u")
 vertical_alignment = 1
 
 [node name="Name" type="Control" parent="TabCont/Ants/Ants/VBox/Info/VBox"]
@@ -391,7 +508,7 @@ offset_left = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-text = "Colour"
+text = "Ant Colour"
 vertical_alignment = 1
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="TabCont/Ants/Ants/VBox/Info/VBox/Colour"]
@@ -407,6 +524,37 @@ grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 10
 mouse_filter = 1
+
+[node name="WrapAround" type="Control" parent="TabCont/Ants/Ants/VBox/Info/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Info/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Show Ant"
+vertical_alignment = 1
+
+[node name="ShowAnt" type="CheckButton" parent="TabCont/Ants/Ants/VBox/Info/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+button_pressed = true
+flat = true
 
 [node name="Start" type="Control" parent="TabCont/Ants/Ants/VBox"]
 custom_minimum_size = Vector2(0, 84)
@@ -457,7 +605,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 text = "Start"
-label_settings = SubResource("LabelSettings_7qf4u")
+label_settings = ExtResource("5_7qf4u")
 vertical_alignment = 1
 
 [node name="Position" type="Control" parent="TabCont/Ants/Ants/VBox/Start/VBox"]
@@ -497,9 +645,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-min_value = 50.0
 max_value = 10000.0
-step = 50.0
 value = 250.0
 rounded = true
 prefix = "x:"
@@ -510,9 +656,7 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-min_value = 50.0
 max_value = 10000.0
-step = 50.0
 value = 250.0
 rounded = true
 prefix = "y:"
@@ -567,6 +711,7 @@ popup/item_3/id = 3
 custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 mouse_filter = 1
+script = ExtResource("6_h3ujd")
 
 [node name="BG" type="Panel" parent="TabCont/Ants/Ants/VBox/Current"]
 layout_mode = 1
@@ -612,7 +757,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 text = "Current"
-label_settings = SubResource("LabelSettings_7qf4u")
+label_settings = ExtResource("5_7qf4u")
 vertical_alignment = 1
 
 [node name="Position" type="Control" parent="TabCont/Ants/Ants/VBox/Current/VBox"]
@@ -651,9 +796,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-min_value = 50.0
 max_value = 10000.0
-step = 50.0
 value = 250.0
 rounded = true
 prefix = "x:"
@@ -664,9 +807,7 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-min_value = 50.0
 max_value = 10000.0
-step = 50.0
 value = 250.0
 rounded = true
 prefix = "y:"
@@ -798,7 +939,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 text = "Rules"
-label_settings = SubResource("LabelSettings_7qf4u")
+label_settings = ExtResource("5_7qf4u")
 vertical_alignment = 1
 
 [node name="States" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox"]
@@ -833,6 +974,7 @@ mouse_filter = 1
 min_value = 1.0
 max_value = 50.0
 value = 1.0
+select_all_on_focus = true
 metadata/_edit_use_anchors_ = true
 
 [node name="RandRow1" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox"]
@@ -983,17 +1125,74 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 1
 
-[node name="DisableControls" type="ColorRect" parent="."]
+[node name="DisableControls" type="ColorRect" parent="TabCont/Ants"]
 visible = false
+layout_mode = 0
+offset_right = 1080.0
+offset_bottom = 1047.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+color = Color(0, 0, 0, 0.647059)
+
+[node name="Select" type="Control" parent="TabCont/Ants"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 6.0
+offset_right = 256.0
+offset_bottom = 30.0
+mouse_filter = 1
+
+[node name="HBox" type="HBoxContainer" parent="TabCont/Ants/Select"]
+custom_minimum_size = Vector2(232, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.294118)
 
-[connection signal="value_changed" from="TabCont/Field/Field/VBox/FieldSize/HBox/X" to="." method="_on_x_value_changed"]
-[connection signal="value_changed" from="TabCont/Field/Field/VBox/FieldSize/HBox/Y" to="." method="_on_y_value_changed"]
-[connection signal="value_changed" from="TabCont/Field/Field/VBox/AntStates/HBox/AntStates" to="." method="_on_amt_s_value_changed"]
-[connection signal="value_changed" from="TabCont/Field/Field/VBox/Colours/HBox/Colours" to="." method="_on_amt_c_value_changed"]
+[node name="Label" type="Label" parent="TabCont/Ants/Select/HBox"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+text = "Select Ant:"
+
+[node name="AntChoose" type="OptionButton" parent="TabCont/Ants/Select/HBox"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_h3ujd")
+
+[node name="NewAnt" type="Button" parent="TabCont/Ants/Select/HBox"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+text = "+"
+
+[node name="DeleteAnt" type="Button" parent="TabCont/Ants/Select/HBox"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+text = "-"
+
+[connection signal="tab_changed" from="TabCont" to="." method="_on_tab_cont_tab_changed"]
+[connection signal="value_changed" from="TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox/X" to="." method="_on_x_value_changed"]
+[connection signal="value_changed" from="TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox/Y" to="." method="_on_y_value_changed"]
+[connection signal="value_changed" from="TabCont/Field/Field/VBox/Colours/VBox/Colours/Colours" to="." method="_on_amt_c_value_changed"]
+[connection signal="text_submitted" from="TabCont/Ants/Ants/VBox/Info/VBox/Name/LineEdit" to="." method="_on_line_edit_text_submitted"]
+[connection signal="color_changed" from="TabCont/Ants/Ants/VBox/Info/VBox/Colour/ColorPickerButton" to="." method="_on_color_picker_button_color_changed"]
+[connection signal="toggled" from="TabCont/Ants/Ants/VBox/Info/VBox/WrapAround/ShowAnt" to="." method="_on_show_ant_toggled"]
+[connection signal="value_changed" from="TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/X" to="." method="_on_start_x_value_changed"]
+[connection signal="value_changed" from="TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/Y" to="." method="_on_start_y_value_changed"]
+[connection signal="item_selected" from="TabCont/Ants/Ants/VBox/Start/VBox/Direction/Option" to="." method="_on_start_direction_changed"]
+[connection signal="value_changed" from="TabCont/Ants/Ants/VBox/Rules/VBox/States/Num" to="." method="_on_amt_s_value_changed"]
+[connection signal="item_selected" from="TabCont/Ants/Select/HBox/AntChoose" to="." method="_on_ant_choose_item_selected"]
+[connection signal="pressed" from="TabCont/Ants/Select/HBox/NewAnt" to="." method="_on_new_ant_pressed"]
