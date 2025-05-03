@@ -1,0 +1,102 @@
+[gd_scene load_steps=8 format=3 uid="uid://7ajkp07thh0e"]
+
+[ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://misc/theme.tres" id="1_jn4e3"]
+[ext_resource type="Script" uid="uid://h8sle10i4al" path="res://scripts/colour_state_edit.gd" id="2_75kkj"]
+[ext_resource type="Texture2D" uid="uid://bcg6i5vgrulrt" path="res://resources/ui/up18.png" id="3_gqdj2"]
+[ext_resource type="Texture2D" uid="uid://c0jf3lwycmlct" path="res://resources/ui/ri18.png" id="4_j424t"]
+[ext_resource type="Texture2D" uid="uid://gwikgpip264u" path="res://resources/ui/ba18.png" id="5_r4kas"]
+[ext_resource type="Texture2D" uid="uid://54m4i7wrug84" path="res://resources/ui/le18.png" id="6_w0yqu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mxfn"]
+bg_color = Color(0.190762, 0.190762, 0.190762, 1)
+
+[node name="ColourStateEdit" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 60.0
+offset_bottom = 20.0
+theme = ExtResource("1_jn4e3")
+script = ExtResource("2_75kkj")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0mxfn")
+
+[node name="Colour" type="OptionButton" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.333333
+anchor_bottom = 1.0
+flat = true
+alignment = 1
+text_overrun_behavior = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="State" type="OptionButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.333333
+anchor_right = 0.666667
+anchor_bottom = 1.0
+flat = true
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Rotation" type="OptionButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.666667
+anchor_right = 0.999867
+anchor_bottom = 0.9996
+offset_right = 4.008
+offset_bottom = 4.008
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.833, 0.833)
+theme_override_constants/outline_size = 0
+theme_override_constants/h_separation = 0
+theme_override_constants/icon_max_width = 0
+theme_override_constants/align_to_largest_stylebox = 0
+theme_override_constants/line_spacing = 0
+theme_override_constants/arrow_margin = 0
+theme_override_constants/modulate_arrow = 0
+flat = true
+selected = 0
+item_count = 4
+popup/item_0/icon = ExtResource("3_gqdj2")
+popup/item_0/id = 0
+popup/item_1/icon = ExtResource("4_j424t")
+popup/item_1/id = 1
+popup/item_2/icon = ExtResource("5_r4kas")
+popup/item_2/id = 2
+popup/item_3/icon = ExtResource("6_w0yqu")
+popup/item_3/id = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="VSeparator" type="VSeparator" parent="."]
+modulate = Color(0.28485, 0.28485, 0.28485, 1)
+layout_mode = 0
+offset_left = 18.0
+offset_top = -4.0
+offset_right = 22.0
+offset_bottom = 36.0
+
+[node name="VSeparator2" type="VSeparator" parent="."]
+modulate = Color(0.28485, 0.28485, 0.28485, 1)
+layout_mode = 0
+offset_left = 38.0
+offset_top = -8.0
+offset_right = 42.0
+offset_bottom = 32.0
+
+[connection signal="item_selected" from="Colour" to="." method="_on_colour_item_selected"]
+[connection signal="item_selected" from="State" to="." method="_on_state_item_selected"]
+[connection signal="item_selected" from="Rotation" to="." method="_on_rotation_item_selected"]

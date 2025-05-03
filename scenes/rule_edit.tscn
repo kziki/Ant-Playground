@@ -1,0 +1,1227 @@
+[gd_scene load_steps=22 format=3 uid="uid://bsqnwlgseytya"]
+
+[ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://misc/theme.tres" id="1_p66qh"]
+[ext_resource type="Script" uid="uid://oxxt34r7spnd" path="res://scripts/rule_edit.gd" id="2_ecw8u"]
+[ext_resource type="Script" uid="uid://e7p2n8vjytpk" path="res://misc/SmoothScroll-5aba7cfe17f49b75987c65abab0d7b14bfc42603/addons/SmoothScroll/SmoothScrollContainer.gd" id="3_685p6"]
+[ext_resource type="Script" uid="uid://yt40awsagswl" path="res://misc/SmoothScroll-5aba7cfe17f49b75987c65abab0d7b14bfc42603/addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="4_q56rk"]
+[ext_resource type="LabelSettings" uid="uid://cywgm7vrsj63d" path="res://misc/top_label.tres" id="5_7qf4u"]
+[ext_resource type="Script" uid="uid://dxaknlbcfpvvn" path="res://scripts/current.gd" id="6_h3ujd"]
+[ext_resource type="PackedScene" uid="uid://ctxjb38j5ylif" path="res://scenes/colour_picker.tscn" id="6_pfaoh"]
+[ext_resource type="Texture2D" uid="uid://bcg6i5vgrulrt" path="res://resources/ui/up18.png" id="8_f3ym6"]
+[ext_resource type="Texture2D" uid="uid://c0jf3lwycmlct" path="res://resources/ui/ri18.png" id="9_tmrqh"]
+[ext_resource type="Texture2D" uid="uid://gwikgpip264u" path="res://resources/ui/ba18.png" id="10_cffjk"]
+[ext_resource type="Texture2D" uid="uid://54m4i7wrug84" path="res://resources/ui/le18.png" id="11_u04o6"]
+
+[sub_resource type="Resource" id="Resource_h3ujd"]
+script = ExtResource("4_q56rk")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_pfaoh"]
+script = ExtResource("4_q56rk")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3a1qm"]
+bg_color = Color(0.0562916, 0.0562916, 0.0562916, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7qf4u"]
+bg_color = Color(0.10748, 0.10748, 0.10748, 1)
+
+[sub_resource type="Resource" id="Resource_3a1qm"]
+script = ExtResource("4_q56rk")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_7qf4u"]
+script = ExtResource("4_q56rk")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ecw8u"]
+bg_color = Color(0.0728427, 0.0728426, 0.0728427, 1)
+
+[sub_resource type="Resource" id="Resource_4jwab"]
+script = ExtResource("4_q56rk")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_agqk2"]
+script = ExtResource("4_q56rk")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h3ujd"]
+bg_color = Color(0.259294, 0.259294, 0.259294, 1)
+
+[node name="RuleEdit" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_p66qh")
+script = ExtResource("2_ecw8u")
+metadata/_edit_use_anchors_ = true
+
+[node name="BG" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TabCont" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+current_tab = 1
+
+[node name="Field" type="ScrollContainer" parent="TabCont"]
+visible = false
+custom_minimum_size = Vector2(0, 5.205)
+layout_mode = 2
+follow_focus = true
+script = ExtResource("3_685p6")
+wheel_scroll_damper = SubResource("Resource_h3ujd")
+dragging_scroll_damper = SubResource("Resource_pfaoh")
+metadata/_custom_type_script = "uid://e7p2n8vjytpk"
+metadata/_edit_use_anchors_ = true
+metadata/_tab_index = 0
+
+[node name="Field" type="Control" parent="TabCont/Field"]
+custom_minimum_size = Vector2(240, 516)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Field/Field"]
+custom_minimum_size = Vector2(242, 0)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 248.0
+offset_bottom = 512.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Basic" type="Control" parent="TabCont/Field/Field/VBox"]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="TabCont/Field/Field/VBox/Basic"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Field/Field/VBox/Basic"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="TabCont/Field/Field/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="TabCont/Field/Field/VBox/Basic/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Basic/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Basic"
+label_settings = ExtResource("5_7qf4u")
+vertical_alignment = 1
+
+[node name="FieldSize" type="Control" parent="TabCont/Field/Field/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(224, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Basic/VBox/FieldSize"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Field size"
+vertical_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="TabCont/Field/Field/VBox/Basic/VBox/FieldSize"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="X" type="SpinBox" parent="TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+min_value = 50.0
+max_value = 10000.0
+step = 50.0
+value = 500.0
+rounded = true
+prefix = "x:"
+select_all_on_focus = true
+
+[node name="Y" type="SpinBox" parent="TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+min_value = 50.0
+max_value = 10000.0
+step = 50.0
+value = 500.0
+rounded = true
+prefix = "y:"
+select_all_on_focus = true
+
+[node name="WrapAround" type="Control" parent="TabCont/Field/Field/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Basic/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Wrap Around"
+vertical_alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="TabCont/Field/Field/VBox/Basic/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+flat = true
+
+[node name="Type" type="Control" parent="TabCont/Field/Field/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Basic/VBox/Type"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Type"
+vertical_alignment = 1
+
+[node name="CheckButton" type="OptionButton" parent="TabCont/Field/Field/VBox/Basic/VBox/Type"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+alignment = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Square"
+popup/item_0/id = 0
+popup/item_1/text = "Hexagon"
+popup/item_1/id = 1
+popup/item_1/disabled = true
+popup/item_2/text = "Triangle"
+popup/item_2/id = 2
+popup/item_2/disabled = true
+
+[node name="Colours" type="Control" parent="TabCont/Field/Field/VBox"]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="TabCont/Field/Field/VBox/Colours"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Field/Field/VBox/Colours"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="TabCont/Field/Field/VBox/Colours/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="TabCont/Field/Field/VBox/Colours/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Colours/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Colours"
+label_settings = ExtResource("5_7qf4u")
+vertical_alignment = 1
+
+[node name="Colours" type="Control" parent="TabCont/Field/Field/VBox/Colours/VBox"]
+custom_minimum_size = Vector2(224, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="TabCont/Field/Field/VBox/Colours/VBox/Colours"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Colours"
+vertical_alignment = 1
+
+[node name="Colours" type="SpinBox" parent="TabCont/Field/Field/VBox/Colours/VBox/Colours"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+value = 2.0
+select_all_on_focus = true
+
+[node name="GridContainer" type="GridContainer" parent="TabCont/Field/Field/VBox/Colours/VBox/Colours"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.16667
+anchor_right = 1.0
+anchor_bottom = 2.792
+offset_left = 20.0
+offset_right = -4.0
+offset_bottom = 0.991997
+metadata/_edit_use_anchors_ = true
+
+[node name="ColourPicker" parent="TabCont/Field/Field/VBox/Colours/VBox/Colours/GridContainer" instance=ExtResource("6_pfaoh")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Ants" type="Control" parent="TabCont"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+metadata/_tab_index = 1
+
+[node name="Ants" type="ScrollContainer" parent="TabCont/Ants"]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 8.0
+offset_top = 35.0
+offset_right = 308.0
+offset_bottom = 1040.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_685p6")
+wheel_scroll_damper = SubResource("Resource_3a1qm")
+dragging_scroll_damper = SubResource("Resource_7qf4u")
+metadata/_custom_type_script = "uid://e7p2n8vjytpk"
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Ants/Ants"]
+custom_minimum_size = Vector2(0, 706)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Info" type="Control" parent="TabCont/Ants/Ants/VBox"]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="TabCont/Ants/Ants/VBox/Info"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Ants/Ants/VBox/Info"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="TabCont/Ants/Ants/VBox/Info/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="TabCont/Ants/Ants/VBox/Info/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="MainLabel" type="Label" parent="TabCont/Ants/Ants/VBox/Info/VBox/Top"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Basic"
+label_settings = ExtResource("5_7qf4u")
+vertical_alignment = 1
+
+[node name="Name" type="Control" parent="TabCont/Ants/Ants/VBox/Info/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Info/VBox/Name"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Name"
+vertical_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="TabCont/Ants/Ants/VBox/Info/VBox/Name"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 10
+mouse_filter = 1
+text = "ant 0"
+placeholder_text = "type name"
+select_all_on_focus = true
+
+[node name="Colour" type="Control" parent="TabCont/Ants/Ants/VBox/Info/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Info/VBox/Colour"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Ant Colour"
+vertical_alignment = 1
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="TabCont/Ants/Ants/VBox/Info/VBox/Colour"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 10
+mouse_filter = 1
+
+[node name="WrapAround" type="Control" parent="TabCont/Ants/Ants/VBox/Info/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Info/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Show Ant"
+vertical_alignment = 1
+
+[node name="ShowAnt" type="CheckButton" parent="TabCont/Ants/Ants/VBox/Info/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+button_pressed = true
+flat = true
+
+[node name="Start" type="Control" parent="TabCont/Ants/Ants/VBox"]
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="TabCont/Ants/Ants/VBox/Start"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Ants/Ants/VBox/Start"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="TabCont/Ants/Ants/VBox/Start/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="TabCont/Ants/Ants/VBox/Start/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="MainLabel" type="Label" parent="TabCont/Ants/Ants/VBox/Start/VBox/Top"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Start"
+label_settings = ExtResource("5_7qf4u")
+vertical_alignment = 1
+
+[node name="Position" type="Control" parent="TabCont/Ants/Ants/VBox/Start/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Start/VBox/Position"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Position"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="HBox" type="HBoxContainer" parent="TabCont/Ants/Ants/VBox/Start/VBox/Position"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -132.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="X" type="SpinBox" parent="TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+max_value = 10000.0
+value = 250.0
+rounded = true
+prefix = "x:"
+select_all_on_focus = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Y" type="SpinBox" parent="TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+max_value = 10000.0
+value = 250.0
+rounded = true
+prefix = "y:"
+select_all_on_focus = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Direction" type="Control" parent="TabCont/Ants/Ants/VBox/Start/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Start/VBox/Direction"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Direction"
+vertical_alignment = 1
+
+[node name="Option" type="OptionButton" parent="TabCont/Ants/Ants/VBox/Start/VBox/Direction"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+alignment = 1
+selected = 0
+item_count = 4
+popup/item_0/icon = ExtResource("8_f3ym6")
+popup/item_0/id = 0
+popup/item_1/icon = ExtResource("9_tmrqh")
+popup/item_1/id = 1
+popup/item_2/icon = ExtResource("10_cffjk")
+popup/item_2/id = 2
+popup/item_3/icon = ExtResource("11_u04o6")
+popup/item_3/id = 3
+
+[node name="Current" type="Control" parent="TabCont/Ants/Ants/VBox"]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_h3ujd")
+
+[node name="BG" type="Panel" parent="TabCont/Ants/Ants/VBox/Current"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Ants/Ants/VBox/Current"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="TabCont/Ants/Ants/VBox/Current/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Top" type="Panel" parent="TabCont/Ants/Ants/VBox/Current/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="MainLabel" type="Label" parent="TabCont/Ants/Ants/VBox/Current/VBox/Top"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Current"
+label_settings = ExtResource("5_7qf4u")
+vertical_alignment = 1
+
+[node name="Position" type="Control" parent="TabCont/Ants/Ants/VBox/Current/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Current/VBox/Position"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Position"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="HBox" type="HBoxContainer" parent="TabCont/Ants/Ants/VBox/Current/VBox/Position"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -132.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="X" type="SpinBox" parent="TabCont/Ants/Ants/VBox/Current/VBox/Position/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+max_value = 10000.0
+value = 250.0
+rounded = true
+prefix = "x:"
+select_all_on_focus = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Y" type="SpinBox" parent="TabCont/Ants/Ants/VBox/Current/VBox/Position/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+max_value = 10000.0
+value = 250.0
+rounded = true
+prefix = "y:"
+select_all_on_focus = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Direction" type="Control" parent="TabCont/Ants/Ants/VBox/Current/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Current/VBox/Direction"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Direction"
+vertical_alignment = 1
+
+[node name="Option" type="OptionButton" parent="TabCont/Ants/Ants/VBox/Current/VBox/Direction"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+alignment = 1
+selected = 0
+item_count = 4
+popup/item_0/icon = ExtResource("8_f3ym6")
+popup/item_0/id = 0
+popup/item_1/icon = ExtResource("9_tmrqh")
+popup/item_1/id = 1
+popup/item_2/icon = ExtResource("10_cffjk")
+popup/item_2/id = 2
+popup/item_3/icon = ExtResource("11_u04o6")
+popup/item_3/id = 3
+
+[node name="State" type="Control" parent="TabCont/Ants/Ants/VBox/Current/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Current/VBox/State"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "State"
+vertical_alignment = 1
+
+[node name="Num" type="SpinBox" parent="TabCont/Ants/Ants/VBox/Current/VBox/State"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_right = -4.0
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Rules" type="Control" parent="TabCont/Ants/Ants/VBox"]
+custom_minimum_size = Vector2(224, 224)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="TabCont/Ants/Ants/VBox/Rules"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="TabCont/Ants/Ants/VBox/Rules"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Top" type="Panel" parent="TabCont/Ants/Ants/VBox/Rules/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="MainLabel" type="Label" parent="TabCont/Ants/Ants/VBox/Rules/VBox/Top"]
+custom_minimum_size = Vector2(65, 24)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Rules"
+label_settings = ExtResource("5_7qf4u")
+vertical_alignment = 1
+
+[node name="States" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Rules/VBox/States"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "States"
+vertical_alignment = 1
+
+[node name="Num" type="SpinBox" parent="TabCont/Ants/Ants/VBox/Rules/VBox/States"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_right = -4.0
+mouse_filter = 1
+min_value = 1.0
+max_value = 50.0
+value = 1.0
+select_all_on_focus = true
+metadata/_edit_use_anchors_ = true
+
+[node name="RandRow1" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox"]
+custom_minimum_size = Vector2(224, 24)
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Randomize"
+vertical_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ToAll" type="Button" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "all"
+
+[node name="ToStates" type="Button" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "b state"
+
+[node name="ToColour" type="Button" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "colours"
+
+[node name="RandRow2" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBox" type="HBoxContainer" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2"]
+custom_minimum_size = Vector2(128, 24)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+
+[node name="ToColour" type="Button" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "a state"
+
+[node name="Rotation" type="Button" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "rotation"
+
+[node name="RuleEdit" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_right = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_ecw8u")
+
+[node name="ScrollCont" type="ScrollContainer" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.003
+offset_left = 4.0
+offset_right = -4.0
+offset_bottom = 0.265991
+script = ExtResource("3_685p6")
+wheel_scroll_damper = SubResource("Resource_4jwab")
+dragging_scroll_damper = SubResource("Resource_agqk2")
+metadata/_custom_type_script = "uid://e7p2n8vjytpk"
+
+[node name="Main" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="Labels" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="Edits" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="Colours" type="Control" parent="TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="DisableControls" type="ColorRect" parent="TabCont/Ants"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+color = Color(0, 0, 0, 0.647059)
+
+[node name="Select" type="Control" parent="TabCont/Ants"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 6.0
+offset_right = 256.0
+offset_bottom = 30.0
+mouse_filter = 1
+
+[node name="HBox" type="HBoxContainer" parent="TabCont/Ants/Select"]
+custom_minimum_size = Vector2(232, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="TabCont/Ants/Select/HBox"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+text = "Select Ant:"
+
+[node name="AntChoose" type="OptionButton" parent="TabCont/Ants/Select/HBox"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_h3ujd")
+
+[node name="NewAnt" type="Button" parent="TabCont/Ants/Select/HBox"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+text = "+"
+
+[node name="DeleteAnt" type="Button" parent="TabCont/Ants/Select/HBox"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+text = "-"
+
+[connection signal="tab_changed" from="TabCont" to="." method="_on_tab_cont_tab_changed"]
+[connection signal="value_changed" from="TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox/X" to="." method="_on_x_value_changed"]
+[connection signal="value_changed" from="TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox/Y" to="." method="_on_y_value_changed"]
+[connection signal="value_changed" from="TabCont/Field/Field/VBox/Colours/VBox/Colours/Colours" to="." method="_on_amt_c_value_changed"]
+[connection signal="text_submitted" from="TabCont/Ants/Ants/VBox/Info/VBox/Name/LineEdit" to="." method="_on_line_edit_text_submitted"]
+[connection signal="color_changed" from="TabCont/Ants/Ants/VBox/Info/VBox/Colour/ColorPickerButton" to="." method="_on_color_picker_button_color_changed"]
+[connection signal="toggled" from="TabCont/Ants/Ants/VBox/Info/VBox/WrapAround/ShowAnt" to="." method="_on_show_ant_toggled"]
+[connection signal="value_changed" from="TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/X" to="." method="_on_start_x_value_changed"]
+[connection signal="value_changed" from="TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/Y" to="." method="_on_start_y_value_changed"]
+[connection signal="item_selected" from="TabCont/Ants/Ants/VBox/Start/VBox/Direction/Option" to="." method="_on_start_direction_changed"]
+[connection signal="value_changed" from="TabCont/Ants/Ants/VBox/Rules/VBox/States/Num" to="." method="_on_amt_s_value_changed"]
+[connection signal="pressed" from="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox/ToAll" to="." method="_on_to_all_pressed"]
+[connection signal="pressed" from="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox/ToStates" to="." method="_on_to_states_pressed"]
+[connection signal="pressed" from="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox/ToColour" to="." method="_on_to_colour_pressed"]
+[connection signal="pressed" from="TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox/Rotation" to="." method="_on_rotation_pressed"]
+[connection signal="item_selected" from="TabCont/Ants/Select/HBox/AntChoose" to="." method="_on_ant_choose_item_selected"]
+[connection signal="pressed" from="TabCont/Ants/Select/HBox/NewAnt" to="." method="_on_new_ant_pressed"]

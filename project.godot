@@ -12,14 +12,14 @@ config_version=5
 
 config/name="Ant Playground"
 config/description="Langton's Ant / Turmite playground."
-run/main_scene="res://world.tscn"
+run/main_scene="res://scenes/world.tscn"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="uid://dmtolp5cql5xi"
 
 [autoload]
 
-g="*res://global.gd"
-GlobalCs="*res://GlobalCS.cs"
+g="*res://scripts/global.gd"
+GlobalCs="*res://scripts/GlobalCS.cs"
 
 [debug]
 
