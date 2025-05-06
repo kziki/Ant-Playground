@@ -5,7 +5,7 @@ var camera_tween_pos
 
 var can_move = true
 var default_validzooms = [0.03125,0.0625,0.125,0.25,0.5,1]
-var validzooms = [0.03125,0.0625,0.125,0.25,0.5,1]
+var validzooms = [0.5,1,2,4,8,16]
 var zoomindex:int = 1
 var des_zoom = zoom
 var des_pos = position
@@ -19,7 +19,7 @@ func _input(event):
 	if can_move:
 		# scroll
 		if event is InputEventMouseButton:
-			if event.is_pressed() and !get_node("../Canvas/HSplit/RuleEdit").get_global_rect().grow(8*g.pppp).has_point(event.position):
+			if event.is_pressed() and !get_node("../Canvas/HSplit/Sidebar").get_global_rect().grow(8*g.pppp).has_point(event.position):
 				if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and zoomindex > 0:
 					zoomindex -= 1
 				if event.button_index == MOUSE_BUTTON_WHEEL_UP and zoomindex < validzooms.size()-1:
@@ -29,7 +29,7 @@ func _input(event):
 		# pan
 		if event is InputEventMouseMotion:
 			if event.button_mask == MOUSE_BUTTON_MASK_MIDDLE:
-				if !get_node("../Canvas/HSplit/RuleEdit").get_global_rect().grow(8*g.pppp).has_point(event.position):
+				if !get_node("../Canvas/HSplit/Sidebar").get_global_rect().grow(8*g.pppp).has_point(event.position):
 					position -= event.relative / zoom
 
 

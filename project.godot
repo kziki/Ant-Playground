@@ -35,6 +35,17 @@ window/stretch/aspect="expand"
 
 project/assembly_name="langton-s ant"
 
+[file_customization]
+
+folder_colors={
+"res://Properties/": "green",
+"res://font/": "red",
+"res://misc/": "yellow",
+"res://resources/": "blue",
+"res://scenes/": "purple",
+"res://scripts/": "pink"
+}
+
 [gui]
 
 theme/custom="uid://bx3jvtk8472ag"
@@ -45,8 +56,3 @@ theme/custom="uid://bx3jvtk8472ag"
 common/physics_ticks_per_second=1
 2d/solver/solver_iterations=1
 common/enable_object_picking=false
-
-[rendering]
-
-2d/snap/snap_2d_transforms_to_pixel=true
-2d/snap/snap_2d_vertices_to_pixel=true

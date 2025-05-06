@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bantfaxh1o1hc" path="res://scripts/world.gd" id="1_xo05s"]
 [ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://misc/theme.tres" id="2_dss4m"]
-[ext_resource type="PackedScene" uid="uid://bsqnwlgseytya" path="res://scenes/rule_edit.tscn" id="3_7t5mc"]
+[ext_resource type="PackedScene" uid="uid://bsqnwlgseytya" path="res://scenes/sidebar.tscn" id="3_7t5mc"]
 [ext_resource type="Script" uid="uid://moiaaowbxk07" path="res://scripts/fps.gd" id="4_lakw3"]
 [ext_resource type="Texture2D" uid="uid://bs8erks0flsvk" path="res://resources/ui/clear.png" id="5_pm21f"]
 [ext_resource type="Texture2D" uid="uid://cyl0cn4i4dfrr" path="res://resources/ui/reverse.png" id="6_2lf6f"]
@@ -153,7 +153,7 @@ theme = ExtResource("2_dss4m")
 theme_override_constants/minimum_grab_thickness = 16
 theme_override_icons/grabber = SubResource("NoiseTexture2D_hiqwa")
 
-[node name="RuleEdit" parent="Canvas/HSplit" instance=ExtResource("3_7t5mc")]
+[node name="Sidebar" parent="Canvas/HSplit" instance=ExtResource("3_7t5mc")]
 layout_mode = 2
 
 [node name="OnScreen" type="Control" parent="Canvas/HSplit"]
@@ -305,6 +305,10 @@ z_index = 1
 [node name="CsNode" type="Node" parent="."]
 script = ExtResource("15_37qwj")
 
+[node name="StopTimer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
 [connection signal="dragged" from="Canvas/HSplit" to="." method="_on_h_split_dragged"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/HBox/Clear" to="." method="_on_clear_pressed"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/HBox/Reverse" to="." method="_on_reverse_pressed"]
@@ -312,3 +316,4 @@ script = ExtResource("15_37qwj")
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/HBox/Forward" to="." method="_on_forward_pressed"]
 [connection signal="value_changed" from="Canvas/HSplit/OnScreen/HBox/Speed/SpeedSlider" to="." method="_on_h_slider_value_changed"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/HBox/Screenshot" to="." method="_on_screenshot_pressed"]
+[connection signal="timeout" from="StopTimer" to="." method="_on_stop_timer_timeout"]

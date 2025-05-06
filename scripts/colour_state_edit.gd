@@ -52,10 +52,10 @@ func reload(x = null, y = null):
 
 
 func _on_colour_item_selected(_index):
-	if !g.randomizing: g.world.update_ant(g.rule_edit.ant_select.get_selected_id())
+	if !g.randomizing: g.world.update_ant(g.sidebar.ant_select.get_selected_id())
 
 func _on_state_item_selected(_index):
-	if !g.randomizing: g.world.update_ant(g.rule_edit.ant_select.get_selected_id())
+	if !g.randomizing: g.world.update_ant(g.sidebar.ant_select.get_selected_id())
 
 func _on_rotation_item_selected(_index):
-	if !g.randomizing: g.world.update_ant(g.rule_edit.ant_select.get_selected_id())
+	if !g.randomizing: g.world.update_ant(g.sidebar.ant_select.get_selected_id())

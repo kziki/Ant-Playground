@@ -14,5 +14,7 @@ func init_multimesh(colour = Color.BLACK):
 		for c in g.sq_chunksize:
 			var pos = Vector2i(c,r)
 			multimesh.visible_instance_count += 1
-			multimesh.set_instance_transform_2d(multimesh.visible_instance_count-1,Transform2D(0.0,pos*16+Vector2i(8,8)))
+			multimesh.set_instance_transform_2d(multimesh.visible_instance_count-1,Transform2D(0.0,pos))
 			multimesh.set_instance_color(multimesh.visible_instance_count-1,colour)
+	
+	return multimesh

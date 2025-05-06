@@ -14,20 +14,23 @@ var sq_move:Array = [
 # UI
 var play:bool = true
 var turns:int = 0
-var wrap_around:bool = true
+var wrap_around:bool = false
 var ant_states:int = 1
 var time_state:int = -2 #-2:clear, -1:reverse(unused for now?), 0:paused, 1:forward
 var prev_state:int = 1
 var clear:bool = true
 var tps:int = 100
 
+
 # MAIN
 @onready var field = $Field
+@onready var chunk_parent = $Field/Chunks
 var sq_chunk = preload("res://scenes/sq_chunk.tscn")
 var queue = 0
 var pq = 0
 var ant_thread:Thread = Thread.new()
 var field_thread:Thread = Thread.new()
+var mutex:Mutex = Mutex.new()
 var states:Dictionary = {} #chunk = [0,0,0,1,0,1...]
 var chunks:Dictionary = {}
 var default_multimesh
@@ -66,7 +69,9 @@ func _ready():
 	
 	_on_h_split_dragged($Canvas/HSplit.split_offset)
 	print(ants)
-
+	
+	print (250 >> 0x1F)
+	print (250 / 32)
 
 func resize():
 	g.calc_pppp()
@@ -74,11 +79,16 @@ func resize():
 
 
 func _process(delta):
-	queue += (delta * tps)
+	if time_state > 0:
+		queue += (delta * tps)
+	else:
+		queue = 0
 	$Canvas/HSplit/OnScreen/Turns.text = str(turns)
-	
+	#print(queue)
 	for a in ants:
-		set_ant_preview_pos.call_deferred(a,ants[a][0]*16 + Vector2i(8,8))
+		set_ant_preview_pos.call_deferred(a,ants[a][0]) #+ Vector2(0.5,0.5))
+		
+	#print(queue)
 
 
 func _physics_process(_delta):
@@ -90,7 +100,7 @@ func _physics_process(_delta):
 
 func new_ant() -> int:
 	var x = Sprite2D.new()
-	x.texture = load("res://resources/sq/square.png")
+	x.texture = load("res://resources/sq/pixel.png")
 	$Field/Ants.add_child(x)
 	
 	var id = 0
@@ -120,7 +130,7 @@ func new_ant() -> int:
 	
 	g.state_amt[id] = 1
 	
-	$Canvas/HSplit/RuleEdit.add_ant(id, "ant"+str(id))
+	$Canvas/HSplit/Sidebar.add_ant(id, "ant"+str(id))
 	
 	return id
 
@@ -139,23 +149,22 @@ func get_default_multimesh(colour = Color.BLACK):
 
 
 func ant_ticks():
+	
 	var cs:int = g.sq_chunksize
 	var csf:float = g.sq_chunksize
 	var z:Vector2i
 	var chunk:Vector2i
-	var chunkf:Vector2
 	var ant:Array
 	var which:int
 	
-	while is_physics_processing():
+	while is_processing():
 		if queue > 0:
 			for a in ants:
 				ant = ants[a]
 				chunk = ant[0]
-				chunkf = ant[0]
-				chunk.x = floori(chunkf.x/csf)
-				chunk.y = floori(chunkf.y/csf)
-				which = ant[0].x % cs + ant[0].y % cs * cs
+				chunk.x = floori(chunk.x/csf)
+				chunk.y = floori(chunk.y/csf)
+				which = (ant[0].x & 0x1F) + ant[0].y % cs * cs
 				z = Vector2i(states[chunk][which],ant[2])
 				
 				# set tile colour
@@ -164,8 +173,8 @@ func ant_ticks():
 				
 				# update ant position / rotation
 				ant[2] = colour_state_rules[a][z][1]
-				ant[1] = (ant[1] + colour_state_rules[a][z][2]) % 4
-				ant[0] = ant[0] + sq_move[ant[1]% 4]
+				ant[1] = (ant[1] + colour_state_rules[a][z][2]) & 0x3
+				ant[0] = ant[0] + sq_move[ant[1]]
 				
 				# check if ant is out of bounds
 				chunk = ant[0]
@@ -205,7 +214,7 @@ func get_instance_from_pos(pos) -> int:
 
 
 func update_ant(which):
-	colour_state_rules[which] = $Canvas/HSplit/RuleEdit.make_ant_from_edits()
+	colour_state_rules[which] = $Canvas/HSplit/Sidebar.make_ant_from_edits()
 	print ("ant: "+ str(which)+" has rules: "+str(colour_state_rules[which].keys()))
 
 
@@ -261,10 +270,12 @@ func update_colours(index,colour):
 
 
 func _on_stop_pressed():
-	time_state = 0
-	set_physics_process(false)
 	set_process(false)
-	if ant_thread.is_started(): ant_thread.wait_to_finish()
+	time_state = 0
+	queue = 0.0
+	set_physics_process(false)
+	
+	$StopTimer.start()
 
 
 func _on_forward_pressed():
@@ -274,7 +285,7 @@ func _on_forward_pressed():
 	set_process(true)
 	
 	clear = false
-	$Canvas/HSplit/RuleEdit.disable_elements()
+	$Canvas/HSplit/Sidebar.disable_elements()
 	
 	if !ant_thread.is_started(): 
 		ant_thread.start(ant_ticks)
@@ -289,7 +300,7 @@ func _on_reverse_pressed():
 	if prev_state == 1: reverse_rules()
 	prev_state = -1
 	clear = false
-	$Canvas/HSplit/RuleEdit.disable_elements()
+	$Canvas/HSplit/Sidebar.disable_elements()
 	if !ant_thread.is_started(): 
 		ant_thread.start(ant_ticks)
 
@@ -306,11 +317,11 @@ func _on_h_slider_value_changed(value):
 
 
 func _on_clear_pressed():
-	time_state = -2
 	set_physics_process(false)
 	set_process(false)
-	if ant_thread.is_started(): ant_thread.wait_to_finish()
 	
+	$StopTimer.start()
+	time_state = -2
 	chunks.clear()
 	update_field()
 	
@@ -327,7 +338,7 @@ func _on_clear_pressed():
 		reset_ant(ant)
 	
 	turns = 0
-	$Canvas/HSplit/RuleEdit.enable_elements()
+	$Canvas/HSplit/Sidebar.enable_elements()
 	clear = true
 	
 	for a in ants:
@@ -346,7 +357,7 @@ func update_field():
 		for c in int(g.field_x / g.sq_chunksize): 
 			new_chunk(Vector2i(c,r))
 	
-	$Camera.position = (Vector2( (g.field_x*16 - (int(($Canvas/HSplit.size.x / 2) + $Canvas/HSplit.split_offset))*(16)) ,g.field_y*16))/2 
+	$Camera.position = (Vector2( (g.field_x - (int(($Canvas/HSplit.size.x / 2) + $Canvas/HSplit.split_offset))) ,g.field_y))/2 
 	print((int(($Canvas/HSplit.size.x / 2) + $Canvas/HSplit.split_offset)))
 	
 	ants[0][0] = Vector2i(g.field_x,g.field_y)/2
@@ -359,9 +370,9 @@ func _input(event):
 			if !ant_thread.is_started():
 				ant_thread.start(ant_ticks)
 		if event.keycode == KEY_Q:
-			print (Vector2(floor(get_global_mouse_position().x/800), floor(get_global_mouse_position().y/800) ))
-			print(get_global_mouse_position()/16)
-			print("aa")
+			print("---")
+			print(get_global_mouse_position())
+			print ((int(get_global_mouse_position().x) & 0x1F) + int(get_global_mouse_position().y) % 32 * 32)
 
 
 func get_screenshot_rect() -> Rect2i:
@@ -385,27 +396,29 @@ func _on_screenshot_pressed():
 			var pos = Vector2i(x,y)
 			if states.has(pos + (rect.position*g.sq_chunksize)): image.set_pixel(x,y,colours[states[pos+(rect.position*g.sq_chunksize)][0]])
 			else:image.set_pixel(x,y,colours[0])
+	var rand = str(randi())
 	
-	image.save_png("user://"+str(randi())+".png")
+	image.save_png("user://"+rand+".png")
+	OS.shell_show_in_file_manager.call_deferred(ProjectSettings.globalize_path("user://"+rand+".png"))
 
 
 func new_chunk(pos:Vector2i):
 	var new = sq_chunk.instantiate()
 	new.multimesh = default_multimesh.duplicate()
-	new.position = pos * g.sq_chunksize * 16
+	new.position = pos * g.sq_chunksize
 	chunks[pos] = new
 	states[pos] = PackedByteArray()
 	states[pos].resize(g.sq_chunksize*g.sq_chunksize)
-	field.get_node("Chunks").add_child.call_deferred(new)
+	chunk_parent.add_child.call_deferred(new)
 
 
 func resize_UI(offset):
-	$Canvas/HSplit/RuleEdit/TabCont/Ants/Ants.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 18
-	$Canvas/HSplit/RuleEdit/TabCont/Ants/Ants.size.y = $Canvas/HSplit.size.y-68-8
-	$Canvas/HSplit/RuleEdit/TabCont/Ants/Select/HBox.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 14
+	$Canvas/HSplit/Sidebar/TabCont/Ants/Ants.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 18
+	$Canvas/HSplit/Sidebar/TabCont/Ants/Ants.size.y = $Canvas/HSplit.size.y-68-8
+	$Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 14
 	
-	$Canvas/HSplit/RuleEdit/TabCont/Field/Field/VBox.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 10
-	#$Canvas/HSplit/RuleEdit/TabCont/Field/Field/VBox.size.y = max($Canvas/HSplit.size.y - 76,706)
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 10
+	#$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox.size.y = max($Canvas/HSplit.size.y - 76,706)
 
 
 func _on_h_split_dragged(offset):
@@ -418,3 +431,8 @@ func set_ant_visibility(id, visibility):
 
 func set_ant_preview_pos(id, pos):
 	$Field/Ants.get_node(str(id)).position = pos
+
+
+func _on_stop_timer_timeout():
+	if ant_thread.is_started(): ant_thread.wait_to_finish()
+	print("stopped")

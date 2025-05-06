@@ -26,3 +26,7 @@ script = ExtResource("1_4pmxj")
 [node name="MultiMeshInstance2D" type="MultiMeshInstance2D" parent="."]
 multimesh = SubResource("MultiMesh_txpwr")
 texture = ExtResource("2_3vd64")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="chunks" type="Node2D" parent="."]

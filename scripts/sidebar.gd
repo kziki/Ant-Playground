@@ -8,28 +8,29 @@ const GRID_SPACE = Vector2(72,32)
 var state_edits:Dictionary = {}
 var randomizing:bool = false
 
-@onready var main_labels = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main/Labels
+@onready var main_labels = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/XY/Labels
 @onready var main_edits = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main/Edits
-@onready var main_colours = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main/Colours
+@onready var main_colours = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/XY/Colours
 @onready var main = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main
 @onready var ant_select = $TabCont/Ants/Select/HBox/AntChoose
 
 func _ready():
-	
-	g.rule_edit = self
+	g.sidebar = self
 	main_labels.mouse_filter = MOUSE_FILTER_IGNORE
 	main_edits.mouse_filter = MOUSE_FILTER_IGNORE
 	main_colours.mouse_filter = MOUSE_FILTER_IGNORE
 	init_grid.call_deferred()
 	
-	$TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox/X.step = g.sq_chunksize
-	$TabCont/Field/Field/VBox/Basic/VBox/FieldSize/HBox/Y.step = g.sq_chunksize
+	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.set_deferred("step",g.sq_chunksize)
+	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.set_deferred("step",g.sq_chunksize)
+	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.set_deferred("min_value",g.sq_chunksize)
+	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.set_deferred("min_value",g.sq_chunksize)
 	
 	$TabCont/Ants/Ants/VBox/Current.rule_edit = self
 	
 	select_ant.call_deferred(0)
 	
-	$TabCont/Field/Field/VBox/Colours/VBox/Colours/GridContainer/ColourPicker.get_child(0).text = "0"
+	$TabCont/Grid/Grid/VBox/Colours/VBox/Colours/GridContainer/ColourPicker.get_child(0).text = "0"
 
 
 func add_ant(id,ant_name):
@@ -54,7 +55,7 @@ func init_grid():
 	
 	for c in g.colour_amt:
 		var new = colour_picker.instantiate()
-		new.position = Vector2(c * GRID_SPACE.x + (GRID_SPACE.x / 1.1), 8)
+		new.position = Vector2(c * GRID_SPACE.x + GRID_SPACE.x -12, 8)
 		if c==0:new.color = Color.BLACK
 		else: new.color = Color.WHITE
 		new.get_child(0).text = str(int(c))
@@ -72,7 +73,7 @@ func resize_grid(x=null,y=null):
 				
 				var new = colour_picker.instantiate()
 				
-				new.position = Vector2((g.colour_amt-x+c)*GRID_SPACE.x+(GRID_SPACE.x/1.1),8)
+				new.position = Vector2((g.colour_amt-x+c)*GRID_SPACE.x + GRID_SPACE.x -12,8)
 				new.get_child(0).text = str(int(g.colour_amt-x+c))
 				
 				if g.colour_amt-x+c == 0: new.color = Color.BLACK
@@ -108,7 +109,7 @@ func resize_grid(x=null,y=null):
 			for s in -y:
 				main_labels.get_child(g.state_amt[g.selected_ant]-y-s-1).queue_free()
 			
-	main.custom_minimum_size = Vector2((g.colour_amt)*GRID_SPACE.x,(g.state_amt[g.selected_ant]+1)*GRID_SPACE.y) + GRID_SPACE
+	main.custom_minimum_size = Vector2((g.colour_amt)*GRID_SPACE.x,(g.state_amt[g.selected_ant])*GRID_SPACE.y)
 
 
 func swap_grid(id:int, old_id:int):
@@ -125,7 +126,7 @@ func swap_grid(id:int, old_id:int):
 
 func new_edit(pos:Vector2i):
 	var new = edit_scene.instantiate()
-	new.position = (Vector2(pos.x, pos.y) * GRID_SPACE) + Vector2(32, 32)
+	new.position = (Vector2(pos.x, pos.y) * GRID_SPACE) + Vector2(0, 0)
 	main_edits.add_child(new)
 	state_edits[pos] = new 
 	
@@ -205,7 +206,7 @@ func _on_amt_s_value_changed(value):
 	var x = g.state_amt[g.selected_ant]
 	g.state_amt[g.selected_ant] = value
 	resize_grid(null,value-x)
-	g.world.update_ant(g.rule_edit.ant_select.get_selected_id())
+	g.world.update_ant(ant_select.get_selected_id())
 	g.world.update_state_amt(x)
 
 
@@ -295,7 +296,7 @@ func _on_new_ant_pressed():
 	var x = g.world.new_ant()
 	ant_select.select(x)
 	select_ant(x)
-	g.world.update_ant(g.rule_edit.ant_select.get_selected_id())
+	g.world.update_ant(g.sidebar.ant_select.get_selected_id())
 
 
 func _on_start_x_value_changed(value):
@@ -324,3 +325,7 @@ func _on_line_edit_text_submitted(new_text):
 
 func _on_show_ant_toggled(toggled_on):
 	g.world.set_ant_visibility(g.selected_ant,toggled_on)
+
+
+func _on_check_button_toggled(toggled_on):
+	g.world.wrap_around = toggled_on

@@ -8,11 +8,11 @@ var randomizing:bool = false
 var pppp:float #pixels per project pixel
 var ipppp:float #inverse pppp
 var int_scaling:float #pppp scaling rouded to nearest power of 2 or 0.5/0.25/0.125 etc
-var sq_chunksize:int = 50
+var sq_chunksize:int = 32
 var selected_ant:int = 0
 
 # instances
-var rule_edit
+var sidebar
 var world
 
 

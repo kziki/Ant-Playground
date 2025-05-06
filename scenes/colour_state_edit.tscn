@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://7ajkp07thh0e"]
 
-[ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://misc/theme.tres" id="1_jn4e3"]
+[ext_resource type="Theme" uid="uid://dj3bmaqt1xsck" path="res://misc/rule_theme.tres" id="1_jn4e3"]
 [ext_resource type="Script" uid="uid://h8sle10i4al" path="res://scripts/colour_state_edit.gd" id="2_75kkj"]
 [ext_resource type="Texture2D" uid="uid://bcg6i5vgrulrt" path="res://resources/ui/up18.png" id="3_gqdj2"]
 [ext_resource type="Texture2D" uid="uid://c0jf3lwycmlct" path="res://resources/ui/ri18.png" id="4_j424t"]
@@ -35,7 +35,6 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.333333
 anchor_bottom = 1.0
-flat = true
 alignment = 1
 text_overrun_behavior = 1
 metadata/_edit_use_anchors_ = true
@@ -46,7 +45,6 @@ anchors_preset = -1
 anchor_left = 0.333333
 anchor_right = 0.666667
 anchor_bottom = 1.0
-flat = true
 alignment = 1
 metadata/_edit_use_anchors_ = true
 
@@ -68,7 +66,6 @@ theme_override_constants/align_to_largest_stylebox = 0
 theme_override_constants/line_spacing = 0
 theme_override_constants/arrow_margin = 0
 theme_override_constants/modulate_arrow = 0
-flat = true
 selected = 0
 item_count = 4
 popup/item_0/icon = ExtResource("3_gqdj2")
@@ -80,22 +77,6 @@ popup/item_2/id = 2
 popup/item_3/icon = ExtResource("6_w0yqu")
 popup/item_3/id = 3
 metadata/_edit_use_anchors_ = true
-
-[node name="VSeparator" type="VSeparator" parent="."]
-modulate = Color(0.28485, 0.28485, 0.28485, 1)
-layout_mode = 0
-offset_left = 18.0
-offset_top = -4.0
-offset_right = 22.0
-offset_bottom = 36.0
-
-[node name="VSeparator2" type="VSeparator" parent="."]
-modulate = Color(0.28485, 0.28485, 0.28485, 1)
-layout_mode = 0
-offset_left = 38.0
-offset_top = -8.0
-offset_right = 42.0
-offset_bottom = 32.0
 
 [connection signal="item_selected" from="Colour" to="." method="_on_colour_item_selected"]
 [connection signal="item_selected" from="State" to="." method="_on_state_item_selected"]

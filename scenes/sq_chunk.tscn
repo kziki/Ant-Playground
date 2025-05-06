@@ -1,25 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://dgb532y2wctji"]
+[gd_scene load_steps=5 format=3 uid="uid://dgb532y2wctji"]
 
 [ext_resource type="Script" uid="uid://cyn1lfdooc832" path="res://scripts/sq_chunk.gd" id="1_cagj5"]
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_o7ubl"]
-_surfaces = [{
-"2d": true,
-"aabb": AABB(-8, -8, 0, 16, 16, 0),
-"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0),
-"format": 34393296913,
-"index_count": 6,
-"index_data": PackedByteArray(0, 0, 3, 0, 2, 0, 2, 0, 1, 0, 0, 0),
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 4,
-"vertex_data": PackedByteArray(0, 0, 0, 193, 0, 0, 0, 193, 0, 0, 0, 193, 0, 0, 0, 65, 0, 0, 0, 65, 0, 0, 0, 65, 0, 0, 0, 65, 0, 0, 0, 193)
-}]
+[ext_resource type="ArrayMesh" uid="uid://dp44r0tqyc1pl" path="res://misc/pixel_mesh.tres" id="1_lvagd"]
+[ext_resource type="Texture2D" uid="uid://dykcb24tkc4tv" path="res://resources/sq/pixel.png" id="1_y4j4x"]
 
 [sub_resource type="MultiMesh" id="MultiMesh_n2b1n"]
 use_colors = true
-mesh = SubResource("ArrayMesh_o7ubl")
+mesh = ExtResource("1_lvagd")
 
 [node name="SqChunk" type="MultiMeshInstance2D"]
 multimesh = SubResource("MultiMesh_n2b1n")
+texture = ExtResource("1_y4j4x")
 script = ExtResource("1_cagj5")
