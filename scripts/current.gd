@@ -3,7 +3,7 @@ var rule_edit
 var antpos
 
 func _ready():
-	set_physics_process(false)
+	set_process(false)
 
 func _process(_delta):
 	antpos = g.world.ants[rule_edit.get_selected_ant_id()]

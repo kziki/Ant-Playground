@@ -301,6 +301,7 @@ texture = ExtResource("14_0nbtd")
 z_index = 1
 
 [node name="Chunks" type="Node2D" parent="Field"]
+texture_filter = 1
 
 [node name="CsNode" type="Node" parent="."]
 script = ExtResource("15_37qwj")

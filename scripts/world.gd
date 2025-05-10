@@ -14,7 +14,7 @@ var sq_move:Array = [
 # UI
 var play:bool = true
 var turns:int = 0
-var wrap_around:bool = false
+var wrap_around:bool = true
 var ant_states:int = 1
 var time_state:int = -2 #-2:clear, -1:reverse(unused for now?), 0:paused, 1:forward
 var prev_state:int = 1
@@ -33,6 +33,8 @@ var field_thread:Thread = Thread.new()
 var mutex:Mutex = Mutex.new()
 var states:Dictionary = {} #chunk = [0,0,0,1,0,1...]
 var chunks:Dictionary = {}
+var images:Dictionary[Vector2i,Image] = {}
+var updatequeue:Dictionary[Vector2i,bool] = {}
 var default_multimesh
 
 # RULES
@@ -84,11 +86,13 @@ func _process(delta):
 	else:
 		queue = 0
 	$Canvas/HSplit/OnScreen/Turns.text = str(turns)
-	#print(queue)
+	
+	mutex.lock()
 	for a in ants:
-		set_ant_preview_pos.call_deferred(a,ants[a][0]) #+ Vector2(0.5,0.5))
-		
-	#print(queue)
+		set_ant_preview_pos(a,ants[a][0]) #+ Vector2(0.5,0.5))
+	for i in chunks.keys():
+		chunks[i].texture.update(images[i])
+	mutex.unlock()
 
 
 func _physics_process(_delta):
@@ -152,59 +156,49 @@ func ant_ticks():
 	
 	var cs:int = g.sq_chunksize
 	var csf:float = g.sq_chunksize
-	var z:Vector2i
+	var rules:Array
 	var chunk:Vector2i
 	var ant:Array
-	var which:int
+	var which:Vector2i
 	
 	while is_processing():
 		if queue > 0:
 			for a in ants:
 				ant = ants[a]
-				chunk = ant[0]
-				chunk.x = floori(chunk.x/csf)
-				chunk.y = floori(chunk.y/csf)
-				which = (ant[0].x & 0x1F) + ant[0].y % cs * cs
-				z = Vector2i(states[chunk][which],ant[2])
-				
-				# set tile colour
-				states[chunk][which] = colour_state_rules[a][z][0]
-				chunks[chunk].multimesh.set_instance_color(which,colours[states[chunk][which]])
-				
-				# update ant position / rotation
-				ant[2] = colour_state_rules[a][z][1]
-				ant[1] = (ant[1] + colour_state_rules[a][z][2]) & 0x3
-				ant[0] = ant[0] + sq_move[ant[1]]
+				chunk = Vector2(ant[0]/csf).floor()
 				
 				# check if ant is out of bounds
-				chunk = ant[0]
-				chunk.x = floori(chunk.x/csf)
-				chunk.y = floori(chunk.y/csf)
 				if !states.has(chunk):
 					if wrap_around:
 						if ant[0].x >= g.field_x: ant[0].x = 0
 						elif ant[0].y >= g.field_y: ant[0].y = 0
 						elif ant[0].x < 0: ant[0].x = g.field_x -1
 						elif ant[0].y < 0: ant[0].y = g.field_y -1
+						chunk = Vector2(ant[0]/csf).floor()
 					else:
 						new_chunk(chunk)
 						if chunks.keys().size() >= 2000:
 							_on_stop_pressed.call_deferred()
 				
+				which = ant[0] - chunk*cs + chunk.sign().clampi(-1,0)
+				#updatequeue[chunk] = true
+				
+				#get rules for current ant and its position / state
+				rules = colour_state_rules[a][Vector2i(states[chunk][which.x][which.y],ant[2])]
+				
+				# set tile colour
+				states[chunk][which.x][which.y] = rules[0]
+				mutex.lock()
+				images[chunk].set_pixelv(which,colours[rules[0]])
+				mutex.unlock()
+				
+				# update ant position / rotation
+				ant[2] = rules[1]
+				ant[1] = (ant[1] + rules[2]) & 0x3
+				ant[0] = ant[0] + sq_move[ant[1]]
+				
 				turns = turns + 1
 			queue = queue - 1
-
-
-func move_ant(ant):
-	match ant[1]:
-		0:ant[0].y -= 1
-		1:ant[0].x += 1
-		2:ant[0].y += 1
-		3:ant[0].x -= 1
-	if ant[0].x >= g.field_x: ant[0].x = 0
-	elif  ant[0].y >= g.field_y: ant[0].y = 0
-	elif  ant[0].x < 0: ant[0].x = g.field_x -1
-	elif ant[0].y < 0: ant[0].y = g.field_y -1
 
 
 func get_instance_from_pos(pos) -> int:
@@ -371,8 +365,12 @@ func _input(event):
 				ant_thread.start(ant_ticks)
 		if event.keycode == KEY_Q:
 			print("---")
-			print(get_global_mouse_position())
-			print ((int(get_global_mouse_position().x) & 0x1F) + int(get_global_mouse_position().y) % 32 * 32)
+			var i = get_global_mouse_position()
+			var j = Vector2i(get_global_mouse_position()) % 32
+			var k = Vector2i((get_global_mouse_position()/32).floor())
+			print ( Vector2i(i) - k*32  +  k.sign().clampi(-1,0))
+			print ( j )
+			print ( k )
 
 
 func get_screenshot_rect() -> Rect2i:
@@ -403,13 +401,25 @@ func _on_screenshot_pressed():
 
 
 func new_chunk(pos:Vector2i):
-	var new = sq_chunk.instantiate()
-	new.multimesh = default_multimesh.duplicate()
-	new.position = pos * g.sq_chunksize
-	chunks[pos] = new
-	states[pos] = PackedByteArray()
-	states[pos].resize(g.sq_chunksize*g.sq_chunksize)
-	chunk_parent.add_child.call_deferred(new)
+	#var new = sq_chunk.instantiate()
+	var sprite = Sprite2D.new()
+	var img = Image.create_empty(g.sq_chunksize,g.sq_chunksize,false,Image.FORMAT_L8)
+	img.fill(colours[0])
+	
+	var texture = ImageTexture.create_from_image(img)
+	sprite.texture = texture
+	sprite.use_parent_material = true
+	
+	sprite.position = pos * g.sq_chunksize
+	chunks[pos] = sprite
+	images[pos] = img
+	
+	states[pos] = []
+	states[pos].resize(g.sq_chunksize)
+	for i in g.sq_chunksize:
+		states[pos][i] = PackedByteArray()
+		states[pos][i].resize(g.sq_chunksize)
+	chunk_parent.add_child.call_deferred(sprite)
 
 
 func resize_UI(offset):
@@ -425,11 +435,11 @@ func _on_h_split_dragged(offset):
 	resize_UI(offset)
 
 
-func set_ant_visibility(id, visibility):
+func set_ant_visibility(id:int, visibility:bool):
 	$Field/Ants.get_node(str(id)).visible = visibility
 
 
-func set_ant_preview_pos(id, pos):
+func set_ant_preview_pos(id:int, pos:Vector2):
 	$Field/Ants.get_node(str(id)).position = pos
 
 
