@@ -3,13 +3,15 @@ extends Camera2D
 var camera_tween
 var camera_tween_pos
 
+@onready var parent = get_parent().get_parent().get_parent()
+
 var can_move = true
 var default_validzooms = [0.03125,0.0625,0.125,0.25,0.5,1]
 var validzooms = [0.5,1,2,4,8,16]
 var zoomindex:int = 1
 var des_zoom = zoom
 var des_pos = position
-
+var camera_rect:Rect2
 
 func _ready():
 	zoom = Vector2.ONE * validzooms[zoomindex]
@@ -19,7 +21,7 @@ func _input(event):
 	if can_move:
 		# scroll
 		if event is InputEventMouseButton:
-			if event.is_pressed() and !get_node("../Canvas/HSplit/Sidebar").get_global_rect().grow(8*g.pppp).has_point(event.position):
+			if event.is_pressed() and event.position.x > 8:
 				if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and zoomindex > 0:
 					zoomindex -= 1
 				if event.button_index == MOUSE_BUTTON_WHEEL_UP and zoomindex < validzooms.size()-1:
@@ -28,9 +30,19 @@ func _input(event):
 				zoom_tween(des_zoom,des_pos)
 		# pan
 		if event is InputEventMouseMotion:
-			if event.button_mask == MOUSE_BUTTON_MASK_MIDDLE:
-				if !get_node("../Canvas/HSplit/Sidebar").get_global_rect().grow(8*g.pppp).has_point(event.position):
-					position -= event.relative / zoom
+			parent.set_mousepos_text(get_local_mouse_position() + position)
+			
+			if event.button_mask == MOUSE_BUTTON_MASK_MIDDLE and event.position.x > 8:
+				position -= event.relative / zoom
+				
+				camera_rect = Rect2(Vector2(position), Vector2(get_viewport().size) / zoom)
+				var bot_right_point:Vector2 = ((camera_rect.position + camera_rect.size / 2) + Vector2.ONE * g.sq_chunksize)
+				var top_left_point:Vector2 = ((camera_rect.position - camera_rect.size / 2) )
+				
+				if bot_right_point.x < 0: position.x = ((g.rightmost_chunk.x+1) * g.sq_chunksize) + camera_rect.size.x / 2 
+				elif bot_right_point.y < 0: position.y = ((g.downmost_chunk.y+1) * g.sq_chunksize) + camera_rect.size.y / 2 
+				elif top_left_point.x > ((g.rightmost_chunk.x + 1) * g.sq_chunksize): position.x = -(camera_rect.size.x/2 + g.sq_chunksize/2)
+				elif top_left_point.y > ((g.downmost_chunk.y + 1) * g.sq_chunksize): position.y = -(camera_rect.size.y/2 + g.sq_chunksize/2)
 
 
 func get_valid_zooms():

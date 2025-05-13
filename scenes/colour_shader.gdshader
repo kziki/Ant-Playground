@@ -6,7 +6,7 @@ render_mode unshaded;
 // Annoyingly, since this is set at compile, it seems you need to manually
 // set this array size to match the number of colors in your array. Otherwise
 // it will disregard the 'extra' colors
-uniform vec4[256] colors : source_color;
+uniform vec4[64] colors : source_color;
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 
 const vec3 D65_WHITE = vec3(0.95045592705, 1.0, 1.08905775076);

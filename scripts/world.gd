@@ -23,8 +23,9 @@ var tps:int = 100
 
 
 # MAIN
-@onready var field = $Field
-@onready var chunk_parent = $Field/Chunks
+@onready var field = $Canvas/HSplit/OnScreen/Sim/SubViewport/Field
+@onready var chunk_parent = $Canvas/HSplit/OnScreen/Sim/SubViewport/Field/Chunks
+@onready var field_ants = $Canvas/HSplit/OnScreen/Sim/SubViewport/Field/Ants
 var sq_chunk = preload("res://scenes/sq_chunk.tscn")
 var queue = 0
 var pq = 0
@@ -32,13 +33,17 @@ var ant_thread:Thread = Thread.new()
 var field_thread:Thread = Thread.new()
 var mutex:Mutex = Mutex.new()
 var states:Dictionary = {} #chunk = [0,0,0,1,0,1...]
-var chunks:Dictionary = {}
+var chunks:Dictionary[Vector2i,Sprite2D] = {}
 var images:Dictionary[Vector2i,Image] = {}
 var updatequeue:Dictionary[Vector2i,bool] = {}
 var default_multimesh
 
 # RULES
-var colours:Dictionary = {
+var l8_colours:Dictionary = { #to avoid doing calculation
+	0: Color(0,0,0),
+	1: Color(256,0,0)
+}
+var user_colours:Dictionary = {
 	0: Color.BLACK,
 	1: Color.WHITE 
 	}
@@ -47,7 +52,7 @@ var ants:Dictionary = {} #[ant position, ant direction, ant state, colour on gri
 
 
 func _ready():
-	RenderingServer.set_default_clear_color(colours[0])
+	RenderingServer.set_default_clear_color(user_colours[0])
 	
 	g.world = self
 	set_physics_process(false)
@@ -70,10 +75,8 @@ func _ready():
 	new_ant()
 	
 	_on_h_split_dragged($Canvas/HSplit.split_offset)
-	print(ants)
 	
-	print (250 >> 0x1F)
-	print (250 / 32)
+	$Canvas/HSplit/OnScreen/Sim/SubViewport/Field/Ants.position = Vector2(0.5,0.5)
 
 func resize():
 	g.calc_pppp()
@@ -88,10 +91,13 @@ func _process(delta):
 	$Canvas/HSplit/OnScreen/Turns.text = str(turns)
 	
 	mutex.lock()
+	if $Canvas/HSplit/Sidebar/TabCont.get_current_tab_control().name == "Ants":
+		$Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current.update()
 	for a in ants:
 		set_ant_preview_pos(a,ants[a][0]) #+ Vector2(0.5,0.5))
-	for i in chunks.keys():
+	for i in updatequeue.keys():
 		chunks[i].texture.update(images[i])
+	updatequeue.clear()
 	mutex.unlock()
 
 
@@ -100,12 +106,13 @@ func _physics_process(_delta):
 	$Canvas/HSplit/OnScreen/Info.text = str(int(turns - pq))# + "\n" + str(int(queue))
 	pq = turns
 	if queue > (turns - pq): queue = turns - pq
+	print(Engine.get_frames_per_second())
 
 
 func new_ant() -> int:
 	var x = Sprite2D.new()
 	x.texture = load("res://resources/sq/pixel.png")
-	$Field/Ants.add_child(x)
+	field_ants.add_child(x)
 	
 	var id = 0
 	while ants.has(id):
@@ -177,11 +184,11 @@ func ant_ticks():
 						chunk = Vector2(ant[0]/csf).floor()
 					else:
 						new_chunk(chunk)
-						if chunks.keys().size() >= 2000:
+						if chunks.keys().size() == 2000:
 							_on_stop_pressed.call_deferred()
 				
-				which = ant[0] - chunk*cs + chunk.sign().clampi(-1,0)
-				#updatequeue[chunk] = true
+				which = ant[0] - chunk*cs# + chunk.sign().clampi(-1,0)
+				
 				
 				#get rules for current ant and its position / state
 				rules = colour_state_rules[a][Vector2i(states[chunk][which.x][which.y],ant[2])]
@@ -189,7 +196,8 @@ func ant_ticks():
 				# set tile colour
 				states[chunk][which.x][which.y] = rules[0]
 				mutex.lock()
-				images[chunk].set_pixelv(which,colours[rules[0]])
+				updatequeue[chunk] = true
+				images[chunk].set_pixelv(which,user_colours[rules[0]])
 				mutex.unlock()
 				
 				# update ant position / rotation
@@ -251,11 +259,11 @@ func reset_ant(which):
 
 func set_ant_colour(which:int, colour:Color):
 	ants[which][3] = colour
-	$Field/Ants.get_node(str(which)).modulate = colour
+	field_ants.get_node(str(which)).modulate = colour
 
 
 func update_colours(index,colour):
-	colours[index] = colour
+	user_colours[index] = colour
 	if index == 0:
 		RenderingServer.set_default_clear_color(colour)
 		get_default_multimesh(colour)
@@ -307,7 +315,7 @@ func reverse_rules() -> void:
 
 func _on_h_slider_value_changed(value):
 	tps = value
-	$Canvas/HSplit/OnScreen/HBox/TPS.text = str(int(value))
+	$Canvas/HSplit/OnScreen/Tools/HBox/TPS.text = str(int(value))
 
 
 func _on_clear_pressed():
@@ -317,12 +325,15 @@ func _on_clear_pressed():
 	$StopTimer.start()
 	time_state = -2
 	chunks.clear()
+	updatequeue.clear()
 	update_field()
 	
 	for chunk in chunks:
-		chunks[chunk].multimesh = default_multimesh.duplicate()
-		for ci in g.sq_chunksize * g.sq_chunksize:
-			states[chunk][ci] = 0
+		images[chunk].fill(user_colours[0])
+		var current_chunk = states[chunk]
+		for x in g.sq_chunksize:
+			for y in g.sq_chunksize:
+				current_chunk[x][y] = 0
 	
 	if prev_state == -1:
 		prev_state = 1
@@ -337,7 +348,7 @@ func _on_clear_pressed():
 	
 	for a in ants:
 		var ant = ants[a]
-		$Field/Ants.get_node(str(a)).position = ant[0]*16 + Vector2i(8,8)
+		field_ants.get_node(str(a)).position = ant[0]*16 + Vector2i(8,8)
 
 
 func update_field():
@@ -347,11 +358,14 @@ func update_field():
 	for c in field.get_node("Chunks").get_children():
 		c.free()
 	
+	g.downmost_chunk = Vector2i(0,g.field_y/g.sq_chunksize-1)
+	g.rightmost_chunk = Vector2i(g.field_x/g.sq_chunksize-1,0)
+	
 	for r in int(g.field_y / g.sq_chunksize): 
 		for c in int(g.field_x / g.sq_chunksize): 
 			new_chunk(Vector2i(c,r))
 	
-	$Camera.position = (Vector2( (g.field_x - (int(($Canvas/HSplit.size.x / 2) + $Canvas/HSplit.split_offset))) ,g.field_y))/2 
+	$Canvas/HSplit/OnScreen/Sim/SubViewport/Camera.position = (Vector2(g.field_x,g.field_y))/2 - (Vector2.ONE * g.sq_chunksize)/2 
 	print((int(($Canvas/HSplit.size.x / 2) + $Canvas/HSplit.split_offset)))
 	
 	ants[0][0] = Vector2i(g.field_x,g.field_y)/2
@@ -365,13 +379,22 @@ func _input(event):
 				ant_thread.start(ant_ticks)
 		if event.keycode == KEY_Q:
 			print("---")
-			var i = get_global_mouse_position()
-			var j = Vector2i(get_global_mouse_position()) % 32
-			var k = Vector2i((get_global_mouse_position()/32).floor())
-			print ( Vector2i(i) - k*32  +  k.sign().clampi(-1,0))
-			print ( j )
-			print ( k )
-
+			var vec1
+			var i
+			var j
+			var k
+			
+			vec1 = Vector2(-704, 584)
+			i = vec1
+			j = Vector2i(vec1) % 32
+			k = Vector2i((vec1/32).floor())
+			print ( Vector2i(i) - k*32 )#+  k.sign().clampi(-1,0))
+			
+			vec1 = Vector2(-737, 620)
+			i = vec1
+			j = Vector2i(vec1) % 32
+			k = Vector2i((vec1/32).floor())
+			print ( Vector2i(i) - k*32 )#+  k.sign().clampi(-1,0))
 
 func get_screenshot_rect() -> Rect2i:
 	var bounds = [0,0,0,0] #-x +x -y +y
@@ -387,13 +410,22 @@ func get_screenshot_rect() -> Rect2i:
 
 func _on_screenshot_pressed():
 	var rect = get_screenshot_rect()
-	var image = Image.create_empty(rect.size.x*g.sq_chunksize,rect.size.y*g.sq_chunksize,false,Image.FORMAT_RGB8)
+	var image = Image.create_empty(rect.size.x*g.sq_chunksize,rect.size.y*g.sq_chunksize,false,Image.FORMAT_RGBA8)
+	#colours[0] = Color(0,0,0,0)
+	var pos
+	var offset = rect.position
 	
-	for y in rect.size.y*g.sq_chunksize:
-		for x in rect.size.x*g.sq_chunksize:
-			var pos = Vector2i(x,y)
-			if states.has(pos + (rect.position*g.sq_chunksize)): image.set_pixel(x,y,colours[states[pos+(rect.position*g.sq_chunksize)][0]])
-			else:image.set_pixel(x,y,colours[0])
+	for c in chunks.keys():
+		for x in g.sq_chunksize:
+			for y in g.sq_chunksize:
+				pos = Vector2i(x,y)
+				image.set_pixelv((c-offset)*g.sq_chunksize + pos,user_colours[states[c][x][y]])
+	#for y in rect.size.y*g.sq_chunksize:
+		#for x in rect.size.x*g.sq_chunksize:
+			#pos = Vector2i(x,y)
+			#chunk = Vector2(Vector2(x,y)/g.sq_chunksize).floor()
+			#if states.has(chunk): image.set_pixelv(pos,colours[states[chunk][pos]])
+			#else:image.set_pixel(x,y,colours[0])
 	var rand = str(randi())
 	
 	image.save_png("user://"+rand+".png")
@@ -401,10 +433,11 @@ func _on_screenshot_pressed():
 
 
 func new_chunk(pos:Vector2i):
+	mutex.lock()
 	#var new = sq_chunk.instantiate()
 	var sprite = Sprite2D.new()
 	var img = Image.create_empty(g.sq_chunksize,g.sq_chunksize,false,Image.FORMAT_L8)
-	img.fill(colours[0])
+	img.fill(user_colours[0])
 	
 	var texture = ImageTexture.create_from_image(img)
 	sprite.texture = texture
@@ -420,6 +453,8 @@ func new_chunk(pos:Vector2i):
 		states[pos][i] = PackedByteArray()
 		states[pos][i].resize(g.sq_chunksize)
 	chunk_parent.add_child.call_deferred(sprite)
+	
+	mutex.unlock()
 
 
 func resize_UI(offset):
@@ -428,7 +463,8 @@ func resize_UI(offset):
 	$Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 14
 	
 	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 10
-	#$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox.size.y = max($Canvas/HSplit.size.y - 76,706)
+	
+	$Canvas/HSplit/OnScreen/Sim/SubViewport.size_2d_override = $Canvas/HSplit/OnScreen/Sim.size
 
 
 func _on_h_split_dragged(offset):
@@ -436,11 +472,11 @@ func _on_h_split_dragged(offset):
 
 
 func set_ant_visibility(id:int, visibility:bool):
-	$Field/Ants.get_node(str(id)).visible = visibility
+	field_ants.get_node(str(id)).visible = visibility
 
 
 func set_ant_preview_pos(id:int, pos:Vector2):
-	$Field/Ants.get_node(str(id)).position = pos
+	field_ants.get_node(str(id)).position = pos
 
 
 func _on_stop_timer_timeout():
