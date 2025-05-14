@@ -12,6 +12,7 @@ var sq_chunksize:int = 64
 var selected_ant:int = 0
 var rightmost_chunk:Vector2i
 var downmost_chunk:Vector2i
+var user_pallete:Image
 
 # instances
 var sidebar
@@ -20,7 +21,10 @@ var world
 
 func _ready():
 	state_amt.resize(50)
-
+	
+	user_pallete = Image.create_empty(1,64,false,Image.FORMAT_RGB8)
+	for i in 63:
+		user_pallete.set_pixel(0,i+1,Color(randf(),randf(),randf()))
 
 func calc_pppp():
 	if get_viewport().size.x > get_viewport().size.y:

@@ -26,6 +26,7 @@ var tps:int = 100
 @onready var field = $Canvas/HSplit/OnScreen/Sim/SubViewport/Field
 @onready var chunk_parent = $Canvas/HSplit/OnScreen/Sim/SubViewport/Field/Chunks
 @onready var field_ants = $Canvas/HSplit/OnScreen/Sim/SubViewport/Field/Ants
+@onready var shader_node = $Canvas/HSplit/OnScreen/Sim/SubViewport/Layer/Shader
 var sq_chunk = preload("res://scenes/sq_chunk.tscn")
 var queue = 0
 var pq = 0
@@ -39,19 +40,23 @@ var updatequeue:Dictionary[Vector2i,bool] = {}
 var default_multimesh
 
 # RULES
-var l8_colours:Dictionary = { #to avoid doing calculation
-	0: Color(0,0,0),
-	1: Color(256,0,0)
+var l8_colours:Dictionary[int,Color] = { #to avoid doing calculation
 }
 var user_colours:Dictionary = {
 	0: Color.BLACK,
 	1: Color.WHITE 
 	}
+var shader:Shader = load("res://scenes/colour_shader.gdshader")
 var colour_state_rules:Dictionary = {} #Vector2i(colour,ant_state): [to_colour, to_state, rotation]
 var ants:Dictionary = {} #[ant position, ant direction, ant state, colour on grid, start position, start direction, name]
 
 
 func _ready():
+	for i in 64:
+		var c = i*4
+		l8_colours[i] = Color.from_rgba8(c,c,c)
+	print(l8_colours)
+	
 	RenderingServer.set_default_clear_color(user_colours[0])
 	
 	g.world = self
@@ -77,6 +82,10 @@ func _ready():
 	_on_h_split_dragged($Canvas/HSplit.split_offset)
 	
 	$Canvas/HSplit/OnScreen/Sim/SubViewport/Field/Ants.position = Vector2(0.5,0.5)
+	
+	#shader.set("user_pallete", g.user_pallete)
+	
+	$Canvas/HSplit/OnScreen/Sim/SubViewport/Layer/Shader.material.set_shader_parameter("user_pallete",ImageTexture.create_from_image(g.user_pallete))
 
 func resize():
 	g.calc_pppp()
@@ -107,6 +116,8 @@ func _physics_process(_delta):
 	pq = turns
 	if queue > (turns - pq): queue = turns - pq
 	print(Engine.get_frames_per_second())
+	for i in 63:
+		g.user_pallete.set_pixel(0,i+1,Color(randf(),randf(),randf()))
 
 
 func new_ant() -> int:
@@ -197,7 +208,7 @@ func ant_ticks():
 				states[chunk][which.x][which.y] = rules[0]
 				mutex.lock()
 				updatequeue[chunk] = true
-				images[chunk].set_pixelv(which,user_colours[rules[0]])
+				images[chunk].set_pixelv(which,l8_colours[rules[0]])
 				mutex.unlock()
 				
 				# update ant position / rotation
@@ -263,12 +274,12 @@ func set_ant_colour(which:int, colour:Color):
 
 
 func update_colours(index,colour):
-	user_colours[index] = colour
-	if index == 0:
-		RenderingServer.set_default_clear_color(colour)
-		get_default_multimesh(colour)
-		for chunk in chunks:
-			chunks[chunk].multimesh = default_multimesh.duplicate()
+	g.user_pallete.set_pixel(0,index,colour)
+	print(g.user_pallete.get_pixel(0,index))
+	var texture = ImageTexture.create_from_image(g.user_pallete)
+	shader_node.material.set_shader_parameter("user_pallete",texture)
+	#if index == 0:
+		#RenderingServer.set_default_clear_color(colour)
 
 
 func _on_stop_pressed():
@@ -329,7 +340,7 @@ func _on_clear_pressed():
 	update_field()
 	
 	for chunk in chunks:
-		images[chunk].fill(user_colours[0])
+		images[chunk].fill(l8_colours[0])
 		var current_chunk = states[chunk]
 		for x in g.sq_chunksize:
 			for y in g.sq_chunksize:
@@ -437,7 +448,7 @@ func new_chunk(pos:Vector2i):
 	#var new = sq_chunk.instantiate()
 	var sprite = Sprite2D.new()
 	var img = Image.create_empty(g.sq_chunksize,g.sq_chunksize,false,Image.FORMAT_L8)
-	img.fill(user_colours[0])
+	img.fill(l8_colours[0])
 	
 	var texture = ImageTexture.create_from_image(img)
 	sprite.texture = texture

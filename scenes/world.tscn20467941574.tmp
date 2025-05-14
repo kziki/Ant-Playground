@@ -185,7 +185,6 @@ script = ExtResource("13_ts3gi")
 [node name="Field" type="Node2D" parent="Canvas/HSplit/OnScreen/Sim/SubViewport"]
 
 [node name="Ants" type="Node2D" parent="Canvas/HSplit/OnScreen/Sim/SubViewport/Field"]
-visible = false
 z_index = 1
 
 [node name="Chunks" type="Node2D" parent="Canvas/HSplit/OnScreen/Sim/SubViewport/Field"]
@@ -196,14 +195,12 @@ position = Vector2(32, 32)
 
 [node name="Shader" type="ColorRect" parent="Canvas/HSplit/OnScreen/Sim/SubViewport/Layer"]
 z_index = 100
-texture_filter = 1
 material = SubResource("ShaderMaterial_lakw3")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
 
 [node name="Info" type="Label" parent="Canvas/HSplit/OnScreen"]
 layout_mode = 1
