@@ -1,26 +1,87 @@
-[gd_scene load_steps=26 format=3 uid="uid://ba7413b0niv7p"]
+[gd_scene load_steps=46 format=3 uid="uid://ba7413b0niv7p"]
 
 [ext_resource type="Script" uid="uid://bantfaxh1o1hc" path="res://scripts/world.gd" id="1_xo05s"]
 [ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://misc/theme.tres" id="2_dss4m"]
-[ext_resource type="PackedScene" uid="uid://bsqnwlgseytya" path="res://scenes/sidebar.tscn" id="3_7t5mc"]
+[ext_resource type="Script" uid="uid://oxxt34r7spnd" path="res://scripts/sidebar.gd" id="3_0nbtd"]
 [ext_resource type="Script" uid="uid://cij655m0vvwrn" path="res://scenes/on_screen.gd" id="4_7t5mc"]
+[ext_resource type="Script" uid="uid://e7p2n8vjytpk" path="res://misc/SmoothScroll-5aba7cfe17f49b75987c65abab0d7b14bfc42603/addons/SmoothScroll/SmoothScrollContainer.gd" id="4_37qwj"]
 [ext_resource type="Script" uid="uid://moiaaowbxk07" path="res://scripts/fps.gd" id="4_lakw3"]
+[ext_resource type="Script" uid="uid://yt40awsagswl" path="res://misc/SmoothScroll-5aba7cfe17f49b75987c65abab0d7b14bfc42603/addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="5_navra"]
 [ext_resource type="Texture2D" uid="uid://bs8erks0flsvk" path="res://resources/ui/clear.png" id="5_pm21f"]
 [ext_resource type="Texture2D" uid="uid://cyl0cn4i4dfrr" path="res://resources/ui/reverse.png" id="6_2lf6f"]
 [ext_resource type="Shader" uid="uid://cawaxctpgw8ue" path="res://scenes/colour_shader.gdshader" id="6_7t5mc"]
+[ext_resource type="LabelSettings" uid="uid://cywgm7vrsj63d" path="res://misc/top_label.tres" id="6_luhhm"]
 [ext_resource type="Texture2D" uid="uid://drpnqfhdv5qfl" path="res://resources/ui/stop.png" id="7_7iits"]
+[ext_resource type="PackedScene" uid="uid://ctxjb38j5ylif" path="res://scenes/colour_picker.tscn" id="7_fh13f"]
 [ext_resource type="Texture2D" uid="uid://hmx0wn5wnt1e" path="res://resources/ui/forward.png" id="8_oo54l"]
+[ext_resource type="Texture2D" uid="uid://bcg6i5vgrulrt" path="res://resources/ui/up18.png" id="8_rup4s"]
+[ext_resource type="Texture2D" uid="uid://c0jf3lwycmlct" path="res://resources/ui/ri18.png" id="9_4kbfs"]
 [ext_resource type="Texture2D" uid="uid://cbp4pbrwwmctg" path="res://resources/ui/grabber.png" id="9_kpybi"]
 [ext_resource type="Texture2D" uid="uid://dmtolp5cql5xi" path="res://resources/ui/ant.png" id="10_ctatt"]
+[ext_resource type="Texture2D" uid="uid://gwikgpip264u" path="res://resources/ui/ba18.png" id="10_f17e3"]
+[ext_resource type="Texture2D" uid="uid://54m4i7wrug84" path="res://resources/ui/le18.png" id="11_x2olw"]
 [ext_resource type="Texture2D" uid="uid://dujfgqv2ija7y" path="res://resources/ui/pencil_pixel.png" id="11_xgqkh"]
+[ext_resource type="Script" uid="uid://dxaknlbcfpvvn" path="res://scripts/current.gd" id="12_817gm"]
 [ext_resource type="Texture2D" uid="uid://cg36jnkom5ccw" path="res://resources/ui/camera.png" id="12_munwf"]
+[ext_resource type="Script" uid="uid://dylx54umyv4wa" path="res://scenes/rule_edit.gd" id="13_ggc52"]
 [ext_resource type="Script" uid="uid://btn2vdum3tw65" path="res://scripts/camera.gd" id="13_ts3gi"]
-[ext_resource type="FontFile" uid="uid://bixh6redaff4e" path="res://font/JetBrainsMono[wght].ttf" id="15_7t5mc"]
 [ext_resource type="Script" uid="uid://e4g3ecm5xd1w" path="res://scripts/CSharpField.cs" id="15_37qwj"]
+[ext_resource type="LabelSettings" uid="uid://c4u7pvq0bxhq" path="res://scenes/small_text.tres" id="17_ts3gi"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hiqwa"]
 width = 2
 height = 64
+
+[sub_resource type="Resource" id="Resource_h3ujd"]
+script = ExtResource("5_navra")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_pfaoh"]
+script = ExtResource("5_navra")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3a1qm"]
+bg_color = Color(0.0562916, 0.0562916, 0.0562916, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7qf4u"]
+bg_color = Color(0.10748, 0.10748, 0.10748, 1)
+
+[sub_resource type="Resource" id="Resource_3a1qm"]
+script = ExtResource("5_navra")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_7qf4u"]
+script = ExtResource("5_navra")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ecw8u"]
+bg_color = Color(0.0728427, 0.0728426, 0.0728427, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tmrqh"]
+bg_color = Color(0.0745098, 0.0745098, 0.0745098, 1)
+
+[sub_resource type="Resource" id="Resource_f3ym6"]
+script = ExtResource("5_navra")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_tmrqh"]
+script = ExtResource("5_navra")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h3ujd"]
+bg_color = Color(0.259294, 0.259294, 0.259294, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lakw3"]
 shader = ExtResource("6_7t5mc")
@@ -46,10 +107,6 @@ content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(0, 0, 0, 0.764706)
-
-[sub_resource type="LabelSettings" id="LabelSettings_pm21f"]
-font = ExtResource("15_7t5mc")
-font_size = 8
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_xo05s")
@@ -155,8 +212,1180 @@ theme = ExtResource("2_dss4m")
 theme_override_constants/minimum_grab_thickness = 16
 theme_override_icons/grabber = SubResource("NoiseTexture2D_hiqwa")
 
-[node name="Sidebar" parent="Canvas/HSplit" instance=ExtResource("3_7t5mc")]
+[node name="Sidebar" type="Control" parent="Canvas/HSplit"]
+clip_contents = true
 layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_dss4m")
+script = ExtResource("3_0nbtd")
+metadata/_edit_use_anchors_ = true
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TabCont" type="TabContainer" parent="Canvas/HSplit/Sidebar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Grid" type="ScrollContainer" parent="Canvas/HSplit/Sidebar/TabCont"]
+custom_minimum_size = Vector2(0, 5.205)
+layout_mode = 2
+follow_focus = true
+script = ExtResource("4_37qwj")
+wheel_scroll_damper = SubResource("Resource_h3ujd")
+dragging_scroll_damper = SubResource("Resource_pfaoh")
+metadata/_custom_type_script = "uid://e7p2n8vjytpk"
+metadata/_edit_use_anchors_ = true
+metadata/_tab_index = 0
+
+[node name="Grid" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid"]
+custom_minimum_size = Vector2(240, 516)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="VBox" type="VBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid"]
+custom_minimum_size = Vector2(242, 0)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 248.0
+offset_bottom = 512.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Basic" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox"]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Basic"
+label_settings = ExtResource("6_luhhm")
+vertical_alignment = 1
+
+[node name="FieldSize" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(224, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Field size"
+vertical_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="X" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+min_value = 50.0
+max_value = 10000.0
+step = 50.0
+value = 500.0
+rounded = true
+prefix = "x:"
+select_all_on_focus = true
+
+[node name="Y" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+min_value = 50.0
+max_value = 10000.0
+step = 50.0
+value = 500.0
+rounded = true
+prefix = "y:"
+select_all_on_focus = true
+
+[node name="WrapAround" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Wrap Around"
+vertical_alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+button_pressed = true
+flat = true
+
+[node name="Type" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/Type"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Type"
+vertical_alignment = 1
+
+[node name="CheckButton" type="OptionButton" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/Type"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+alignment = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Square"
+popup/item_0/id = 0
+popup/item_1/text = "Hexagon"
+popup/item_1/id = 1
+popup/item_1/disabled = true
+popup/item_2/text = "Triangle"
+popup/item_2/id = 2
+popup/item_2/disabled = true
+
+[node name="Colours" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox"]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Colours"
+label_settings = ExtResource("6_luhhm")
+vertical_alignment = 1
+
+[node name="Colours" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox"]
+custom_minimum_size = Vector2(224, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Colours"
+vertical_alignment = 1
+
+[node name="Colours" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+max_value = 63.0
+value = 2.0
+rounded = true
+select_all_on_focus = true
+
+[node name="GridContainer" type="GridContainer" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.16667
+anchor_right = 1.0
+anchor_bottom = 2.792
+offset_left = 20.0
+offset_right = -4.0
+offset_bottom = 0.991997
+metadata/_edit_use_anchors_ = true
+
+[node name="ColourPicker" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/GridContainer" instance=ExtResource("7_fh13f")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Ants" type="Control" parent="Canvas/HSplit/Sidebar/TabCont"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+metadata/_tab_index = 1
+
+[node name="Ants" type="ScrollContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants"]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 8.0
+offset_top = 35.0
+offset_right = 308.0
+offset_bottom = 1040.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_37qwj")
+wheel_scroll_damper = SubResource("Resource_3a1qm")
+dragging_scroll_damper = SubResource("Resource_7qf4u")
+metadata/_custom_type_script = "uid://e7p2n8vjytpk"
+
+[node name="VBox" type="VBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants"]
+custom_minimum_size = Vector2(0, 706)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Info" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox"]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="MainLabel" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Top"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Basic"
+label_settings = ExtResource("6_luhhm")
+vertical_alignment = 1
+
+[node name="Name" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Name"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Name"
+vertical_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Name"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 10
+mouse_filter = 1
+text = "ant 0"
+placeholder_text = "type name"
+select_all_on_focus = true
+
+[node name="Colour" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Colour"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Ant Colour"
+vertical_alignment = 1
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Colour"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 10
+mouse_filter = 1
+
+[node name="WrapAround" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Show Ant"
+vertical_alignment = 1
+
+[node name="ShowAnt" type="CheckButton" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/WrapAround"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+button_pressed = true
+flat = true
+
+[node name="Start" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox"]
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="MainLabel" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Top"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Start"
+label_settings = ExtResource("6_luhhm")
+vertical_alignment = 1
+
+[node name="Position" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Position"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Position"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="HBox" type="HBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Position"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -132.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="X" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+max_value = 10000.0
+value = 250.0
+rounded = true
+prefix = "x:"
+select_all_on_focus = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Y" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+max_value = 10000.0
+value = 250.0
+rounded = true
+prefix = "y:"
+select_all_on_focus = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Direction" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Direction"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Direction"
+vertical_alignment = 1
+
+[node name="Option" type="OptionButton" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Direction"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+alignment = 1
+selected = 0
+item_count = 4
+popup/item_0/icon = ExtResource("8_rup4s")
+popup/item_0/id = 0
+popup/item_1/icon = ExtResource("9_4kbfs")
+popup/item_1/id = 1
+popup/item_2/icon = ExtResource("10_f17e3")
+popup/item_2/id = 2
+popup/item_3/icon = ExtResource("11_x2olw")
+popup/item_3/id = 3
+
+[node name="Current" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox"]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("12_817gm")
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Top" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="MainLabel" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox/Top"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Current"
+label_settings = ExtResource("6_luhhm")
+vertical_alignment = 1
+
+[node name="Position" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox/Position"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Position"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="HBox" type="HBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox/Position"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -132.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="X" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox/Position/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+max_value = 10000.0
+value = 250.0
+rounded = true
+prefix = "x:"
+select_all_on_focus = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Y" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox/Position/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+max_value = 10000.0
+value = 250.0
+rounded = true
+prefix = "y:"
+select_all_on_focus = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Direction" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox/Direction"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Direction"
+vertical_alignment = 1
+
+[node name="Option" type="OptionButton" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox/Direction"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+alignment = 1
+selected = 0
+item_count = 4
+popup/item_0/icon = ExtResource("8_rup4s")
+popup/item_0/id = 0
+popup/item_1/icon = ExtResource("9_4kbfs")
+popup/item_1/id = 1
+popup/item_2/icon = ExtResource("10_f17e3")
+popup/item_2/id = 2
+popup/item_3/icon = ExtResource("11_x2olw")
+popup/item_3/id = 3
+
+[node name="State" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox/State"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "State"
+vertical_alignment = 1
+
+[node name="Num" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox/State"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_right = -4.0
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Rules" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox"]
+custom_minimum_size = Vector2(224, 224)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Top" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="MainLabel" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/Top"]
+custom_minimum_size = Vector2(65, 24)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Rules"
+label_settings = ExtResource("6_luhhm")
+vertical_alignment = 1
+
+[node name="States" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/States"]
+custom_minimum_size = Vector2(118, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "States"
+vertical_alignment = 1
+
+[node name="Num" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/States"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_right = -4.0
+mouse_filter = 1
+min_value = 1.0
+max_value = 50.0
+value = 1.0
+select_all_on_focus = true
+metadata/_edit_use_anchors_ = true
+
+[node name="RandRow1" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox"]
+custom_minimum_size = Vector2(224, 24)
+layout_mode = 2
+mouse_filter = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Randomize"
+vertical_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ToAll" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "all"
+
+[node name="ToStates" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "b state"
+
+[node name="ToColour" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "colours"
+
+[node name="RandRow2" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBox" type="HBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2"]
+custom_minimum_size = Vector2(128, 24)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+
+[node name="ToColour" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "a state"
+
+[node name="Rotation" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "rotation"
+
+[node name="RuleEdit" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+script = ExtResource("13_ggc52")
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_right = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_ecw8u")
+
+[node name="XY" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Colours" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/XY"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="Labels" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/XY"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="Panel" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/XY"]
+layout_mode = 0
+offset_right = 28.0
+offset_bottom = 33.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_tmrqh")
+
+[node name="ScrollCont" type="ScrollContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.003
+offset_left = 32.0
+offset_top = 33.0
+offset_right = -4.0
+offset_bottom = 0.317017
+script = ExtResource("4_37qwj")
+wheel_scroll_damper = SubResource("Resource_f3ym6")
+dragging_scroll_damper = SubResource("Resource_tmrqh")
+metadata/_custom_type_script = "uid://e7p2n8vjytpk"
+
+[node name="Main" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="Edits" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="DisableControls" type="ColorRect" parent="Canvas/HSplit/Sidebar/TabCont/Ants"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+color = Color(0, 0, 0, 0.647059)
+
+[node name="Select" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 6.0
+offset_right = 256.0
+offset_bottom = 30.0
+mouse_filter = 1
+
+[node name="HBox" type="HBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Select"]
+custom_minimum_size = Vector2(232, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+text = "Select Ant:"
+
+[node name="AntChoose" type="OptionButton" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_h3ujd")
+
+[node name="NewAnt" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+text = "+"
+
+[node name="DeleteAnt" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+text = "-"
+
+[node name="Rand" type="Control" parent="Canvas/HSplit/Sidebar/TabCont"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
 
 [node name="OnScreen" type="Control" parent="Canvas/HSplit"]
 layout_mode = 2
@@ -172,29 +1401,26 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="Canvas/HSplit/OnScreen/Sim"]
+[node name="SimViewport" type="SubViewport" parent="Canvas/HSplit/OnScreen/Sim"]
 disable_3d = true
 handle_input_locally = false
 size = Vector2i(539, 1080)
 render_target_update_mode = 4
 
-[node name="Camera" type="Camera2D" parent="Canvas/HSplit/OnScreen/Sim/SubViewport"]
+[node name="Camera" type="Camera2D" parent="Canvas/HSplit/OnScreen/Sim/SimViewport"]
 top_level = true
 script = ExtResource("13_ts3gi")
 
-[node name="Field" type="Node2D" parent="Canvas/HSplit/OnScreen/Sim/SubViewport"]
-
-[node name="Ants" type="Node2D" parent="Canvas/HSplit/OnScreen/Sim/SubViewport/Field"]
-visible = false
-z_index = 1
-
-[node name="Chunks" type="Node2D" parent="Canvas/HSplit/OnScreen/Sim/SubViewport/Field"]
+[node name="Field" type="Node2D" parent="Canvas/HSplit/OnScreen/Sim/SimViewport"]
 texture_filter = 1
+
+[node name="Chunks" type="Node2D" parent="Canvas/HSplit/OnScreen/Sim/SimViewport/Field"]
 position = Vector2(32, 32)
 
-[node name="Layer" type="CanvasLayer" parent="Canvas/HSplit/OnScreen/Sim/SubViewport"]
+[node name="Layer" type="CanvasLayer" parent="Canvas/HSplit/OnScreen/Sim/SimViewport"]
 
-[node name="Shader" type="ColorRect" parent="Canvas/HSplit/OnScreen/Sim/SubViewport/Layer"]
+[node name="Shader" type="ColorRect" parent="Canvas/HSplit/OnScreen/Sim/SimViewport/Layer"]
+light_mask = 0
 z_index = 100
 texture_filter = 1
 material = SubResource("ShaderMaterial_lakw3")
@@ -205,14 +1431,26 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
+[node name="AntViewport" type="SubViewport" parent="Canvas/HSplit/OnScreen/Sim"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(539, 1080)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera2D" parent="Canvas/HSplit/OnScreen/Sim/AntViewport"]
+
+[node name="Ants" type="Node2D" parent="Canvas/HSplit/OnScreen/Sim/AntViewport"]
+
 [node name="Info" type="Label" parent="Canvas/HSplit/OnScreen"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -40.0
+offset_left = -45.0
+offset_right = -5.0
 offset_bottom = 23.0
 grow_horizontal = 0
+label_settings = ExtResource("17_ts3gi")
 horizontal_alignment = 2
 script = ExtResource("4_lakw3")
 
@@ -221,10 +1459,12 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -40.0
-offset_top = 24.0
-offset_bottom = 47.0
+offset_left = -44.0
+offset_top = 12.0
+offset_right = -4.0
+offset_bottom = 35.0
 grow_horizontal = 0
+label_settings = ExtResource("17_ts3gi")
 horizontal_alignment = 2
 
 [node name="Tools" type="Control" parent="Canvas/HSplit/OnScreen"]
@@ -300,7 +1540,7 @@ theme_override_icons/grabber_highlight = ExtResource("9_kpybi")
 theme_override_styles/slider = SubResource("StyleBoxFlat_2o6r5")
 min_value = 1.0
 max_value = 1e+07
-value = 1.0
+value = 100.0
 exp_edit = true
 rounded = true
 scrollable = false
@@ -309,7 +1549,7 @@ metadata/_edit_use_anchors_ = true
 [node name="TPS" type="Label" parent="Canvas/HSplit/OnScreen/Tools/HBox"]
 custom_minimum_size = Vector2(58, 0)
 layout_mode = 2
-text = "1"
+text = "100"
 
 [node name="Seperator" type="VSeparator" parent="Canvas/HSplit/OnScreen/Tools/HBox"]
 custom_minimum_size = Vector2(8, 0)
@@ -351,16 +1591,14 @@ modulate = Color(0.71, 0.71, 0.71, 0.752941)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-text = "1233,506"
-label_settings = SubResource("LabelSettings_pm21f")
+label_settings = ExtResource("17_ts3gi")
 
 [node name="MousePos" type="Label" parent="Canvas/HSplit/OnScreen/MousePos"]
 modulate = Color(0.71, 0.71, 0.71, 0.752941)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
-text = "1233,506"
-label_settings = SubResource("LabelSettings_pm21f")
+label_settings = ExtResource("17_ts3gi")
 
 [node name="CsNode" type="Node" parent="."]
 script = ExtResource("15_37qwj")
@@ -369,7 +1607,29 @@ script = ExtResource("15_37qwj")
 wait_time = 0.05
 one_shot = true
 
+[node name="SecondTimer" type="Timer" parent="."]
+autostart = true
+
 [connection signal="dragged" from="Canvas/HSplit" to="." method="_on_h_split_dragged"]
+[connection signal="tab_changed" from="Canvas/HSplit/Sidebar/TabCont" to="Canvas/HSplit/Sidebar" method="_on_tab_cont_tab_changed"]
+[connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X" to="Canvas/HSplit/Sidebar" method="_on_x_value_changed"]
+[connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y" to="Canvas/HSplit/Sidebar" method="_on_y_value_changed"]
+[connection signal="toggled" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround/CheckButton" to="Canvas/HSplit/Sidebar" method="_on_check_button_toggled"]
+[connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours" to="Canvas/HSplit/Sidebar" method="_on_amt_c_value_changed"]
+[connection signal="text_submitted" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Name/LineEdit" to="Canvas/HSplit/Sidebar" method="_on_line_edit_text_submitted"]
+[connection signal="color_changed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Colour/ColorPickerButton" to="Canvas/HSplit/Sidebar" method="_on_color_picker_button_color_changed"]
+[connection signal="toggled" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/WrapAround/ShowAnt" to="Canvas/HSplit/Sidebar" method="_on_show_ant_toggled"]
+[connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/X" to="Canvas/HSplit/Sidebar" method="_on_start_x_value_changed"]
+[connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/Y" to="Canvas/HSplit/Sidebar" method="_on_start_y_value_changed"]
+[connection signal="item_selected" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Direction/Option" to="Canvas/HSplit/Sidebar" method="_on_start_direction_changed"]
+[connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/States/Num" to="Canvas/HSplit/Sidebar" method="_on_amt_s_value_changed"]
+[connection signal="pressed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox/ToAll" to="Canvas/HSplit/Sidebar" method="_on_to_all_pressed"]
+[connection signal="pressed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox/ToStates" to="Canvas/HSplit/Sidebar" method="_on_to_states_pressed"]
+[connection signal="pressed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox/ToColour" to="Canvas/HSplit/Sidebar" method="_on_to_colour_pressed"]
+[connection signal="pressed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox/Rotation" to="Canvas/HSplit/Sidebar" method="_on_rotation_pressed"]
+[connection signal="item_selected" from="Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox/AntChoose" to="Canvas/HSplit/Sidebar" method="_on_ant_choose_item_selected"]
+[connection signal="pressed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox/NewAnt" to="Canvas/HSplit/Sidebar" method="_on_new_ant_pressed"]
+[connection signal="pressed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox/DeleteAnt" to="Canvas/HSplit/Sidebar" method="_on_delete_ant_pressed"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/Tools/HBox/Clear" to="." method="_on_clear_pressed"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/Tools/HBox/Reverse" to="." method="_on_reverse_pressed"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/Tools/HBox/Stop" to="." method="_on_stop_pressed"]
@@ -377,3 +1637,4 @@ one_shot = true
 [connection signal="value_changed" from="Canvas/HSplit/OnScreen/Tools/HBox/Speed/SpeedSlider" to="." method="_on_h_slider_value_changed"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/Tools/HBox/Screenshot" to="." method="_on_screenshot_pressed"]
 [connection signal="timeout" from="StopTimer" to="." method="_on_stop_timer_timeout"]
+[connection signal="timeout" from="SecondTimer" to="." method="_on_second_timer_timeout"]

@@ -4,7 +4,3 @@
 
 [node name="debug" type="Node2D"]
 script = ExtResource("1_4pmxj")
-
-[node name="Camera2D" type="Camera2D" parent="."]
-
-[node name="chunks" type="Node2D" parent="."]

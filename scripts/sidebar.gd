@@ -34,7 +34,8 @@ func _ready():
 
 
 func add_ant(id,ant_name):
-	$TabCont/Ants/Select/HBox/AntChoose.add_item("["+str(id)+"] - " + ant_name,id)
+	
+	$TabCont/Ants/Select/HBox/AntChoose.add_item(ant_name,id)
 
 
 func init_grid():
@@ -76,18 +77,17 @@ func resize_grid(x=null,y=null):
 				new.position = Vector2((g.colour_amt-x+c)*GRID_SPACE.x + GRID_SPACE.x -12,8)
 				new.get_child(0).text = str(int(g.colour_amt-x+c))
 				
-				if g.colour_amt-x+c == 0: new.color = Color.BLACK
-				else: new.color = Color.WHITE
+				new.color = g.user_pallete.get_pixel(0,g.colour_amt-x+c)
 				
 				main_colours.add_child(new)
 			
-			g.world.colours = get_colours()
+			#g.world.colours = get_colours()
 		else: #remove colours from grid
 			for c in -x:
 				for s in g.state_amt[g.selected_ant]:
 					remove_edit(Vector2i(g.colour_amt+c,s))
 				main_colours.get_child(g.colour_amt-x-c-1).queue_free()
-			g.world.colours = get_colours()
+			#g.world.colours = get_colours()
 	else:
 		if y > 0: #add states to grid
 			for c in g.colour_amt:
@@ -206,11 +206,11 @@ func _on_amt_s_value_changed(value):
 	var x = g.state_amt[g.selected_ant]
 	g.state_amt[g.selected_ant] = value
 	resize_grid(null,value-x)
-	g.world.update_ant(ant_select.get_selected_id())
 	g.world.update_state_amt(x)
 
 
 func _on_amt_c_value_changed(value):
+	$TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.min_value = max($TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.min_value, value)
 	var x = g.colour_amt
 	g.colour_amt = value
 	resize_grid(value-x)
@@ -225,11 +225,13 @@ func get_colours():
 
 
 func disable_elements():
-	$TabCont/Ants/DisableControls.show()
+	pass
+	#$TabCont/Ants/DisableControls.show()
 
 
 func enable_elements():
-	$TabCont/Ants/DisableControls.hide()
+	pass
+	#$TabCont/Ants/DisableControls.hide()
 
 
 func _on_to_all_pressed():
@@ -260,7 +262,7 @@ func _on_tab_cont_tab_changed(tab):
 
 
 func _on_ant_choose_item_selected(index):
-	select_ant(index)
+	select_ant($TabCont/Ants/Select/HBox/AntChoose.get_item_id(index))
 
 
 func select_ant(id):
@@ -329,3 +331,18 @@ func _on_show_ant_toggled(toggled_on):
 
 func _on_check_button_toggled(toggled_on):
 	g.world.wrap_around = toggled_on
+
+
+func _on_delete_ant_pressed():
+	var index:int = $TabCont/Ants/Select/HBox/AntChoose.get_item_index(g.selected_ant)
+	var id:int = g.selected_ant
+	print("asdasdasd" + str(index) + str(id))
+	if index > 0: 
+		$TabCont/Ants/Select/HBox/AntChoose.select(index-1)
+		select_ant($TabCont/Ants/Select/HBox/AntChoose.get_item_id(index-1))
+	else: 
+		$TabCont/Ants/Select/HBox/AntChoose.select(index+1)
+		select_ant($TabCont/Ants/Select/HBox/AntChoose.get_item_id(index+1))
+	
+	$TabCont/Ants/Select/HBox/AntChoose.remove_item(index)
+	g.world.delete_ant(id)

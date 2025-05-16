@@ -15,16 +15,19 @@ var downmost_chunk:Vector2i
 var user_pallete:Image
 
 # instances
-var sidebar
-var world
+var sidebar:Control
+var world:Node2D
+var ant_camera:Camera2D
 
 
 func _ready():
-	state_amt.resize(50)
+	state_amt.resize(64)
 	
+	#set colour 0 to black, 1 to white, and the rest are random!
 	user_pallete = Image.create_empty(1,64,false,Image.FORMAT_RGB8)
-	for i in 63:
-		user_pallete.set_pixel(0,i+1,Color(randf(),randf(),randf()))
+	for i in 62:
+		user_pallete.set_pixel(0,i+2,Color(randf(),randf(),randf()))
+	user_pallete.set_pixel(0,1,Color.WHITE)
 
 func calc_pppp():
 	if get_viewport().size.x > get_viewport().size.y:

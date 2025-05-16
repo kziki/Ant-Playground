@@ -2,6 +2,8 @@ extends Camera2D
 
 var camera_tween
 var camera_tween_pos
+var ant_camera_tween
+var ant_camera_tween_pos
 
 @onready var parent = get_parent().get_parent().get_parent()
 
@@ -43,7 +45,8 @@ func _input(event):
 				elif bot_right_point.y < 0: position.y = ((g.downmost_chunk.y+1) * g.sq_chunksize) + camera_rect.size.y / 2 
 				elif top_left_point.x > ((g.rightmost_chunk.x + 1) * g.sq_chunksize): position.x = -(camera_rect.size.x/2 + g.sq_chunksize/2)
 				elif top_left_point.y > ((g.downmost_chunk.y + 1) * g.sq_chunksize): position.y = -(camera_rect.size.y/2 + g.sq_chunksize/2)
-
+				
+				g.ant_camera.position = position
 
 func get_valid_zooms():
 	var x = 0
@@ -60,10 +63,14 @@ func set_zoom_to_index(index):
 func zoom_tween(to_zoom,_to_pos):
 	if camera_tween:
 		camera_tween.kill()
+		ant_camera_tween.kill()
 	if camera_tween_pos:
 		camera_tween_pos.kill()
+		ant_camera_tween_pos.kill()
 	camera_tween = get_tree().create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	ant_camera_tween = get_tree().create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
 	
 	camera_tween.tween_property(self,"zoom",to_zoom,0.05)
+	ant_camera_tween.tween_property(g.ant_camera,"zoom",to_zoom,0.05)
 	
 	# TODO, zoom to mouse position!! tween the position !!!!!!
