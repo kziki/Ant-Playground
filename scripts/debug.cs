@@ -1,6 +1,6 @@
 using Godot;
 using System;
 
-public partial class debug : Node2D
+public partial class Debug : Node2D
 {
 }

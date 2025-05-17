@@ -19,7 +19,7 @@ config/icon="uid://dmtolp5cql5xi"
 [autoload]
 
 g="*res://scripts/global.gd"
-GlobalCs="*res://scripts/GlobalCS.cs"
+GlobalCS="*res://scripts/GlobalCS.cs"
 
 [debug]
 

@@ -9,7 +9,9 @@ func _ready():
 
 
 func get_colour():
-	return $Colour.selected
+	var x = $Colour.selected
+	x = x << 2
+	return Color8(x,x,x)
 
 
 func get_state():

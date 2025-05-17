@@ -1638,3 +1638,4 @@ autostart = true
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/Tools/HBox/Screenshot" to="." method="_on_screenshot_pressed"]
 [connection signal="timeout" from="StopTimer" to="." method="_on_stop_timer_timeout"]
 [connection signal="timeout" from="SecondTimer" to="." method="_on_second_timer_timeout"]
+[connection signal="timeout" from="SecondTimer" to="CsNode" method="_on_second_timer_timeout"]
