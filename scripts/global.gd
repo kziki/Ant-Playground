@@ -1,7 +1,7 @@
 extends Node
 
-var field_x:int = 500
-var field_y:int = 500
+var field_x:int = 512
+var field_y:int = 512
 var state_amt:PackedByteArray = []
 var colour_amt:int = 2
 var randomizing:bool = false

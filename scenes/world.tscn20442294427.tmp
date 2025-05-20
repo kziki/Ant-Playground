@@ -1603,6 +1603,10 @@ label_settings = ExtResource("17_ts3gi")
 [node name="CsNode" type="Node" parent="."]
 script = ExtResource("15_37qwj")
 
+[node name="StopTimer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
 [node name="SecondTimer" type="Timer" parent="."]
 autostart = true
 
@@ -1632,5 +1636,6 @@ autostart = true
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/Tools/HBox/Forward" to="." method="_on_forward_pressed"]
 [connection signal="value_changed" from="Canvas/HSplit/OnScreen/Tools/HBox/Speed/SpeedSlider" to="." method="_on_h_slider_value_changed"]
 [connection signal="pressed" from="Canvas/HSplit/OnScreen/Tools/HBox/Screenshot" to="." method="_on_screenshot_pressed"]
+[connection signal="timeout" from="StopTimer" to="." method="_on_stop_timer_timeout"]
 [connection signal="timeout" from="SecondTimer" to="." method="_on_second_timer_timeout"]
 [connection signal="timeout" from="SecondTimer" to="CsNode" method="_on_second_timer_timeout"]

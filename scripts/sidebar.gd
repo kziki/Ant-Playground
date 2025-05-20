@@ -33,9 +33,8 @@ func _ready():
 	$TabCont/Grid/Grid/VBox/Colours/VBox/Colours/GridContainer/ColourPicker.get_child(0).text = "0"
 
 
-func add_ant(id,ant_name):
-	
-	$TabCont/Ants/Select/HBox/AntChoose.add_item(ant_name,id)
+func add_ant(index,ant_name):
+	$TabCont/Ants/Select/HBox/AntChoose.add_item(ant_name,index)
 
 
 func init_grid():
@@ -43,7 +42,7 @@ func init_grid():
 	for c in g.colour_amt:
 		for s in g.state_amt[g.selected_ant]:
 			var edit = new_edit(Vector2i(c,s))
-			var x = g.world.colour_state_rules[g.selected_ant][Vector2i(c,s)]
+			var x = g.world.colour_state_rules[g.selected_ant][c][s]
 			edit.set_colour(x[0])
 			edit.set_state(x[1])
 			edit.set_rotate(x[2])
@@ -112,13 +111,13 @@ func resize_grid(x=null,y=null):
 	main.custom_minimum_size = Vector2((g.colour_amt)*GRID_SPACE.x,(g.state_amt[g.selected_ant])*GRID_SPACE.y)
 
 
-func swap_grid(id:int, old_id:int):
-	var state_difference:int = g.state_amt[id] - g.state_amt[old_id]
+func swap_grid(index:int, old_index:int):
+	var state_difference:int = g.state_amt[index] - g.state_amt[old_index]
 	resize_grid(null,state_difference)
 	for c in g.colour_amt:
-		for s in g.state_amt[id]:
+		for s in g.state_amt[index]:
 			pass
-			var x = g.world.colour_state_rules[g.selected_ant][Vector2i(c,s)]
+			var x = g.world.colour_state_rules[g.selected_ant][c][s]
 			state_edits[Vector2i(c,s)].set_colour(x[0])
 			state_edits[Vector2i(c,s)].set_state(x[1])
 			state_edits[Vector2i(c,s)].set_rotate(x[2])
@@ -138,11 +137,20 @@ func remove_edit(pos):
 	state_edits.erase(pos)
 
 
-func make_ant_from_edits() -> Dictionary:
-	var x:Dictionary = {}
+func make_ant_from_edits() -> Array:
+	var c:Array = []
+	c.resize(64)
+	for i in 64:
+		c[i] = []
+		c[i].resize(64)
+		for j in 64:
+			var r: PackedByteArray = [0,0,0]
+			c[i][j] = r
 	for i in state_edits:
-		x[i] = [state_edits[i].get_colour(),state_edits[i].get_state(),state_edits[i].get_rotate()]
-	return x
+		c[i.x][i.y][0] = state_edits[i].get_colour()
+		c[i.x][i.y][1] = state_edits[i].get_state()
+		c[i.x][i.y][2] = state_edits[i].get_rotate()
+	return c
 
 
 func randomize_edits():
@@ -225,13 +233,12 @@ func get_colours():
 
 
 func disable_elements():
-	pass
-	#$TabCont/Ants/DisableControls.show()
+	$TabCont/Ants/Select/HBox/DeleteAnt.disabled = true
 
 
 func enable_elements():
 	pass
-	#$TabCont/Ants/DisableControls.hide()
+	$TabCont/Ants/Select/HBox/DeleteAnt.disabled = false
 
 
 func _on_to_all_pressed():
@@ -251,7 +258,7 @@ func _on_rotation_pressed():
 
 
 func get_selected_ant_id() -> int:
-	return $TabCont/Ants/Select/HBox/AntChoose.get_selected_id()
+	return $TabCont/Ants/Select/HBox/AntChoose.get_selected_index()
 
 
 func _on_tab_cont_tab_changed(tab):
@@ -262,22 +269,22 @@ func _on_tab_cont_tab_changed(tab):
 
 
 func _on_ant_choose_item_selected(index):
-	select_ant($TabCont/Ants/Select/HBox/AntChoose.get_item_id(index))
+	select_ant(index)
 
 
-func select_ant(id):
+func select_ant(index):
 	var old_id = g.selected_ant
-	var ant = g.world.ants[id]
-	g.selected_ant = id
+	var ant = g.world.ants[index]
+	g.selected_ant = index
 	
 	$TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/X.set_value_no_signal(ant[4].x)
 	$TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/Y.set_value_no_signal(ant[4].y)
 	$TabCont/Ants/Ants/VBox/Start/VBox/Direction/Option.selected = ant[5]
-	$TabCont/Ants/Ants/VBox/Rules/VBox/States/Num.set_value_no_signal(g.state_amt[id])
+	$TabCont/Ants/Ants/VBox/Rules/VBox/States/Num.set_value_no_signal(g.state_amt[index])
 	$TabCont/Ants/Ants/VBox/Info/VBox/Colour/ColorPickerButton.color = ant[3]
 	$TabCont/Ants/Ants/VBox/Info/VBox/Name/LineEdit.text = ant[6]
 	
-	swap_grid(id,old_id)
+	swap_grid(index,old_id)
 	
 	#resize_grid(g.colour_amt, g.state_amt[g.selected_ant])
 
@@ -335,14 +342,14 @@ func _on_check_button_toggled(toggled_on):
 
 func _on_delete_ant_pressed():
 	var index:int = $TabCont/Ants/Select/HBox/AntChoose.get_item_index(g.selected_ant)
-	var id:int = g.selected_ant
-	print("asdasdasd" + str(index) + str(id))
+	print("asdasdasd" + str(index) + str(index))
 	if index > 0: 
 		$TabCont/Ants/Select/HBox/AntChoose.select(index-1)
-		select_ant($TabCont/Ants/Select/HBox/AntChoose.get_item_id(index-1))
+		select_ant($TabCont/Ants/Select/HBox/AntChoose.get_item_index(index-1))
 	else: 
 		$TabCont/Ants/Select/HBox/AntChoose.select(index+1)
-		select_ant($TabCont/Ants/Select/HBox/AntChoose.get_item_id(index+1))
+		select_ant($TabCont/Ants/Select/HBox/AntChoose.get_item_index(index+1))
 	
 	$TabCont/Ants/Select/HBox/AntChoose.remove_item(index)
-	g.world.delete_ant(id)
+	
+	g.world.delete_ant(index)

@@ -1,39 +1,54 @@
 using Godot;
 using System;
 using System.Threading;
-using CommunityToolkit.HighPerformance;
 using System.Collections.Generic;
 
 public partial class CSharpField : Node
 {
-	public ulong turns = 0;
 	private Thread thread;
 	private static System.Threading.Mutex mutex = new System.Threading.Mutex();
+	private ulong _b;
+	
+	public ulong turns = 0;
+	public ulong prevTurns = 0;
 	public bool wrapAround = true;
 	public Node2D chunkParent;
+	public enum sqDir:int{
+		UP = 0,
+		RIGHT = 1,
+		DOWN = 2,
+		LEFT = 3
+	}
+	public (int x, int y)[] sqMove = new (int x, int y)[4];
 	
-	public Dictionary<byte,(Vector2I, int rotation, byte state)> ants = new Dictionary<byte,(Vector2I, int rotation, byte state)>();
-	public Dictionary<byte, byte[,,]> antRules = new Dictionary<byte, byte[,,]>();
-	public Dictionary<(int x, int y),Image> images = new Dictionary<(int x, int y),Image>();
-	public Dictionary<(int x, int y),Sprite2D> chunks = new Dictionary<(int x, int y),Sprite2D>();
-	public Color[] l8Cols = new Color[64];
-	public HashSet<(int x, int y)> updateQueue = new HashSet<(int x, int y)>(); 
+	public int ants = 0;
+	public (int x, int y)[] antPositions = new (int x, int y)[0];
+	public byte[] antStates = new byte[0];
+	public int[] antRotations = new int[0];
+	public byte[][,,] antRules = new byte[0][,,];
 	
-	private ulong _b;
-	private uint x = 1000000;
-	private int[] y = {0};
+	public Dictionary<(int x, int y),Chunk> chunks = new Dictionary<(int x, int y),Chunk>();
+	public HashSet<(int x, int y)> updateQueue = new HashSet<(int x, int y)>();
+	
+	public class Chunk {
+		public Sprite2D Sprite;
+		public ImageTexture Texture;
+		public Image Image;
+		public byte[] ImgData;
+	}
 	
 	public override void _Ready(){
-		for (int i = 0; i < 64; i++) {
-			byte c = Convert.ToByte(i * 4);
-			l8Cols[i] = Color.Color8(c,c,c);
-		}
+		sqMove[0] = (0,-1);
+		sqMove[1] = (1,0);
+		sqMove[2] = (0,1);
+		sqMove[3] = (-1,0);
 		
 		thread = new Thread(AntTicks);
-		thread.Name = "AntThicksThread";
+		thread.Name = "AntTicksThread";
 		chunkParent = (Node2D) GetNode("../Canvas/HSplit/OnScreen/Sim/SimViewport/Field/Chunks");
 		
-		ants.Add(0,(new Vector2I(256,256),0,0));
+		AddAnt((256,256),0,0);
+		
 		byte[,,] defaultRules = new byte[2,1,3];
 		defaultRules[0,0,0] = 1;
 		defaultRules[0,0,1] = 0;
@@ -42,85 +57,129 @@ public partial class CSharpField : Node
 		defaultRules[1,0,1] = 0;
 		defaultRules[1,0,2] = 3;
 		
-		antRules.Add(0,defaultRules);
+		AddAntRules(0,defaultRules);
 		
 		for (int r = 0; r < 8; r++) {
 			for (int c = 0; c < 8; c++) {
-				NewChunk((c,r));
+				//NewChunk((c,r));
 			}
 		}
 	}
 	
+	
 	public void Start(){
 		//thread.Start();
+		GD.Print("ant start");
+	}
+	
+	
+	public override void _Process(double delta) {
+		mutex.WaitOne();
+		foreach(var i in updateQueue) { 
+			chunks[i].Image.SetData(64,64,false,Image.Format.L8,chunks[i].ImgData);
+			chunks[i].Texture.Update(chunks[i].Image);
+			chunks[i].Sprite.Texture = chunks[i].Texture;
+		}
+		updateQueue.Clear();
+		mutex.ReleaseMutex();
 	}
 	
 	public void AntTicks(){
 		int chunkSize = GlobalCS.Instance.ChunkSize;
 		float chunkSizeF = GlobalCS.Instance.ChunkSize;
-		byte[,,] rules;
-		Vector2I chunk;
-		(Vector2I, int Rotation, byte State) ant;
-		(int posX,int posY) which; //chunk local pos
-		ValueTuple<int,int> pos = new ValueTuple<int,int>(0,0);
+		int fieldX = GlobalCS.Instance.FieldX;
+		int fieldY = GlobalCS.Instance.FieldY;
+		(int x, int y) chunk;
+		(int x, int y) which; //chunk local pos
+		HashSet<(int x, int y)> localQueue = new();
+		byte gState; //grid state
 		
-		GD.Print("---");
-		for (int i = 0; i < 1; i++) {
-			foreach(var a in ants) { 
-				ant = a.Value;
-				
-				chunk = (Vector2I)((Vector2)ant.Item1 / chunkSizeF).Floor();
-				
-				if (images.ContainsKey(chunk)) {
-					if (wrapAround) {
-						
-					} else {
-						
-					}
-					GD.Print("yup");
+		for (int i = 0; i < 1000000000; i++) {
+			for (int ant = 0; ant <= ants; ant++) { 
+				//wrap around or add new chunk if out of bounds
+				if (wrapAround) {
+					if (antPositions[ant].x >= GlobalCS.Instance.FieldX) { antPositions[ant].x = 0; }
+					else if (antPositions[ant].y >= GlobalCS.Instance.FieldY) { antPositions[ant].y = 0; }
+					else if (antPositions[ant].x < 0) { antPositions[ant].x = GlobalCS.Instance.FieldX - 1; }
+					else if (antPositions[ant].y < 0) { antPositions[ant].y = GlobalCS.Instance.FieldY - 1; }
+					chunk = ( antPositions[ant].x >> 6, antPositions[ant].y >> 6 );
+				} else {
+					//TODO: new chunk if out of bounds.
+					chunk = ( (int)Math.Floor((float)antPositions[ant].x / chunkSizeF) , (int)Math.Floor((float)antPositions[ant].y / chunkSizeF) );
 				}
-				which.Item1 = ant.Item1.Item1 - chunk.Item1 * chunkSize;
-				which.Item2 = ant.Item1.Item2 - chunk.Item2 * chunkSize;
+				//get local position to chunk
+				which = ( antPositions[ant].x - chunk.x * chunkSize, antPositions[ant].y - chunk.y * chunkSize );
+				// todo: replace ^ with gdscript version! this doesnt need to be a (x,y)
 				
-				rules = antRules[a.Key];
-				int gState = images[chunk].GetPixel(which.Item1, which.Item2).R8 >> 2;
-				byte aState = ant.Item3;
+				//get image data and rules
+				var chunkdata = chunks[chunk];
+				var rules = antRules[ant];
 				
-				images[chunk].SetPixel(which.Item1,which.Item2,l8Cols[rules[gState,aState,0]]);
+				//state of the tile the ant is on
+				gState = (byte)(chunkdata.ImgData[which.y * chunkSize + which.x] >> 2);
 				
-				ant.Item3 = rules[gState,aState,1];
-				ant.Item2 = (ant.Item2 + rules[gState,aState,2]) & 0x3;
-				//ant.Item1 = pos + sq_move[ant[1]];
+				// change tile state according to rule and add to local update queue
+				chunkdata.ImgData[which.y * chunkSize + which.x] = (byte)(rules[ gState, antStates[ant], 0] << 2);
+				localQueue.Add(chunk);
 				
-				turns = turns + 1;
+				//rotate ant, move ant, and set ant state
+				antStates[ant] = rules[gState, antStates[ant], 1];
+				antRotations[ant] = (antRotations[ant] + rules[gState, antStates[ant], 2]) & 0x3;
+				antPositions[ant] = (antPositions[ant].x + sqMove[antRotations[ant]].x, antPositions[ant].y + sqMove[antRotations[ant]].y);
 				
-				//_b = Time.GetTicksUsec();
-				//GD.Print(Time.GetTicksUsec() - _b);
+				turns++;
+				}
+			if ((i & 0x3FF) == 0) {
+				mutex.WaitOne();
+				foreach (var c in localQueue) {
+					updateQueue.Add(c);
+				}
+				mutex.ReleaseMutex();
+				localQueue.Clear();
 			}
 		}
-		
-		GD.Print("---");
-		
-		//while (IsProcessing()) {
-			//steps++;
-		//}
-		
 	}
 	
 	public void _on_second_timer_timeout(){
-		//GD.Print(steps);
+		mutex.WaitOne();
+		//GD.Print(turns - prevTurns);
+		prevTurns = turns;
+		mutex.ReleaseMutex();
 	}
 	
 	public void NewChunk((int x, int y) pos) {
 		Sprite2D sprite = new Sprite2D();
 		Image img = Image.CreateEmpty(GlobalCS.Instance.ChunkSize,GlobalCS.Instance.ChunkSize,false,Image.Format.L8);
 		ImageTexture texture = ImageTexture.CreateFromImage(img);
+		var data = img.GetData();
 		
 		sprite.Texture = texture;
-		sprite.Position = new Vector2(pos.Item1, pos.Item2) * GlobalCS.Instance.ChunkSize;
+		sprite.Position = new Vector2(pos.x, pos.y) * GlobalCS.Instance.ChunkSize;
 		
-		chunks[pos] = sprite;
-		images[pos] = img;
+		chunks[pos] = new Chunk();//(sprite, texture, img, data);
+		var chunk = chunks[pos];
+		chunk.Sprite = sprite;
+		chunk.Texture = texture;
+		chunk.Image = img;
+		chunk.ImgData = data;
+		
 		chunkParent.CallDeferred("add_child",sprite);
+	}
+	
+	public void AddAnt((int x, int y) pos, int rotation, byte state) {
+		int newLength = antPositions.Length + 1;
+		Array.Resize(ref antPositions, newLength);
+		Array.Resize(ref antRotations, newLength);
+		Array.Resize(ref antStates, newLength);
+		
+		antPositions[newLength-1] = pos;
+		antRotations[newLength-1] = rotation;
+		antStates[newLength-1] = state;
+		
+		Array.Resize(ref antRules, newLength);
+	}
+	
+	public void AddAntRules(int ant, byte[,,] rules) {
+		antRules[ant] = rules;
 	}
 }
