@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://7ajkp07thh0e"]
+[gd_scene load_steps=7 format=3 uid="uid://7ajkp07thh0e"]
 
 [ext_resource type="Theme" uid="uid://dj3bmaqt1xsck" path="res://misc/rule_theme.tres" id="1_jn4e3"]
 [ext_resource type="Script" uid="uid://h8sle10i4al" path="res://scripts/colour_state_edit.gd" id="2_75kkj"]
@@ -7,10 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://gwikgpip264u" path="res://resources/ui/ba18.png" id="5_r4kas"]
 [ext_resource type="Texture2D" uid="uid://54m4i7wrug84" path="res://resources/ui/le18.png" id="6_w0yqu"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mxfn"]
-bg_color = Color(0.190762, 0.190762, 0.190762, 1)
-
 [node name="ColourStateEdit" type="Control"]
+visible = false
 clip_contents = true
 layout_mode = 3
 anchors_preset = 0
@@ -19,15 +17,6 @@ offset_bottom = 20.0
 theme = ExtResource("1_jn4e3")
 script = ExtResource("2_75kkj")
 metadata/_edit_use_anchors_ = true
-
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_0mxfn")
 
 [node name="Colour" type="OptionButton" parent="."]
 clip_contents = true

@@ -3,6 +3,7 @@
 [ext_resource type="LabelSettings" uid="uid://cak656pujdckl" path="res://misc/grid_label.tres" id="1_8pte3"]
 
 [node name="StateNumber" type="Label"]
+visible = false
 offset_right = 32.0
 offset_bottom = 23.0
 label_settings = ExtResource("1_8pte3")

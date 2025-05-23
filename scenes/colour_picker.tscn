@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://ctxjb38j5ylif"]
 
 [ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://misc/theme.tres" id="1_o3r31"]
-[ext_resource type="PackedScene" uid="uid://bcp7plm6w02yv" path="res://scenes/state_number.tscn" id="1_yewj2"]
 [ext_resource type="Script" uid="uid://dvjlh6nleunjp" path="res://scripts/colour_picker.gd" id="2_fq6my"]
+[ext_resource type="LabelSettings" uid="uid://cak656pujdckl" path="res://misc/grid_label.tres" id="3_j6xyc"]
 
 [node name="ColourPicker" type="ColorPickerButton"]
 offset_right = 16.0
@@ -10,12 +10,13 @@ offset_bottom = 16.0
 theme = ExtResource("1_o3r31")
 script = ExtResource("2_fq6my")
 
-[node name="ColourNumber" parent="." instance=ExtResource("1_yewj2")]
+[node name="ColourNumber" type="Label" parent="."]
 layout_mode = 0
 offset_left = -36.0
 offset_top = -2.0
 offset_right = -4.0
 offset_bottom = 18.0
+label_settings = ExtResource("3_j6xyc")
 horizontal_alignment = 2
 vertical_alignment = 1
 

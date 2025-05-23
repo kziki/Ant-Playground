@@ -7,6 +7,8 @@ var label_scene = preload("res://scenes/state_number.tscn")
 const GRID_SPACE = Vector2(72,32)
 var state_edits:Dictionary = {}
 var randomizing:bool = false
+var visible_x:int
+var visible_y:int
 
 @onready var main_labels = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/XY/Labels
 @onready var main_edits = $TabCont/Ants/Ants/VBox/Rules/VBox/RuleEdit/ScrollCont/Main/Edits
@@ -38,89 +40,111 @@ func add_ant(index,ant_name):
 
 
 func init_grid():
-	main.custom_minimum_size = Vector2((g.colour_amt+1)*68,(g.state_amt[g.selected_ant]+1)*28) + Vector2(32,32)
-	for c in g.colour_amt:
-		for s in g.state_amt[g.selected_ant]:
-			var edit = new_edit(Vector2i(c,s))
-			var x = g.world.colour_state_rules[g.selected_ant][c][s]
-			edit.set_colour(x[0])
-			edit.set_state(x[1])
-			edit.set_rotate(x[2])
+	#instancing the max colours and states possible!! 
+	#later you just adjust which ones are visible to avoid instancing and queueing constantly
+	var pre_x = 24
+	var pre_y = 24
+	visible_x = 0
+	visible_y = 0
+	main.custom_minimum_size = Vector2((pre_x)*GRID_SPACE.x, (pre_y)*GRID_SPACE.y)
 	
-	for s in g.state_amt[g.selected_ant]:
+	for c in pre_x:
+		for s in pre_y:
+			new_edit(Vector2i(c,s))
+	
+	for s in pre_y:
 		var new = label_scene.instantiate()
 		new.position = Vector2(0,s*GRID_SPACE.y+32)
 		new.text = str(s)
 		main_labels.add_child(new)
 	
-	for c in g.colour_amt:
+	for c in pre_x:
 		var new = colour_picker.instantiate()
 		new.position = Vector2(c * GRID_SPACE.x + GRID_SPACE.x -12, 8)
-		if c==0:new.color = Color.BLACK
-		else: new.color = Color.WHITE
+		new.color = g.user_pallete.get_pixel(0,c)
 		new.get_child(0).text = str(int(c))
 		main_colours.add_child(new)
+		new.hide()
+	
+	main_colours.get_child(0).show()
+	main_colours.get_child(1).show()
+	visible_x = 2
 
 
 func resize_grid(x=null,y=null):
 	for i in state_edits:
 		state_edits[i].reload(x,y)
-	if !x == null:
+	if x != null:
 		if x > 0: #add colours to grid
 			for c in x:
 				for s in g.state_amt[g.selected_ant]:
-					new_edit(Vector2i(g.colour_amt-x+c,s))
+					#new_edit(Vector2i(g.colour_amt-x+c,s))
+					var a = Vector2i(g.colour_amt-x+c,s)
+					var r = g.world.colour_state_rules[g.selected_ant][a.x][a.y]
+					state_edits[a].show()
+					state_edits[a].set_colour(r[0])
+					state_edits[a].set_state(r[1])
+					state_edits[a].set_rotate(r[2])
 				
-				var new = colour_picker.instantiate()
-				
-				new.position = Vector2((g.colour_amt-x+c)*GRID_SPACE.x + GRID_SPACE.x -12,8)
-				new.get_child(0).text = str(int(g.colour_amt-x+c))
-				
-				new.color = g.user_pallete.get_pixel(0,g.colour_amt-x+c)
-				
-				main_colours.add_child(new)
-			
-			#g.world.colours = get_colours()
+				main_colours.get_child(g.colour_amt-x+c).show()
 		else: #remove colours from grid
 			for c in -x:
 				for s in g.state_amt[g.selected_ant]:
-					remove_edit(Vector2i(g.colour_amt+c,s))
-				main_colours.get_child(g.colour_amt-x-c-1).queue_free()
+					state_edits[Vector2i(g.colour_amt+c,s)].hide()
+				main_colours.get_child(g.colour_amt-x-c-1).hide()
 			#g.world.colours = get_colours()
-	else:
+	elif y != null:
 		if y > 0: #add states to grid
 			for c in g.colour_amt:
 				for s in y:
-					new_edit(Vector2i(c,g.state_amt[g.selected_ant]-s-1))
-			
+					var a = Vector2i(c,g.state_amt[g.selected_ant]-s-1)
+					var r = g.world.colour_state_rules[g.selected_ant][c][a.y]
+					state_edits[a].show()
+					state_edits[a].set_colour(r[0])
+					state_edits[a].set_state(r[1])
+					state_edits[a].set_rotate(r[2])
 			for s in y:
-				var new = label_scene.instantiate()
-				
-				new.position = Vector2(0,(g.state_amt[g.selected_ant]-y+s)*GRID_SPACE.y+32)
-				new.text = str(int(g.state_amt[g.selected_ant]-y+s))
-				
-				main_labels.add_child(new)
+				main_labels.get_child(g.state_amt[g.selected_ant]-s-1).show()
 			
 		else: #remove states from grid
 			for c in g.colour_amt:
 				for s in -y:
-					remove_edit(Vector2i(c,g.state_amt[g.selected_ant]+s))
+					state_edits[Vector2i(c,(g.state_amt[g.selected_ant]+s))].hide()
 			for s in -y:
-				main_labels.get_child(g.state_amt[g.selected_ant]-y-s-1).queue_free()
-			
-	main.custom_minimum_size = Vector2((g.colour_amt)*GRID_SPACE.x,(g.state_amt[g.selected_ant])*GRID_SPACE.y)
+				main_labels.get_child(g.state_amt[g.selected_ant]-y-s-1).hide()
+	
+	print('aad2')
 
 
-func swap_grid(index:int, old_index:int):
-	var state_difference:int = g.state_amt[index] - g.state_amt[old_index]
-	resize_grid(null,state_difference)
-	for c in g.colour_amt:
-		for s in g.state_amt[index]:
-			pass
-			var x = g.world.colour_state_rules[g.selected_ant][c][s]
-			state_edits[Vector2i(c,s)].set_colour(x[0])
-			state_edits[Vector2i(c,s)].set_state(x[1])
-			state_edits[Vector2i(c,s)].set_rotate(x[2])
+func swap_grid(index:int):
+	var state_difference:int = g.state_amt[index] - visible_y
+	var old_y = visible_y
+	visible_y = g.state_amt[index]
+	if state_difference > 0:
+		for c in g.colour_amt:
+			for s in visible_y:
+				var a = Vector2i(c,s)
+				var x = g.world.colour_state_rules[g.selected_ant][c][s]
+				state_edits[a].show()
+				state_edits[a].set_colour(x[0])
+				state_edits[a].set_state(x[1])
+				state_edits[a].set_rotate(x[2])
+		for s in visible_y:
+			main_labels.get_child(s).show()
+	else:
+		for c in g.colour_amt:
+			for s in abs(state_difference):
+				var a = Vector2i(c, old_y - s - 1)
+				state_edits[a].hide()
+		for c in g.colour_amt:
+			for s in visible_y:
+				var a = Vector2i(c,s)
+				var x = g.world.colour_state_rules[g.selected_ant][c][s]
+				state_edits[a].set_colour(x[0])
+				state_edits[a].set_state(x[1])
+				state_edits[a].set_rotate(x[2])
+		for s in abs(state_difference):
+			main_labels.get_child(old_y - s - 1).hide()
 
 
 func new_edit(pos:Vector2i):
@@ -218,7 +242,6 @@ func _on_amt_s_value_changed(value):
 
 
 func _on_amt_c_value_changed(value):
-	$TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.min_value = max($TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.min_value, value)
 	var x = g.colour_amt
 	g.colour_amt = value
 	resize_grid(value-x)
@@ -262,10 +285,11 @@ func get_selected_ant_id() -> int:
 
 
 func _on_tab_cont_tab_changed(tab):
-	if tab == 0:
-		$TabCont/Ants/Ants/VBox/Current.set_process(false)
-	elif tab == 1:
-		$TabCont/Ants/Ants/VBox/Current.set_process(true)
+	pass
+	#if tab == 0:
+		#$TabCont/Ants/Ants/VBox/Current.set_process(false)
+	#elif tab == 1:
+		#$TabCont/Ants/Ants/VBox/Current.set_process(true)
 
 
 func _on_ant_choose_item_selected(index):
@@ -284,7 +308,7 @@ func select_ant(index):
 	$TabCont/Ants/Ants/VBox/Info/VBox/Colour/ColorPickerButton.color = ant[3]
 	$TabCont/Ants/Ants/VBox/Info/VBox/Name/LineEdit.text = ant[6]
 	
-	swap_grid(index,old_id)
+	swap_grid(index)
 	
 	#resize_grid(g.colour_amt, g.state_amt[g.selected_ant])
 

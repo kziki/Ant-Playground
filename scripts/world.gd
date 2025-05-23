@@ -190,7 +190,7 @@ func ant_ticks():
 	var localupdate:Dictionary = {}
 	var chunk_data:PackedByteArray
 	
-	while is_processing():
+	while time_state == 1:
 		while queue > 1.0:
 			for a in ants.size():
 				ant = ants[a]
@@ -219,8 +219,11 @@ func ant_ticks():
 				rules = colour_state_rules[a][chunk_data[which1d] >> 2][ant[2]]
 				
 				# set tile colour
-				localupdate[chunk] = true
+				mutex.lock()
+				updatequeue[chunk] = true
+				#localupdate[chunk] = true
 				chunk_data[which1d] = rules[0] << 2
+				mutex.unlock()
 				
 				# update ant position / rotation / state
 				ant[2] = rules[1]
@@ -229,16 +232,17 @@ func ant_ticks():
 				
 				turns = turns + 1
 				
-				mutex.lock()
-				if turns % update_frequency == 0:
-					for i in localupdate.keys():
-						updatequeue[i] = true
-					localupdate.clear()
-				mutex.unlock()
+				#mutex.lock()
+				#if turns % update_frequency == 0:
+					#for i in localupdate.keys():
+						#updatequeue[i] = true
+					#localupdate.clear()
+				#mutex.unlock()
 			queue = queue - 1.0
 
 func update_ant(which):
 	mutex.lock()
+	print("ant updated")
 	colour_state_rules[which] = $Canvas/HSplit/Sidebar.make_ant_from_edits()
 	mutex.unlock()
 
@@ -320,6 +324,8 @@ func _on_forward_pressed():
 	
 	if !ant_thread.is_started(): 
 		ant_thread.start(ant_ticks)
+	
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.min_value = $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.value
 
 
 func _on_reverse_pressed():
