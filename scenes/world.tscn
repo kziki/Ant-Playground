@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://ba7413b0niv7p"]
+[gd_scene load_steps=49 format=3 uid="uid://ba7413b0niv7p"]
 
 [ext_resource type="Script" uid="uid://bantfaxh1o1hc" path="res://scripts/world.gd" id="1_xo05s"]
 [ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://misc/theme.tres" id="2_dss4m"]
@@ -28,9 +28,15 @@
 [ext_resource type="Script" uid="uid://e4g3ecm5xd1w" path="res://scripts/CSharpField.cs" id="15_37qwj"]
 [ext_resource type="LabelSettings" uid="uid://c4u7pvq0bxhq" path="res://scenes/small_text.tres" id="17_ts3gi"]
 
+[sub_resource type="Gradient" id="Gradient_ts3gi"]
+
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hiqwa"]
 width = 2
 height = 64
+generate_mipmaps = false
+color_ramp = SubResource("Gradient_ts3gi")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ts3gi"]
 
 [sub_resource type="Resource" id="Resource_h3ujd"]
 script = ExtResource("5_navra")
@@ -80,8 +86,19 @@ friction = 4.0
 minimum_velocity = 0.4
 rebound_strength = 7.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h3ujd"]
-bg_color = Color(0.259294, 0.259294, 0.259294, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ts3gi"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.317647, 0.317647, 0.317647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0nbtd"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.317647, 0.317647, 0.317647, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lakw3"]
 shader = ExtResource("6_7t5mc")
@@ -211,6 +228,7 @@ grow_vertical = 2
 theme = ExtResource("2_dss4m")
 theme_override_constants/minimum_grab_thickness = 16
 theme_override_icons/grabber = SubResource("NoiseTexture2D_hiqwa")
+theme_override_icons/h_grabber = SubResource("NoiseTexture2D_ts3gi")
 
 [node name="Sidebar" type="Control" parent="Canvas/HSplit"]
 clip_contents = true
@@ -238,10 +256,9 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 1
+current_tab = 0
 
 [node name="Grid" type="ScrollContainer" parent="Canvas/HSplit/Sidebar/TabCont"]
-visible = false
 custom_minimum_size = Vector2(0, 5.205)
 layout_mode = 2
 follow_focus = true
@@ -273,7 +290,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 8
 
 [node name="Basic" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox"]
-custom_minimum_size = Vector2(0, 112)
+custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
 mouse_filter = 1
 
@@ -327,6 +344,8 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(224, 24)
 layout_direction = 2
 layout_mode = 2
+tooltip_text = "Size of the grid at the beggining of the simulation. 
+If wrap around is on, the grid will stay at this size."
 mouse_filter = 1
 
 [node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize"]
@@ -339,7 +358,7 @@ offset_left = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-text = "Field size"
+text = "Start size"
 vertical_alignment = 1
 
 [node name="HBox" type="HBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize"]
@@ -381,6 +400,11 @@ select_all_on_focus = true
 [node name="WrapAround" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
+tooltip_text = "If on, the ant(s) will wrap around to the other side 
+of the grid when leaving the bounds of the grid.
+
+If off, the ant(s) will generate new chunks. 
+Each chunk is 64x64 and roughly ~1.2mb."
 mouse_filter = 1
 
 [node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround"]
@@ -407,11 +431,13 @@ grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 1
 button_pressed = true
+action_mode = 0
 flat = true
 
 [node name="Type" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
+tooltip_text = "Square only for now, sorry :("
 mouse_filter = 1
 
 [node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/Type"]
@@ -449,6 +475,37 @@ popup/item_1/disabled = true
 popup/item_2/text = "Triangle"
 popup/item_2/id = 2
 popup/item_2/disabled = true
+
+[node name="Rounded" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/Rounded"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Smoothed"
+vertical_alignment = 1
+
+[node name="Smoothed" type="CheckButton" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/Rounded"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+action_mode = 0
+flat = true
 
 [node name="Colours" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox"]
 custom_minimum_size = Vector2(0, 112)
@@ -554,6 +611,7 @@ layout_mode = 2
 mouse_filter = 1
 
 [node name="Ants" type="Control" parent="Canvas/HSplit/Sidebar/TabCont"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -698,12 +756,12 @@ grow_vertical = 2
 size_flags_horizontal = 10
 mouse_filter = 1
 
-[node name="WrapAround" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox"]
+[node name="Visibility" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 mouse_filter = 1
 
-[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/WrapAround"]
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Visibility"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -715,7 +773,7 @@ mouse_filter = 1
 text = "Show Ant"
 vertical_alignment = 1
 
-[node name="ShowAnt" type="CheckButton" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/WrapAround"]
+[node name="ShowAnt" type="CheckButton" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Visibility"]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -1193,13 +1251,6 @@ size_flags_horizontal = 3
 mouse_filter = 1
 text = "b state"
 
-[node name="ToColour" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 1
-text = "colours"
-
 [node name="RandRow2" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
@@ -1367,13 +1418,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxFlat_h3ujd")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ts3gi")
 
 [node name="NewAnt" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxFlat_ts3gi")
 text = "+"
 
 [node name="DeleteAnt" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Select/HBox"]
@@ -1381,6 +1433,7 @@ custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxFlat_0nbtd")
 text = "-"
 
 [node name="Rand" type="Control" parent="Canvas/HSplit/Sidebar/TabCont"]
@@ -1455,7 +1508,7 @@ label_settings = ExtResource("17_ts3gi")
 horizontal_alignment = 2
 script = ExtResource("4_lakw3")
 
-[node name="Turns" type="Label" parent="Canvas/HSplit/OnScreen"]
+[node name="Ticks" type="Label" parent="Canvas/HSplit/OnScreen"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -1612,10 +1665,11 @@ autostart = true
 [connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X" to="Canvas/HSplit/Sidebar" method="_on_x_value_changed"]
 [connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y" to="Canvas/HSplit/Sidebar" method="_on_y_value_changed"]
 [connection signal="toggled" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround/CheckButton" to="Canvas/HSplit/Sidebar" method="_on_check_button_toggled"]
+[connection signal="toggled" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/Rounded/Smoothed" to="." method="_on_smoothed_toggled"]
 [connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours" to="Canvas/HSplit/Sidebar" method="_on_amt_c_value_changed"]
 [connection signal="text_submitted" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Name/LineEdit" to="Canvas/HSplit/Sidebar" method="_on_line_edit_text_submitted"]
 [connection signal="color_changed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Colour/ColorPickerButton" to="Canvas/HSplit/Sidebar" method="_on_color_picker_button_color_changed"]
-[connection signal="toggled" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/WrapAround/ShowAnt" to="Canvas/HSplit/Sidebar" method="_on_show_ant_toggled"]
+[connection signal="toggled" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Visibility/ShowAnt" to="Canvas/HSplit/Sidebar" method="_on_show_ant_toggled"]
 [connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/X" to="Canvas/HSplit/Sidebar" method="_on_start_x_value_changed"]
 [connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/Y" to="Canvas/HSplit/Sidebar" method="_on_start_y_value_changed"]
 [connection signal="item_selected" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Start/VBox/Direction/Option" to="Canvas/HSplit/Sidebar" method="_on_start_direction_changed"]

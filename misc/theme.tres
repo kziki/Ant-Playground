@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=48 format=4 uid="uid://bx3jvtk8472ag"]
+[gd_resource type="Theme" load_steps=50 format=4 uid="uid://bx3jvtk8472ag"]
 
 [ext_resource type="FontFile" uid="uid://bixh6redaff4e" path="res://font/JetBrainsMono[wght].ttf" id="1_gwh2h"]
 [ext_resource type="Texture2D" uid="uid://n01ir1hov0ip" path="res://resources/ui/nothing.png" id="2_kfyo1"]
@@ -1495,6 +1495,8 @@ bg_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ybu1x"]
 bg_color = Color(0.18359, 0.18359, 0.18359, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kfyo1"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ndmpe"]
 bg_color = Color(0, 0, 0, 1)
 border_width_bottom = 2
@@ -1595,6 +1597,17 @@ bg_color = Color(0, 0, 0, 1)
 border_width_bottom = 2
 border_color = Color(0.28485, 0.28485, 0.28485, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7pjvw"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_kfyo1"]
 color = Color(0.317647, 0.317647, 0.317647, 1)
 thickness = 4
@@ -1665,6 +1678,7 @@ PopupMenu/icons/radio_unchecked = ExtResource("2_kfyo1")
 PopupMenu/icons/radio_unchecked_disabled = ExtResource("2_kfyo1")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_535ge")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_ybu1x")
+RichTextLabel/styles/background = SubResource("StyleBoxFlat_kfyo1")
 RichTextLabel/styles/normal = SubResource("StyleBoxFlat_ndmpe")
 SpinBox/constants/buttons_vertical_separation = 0
 SpinBox/constants/buttons_width = 0
@@ -1706,6 +1720,7 @@ TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_aaj76")
 TextEdit/styles/focus = SubResource("StyleBoxFlat_hqigj")
 TextEdit/styles/normal = SubResource("StyleBoxFlat_pvf4r")
 TextEdit/styles/read_only = SubResource("StyleBoxFlat_fsxoa")
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_7pjvw")
 VBoxContainer/constants/separation = 4
 VScrollBar/styles/grabber = SubResource("StyleBoxLine_kfyo1")
 VScrollBar/styles/scroll = SubResource("StyleBoxLine_gwh2h")

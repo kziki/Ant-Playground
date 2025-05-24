@@ -41,10 +41,12 @@ func _input(event):
 				var bot_right_point:Vector2 = ((camera_rect.position + camera_rect.size / 2) + Vector2.ONE * g.sq_chunksize)
 				var top_left_point:Vector2 = ((camera_rect.position - camera_rect.size / 2) )
 				
-				if bot_right_point.x < 0: position.x = ((g.rightmost_chunk.x+1) * g.sq_chunksize) + camera_rect.size.x / 2 
-				elif bot_right_point.y < 0: position.y = ((g.downmost_chunk.y+1) * g.sq_chunksize) + camera_rect.size.y / 2 
-				elif top_left_point.x > ((g.rightmost_chunk.x + 1) * g.sq_chunksize): position.x = -(camera_rect.size.x/2 + g.sq_chunksize/2)
-				elif top_left_point.y > ((g.downmost_chunk.y + 1) * g.sq_chunksize): position.y = -(camera_rect.size.y/2 + g.sq_chunksize/2)
+				#print( (g.leftmost_chunk.x * 2 ))
+				
+				if bot_right_point.x < g.leftmost_chunk.x * g.sq_chunksize: position.x = ((g.rightmost_chunk.x+1) * g.sq_chunksize) + camera_rect.size.x / 2 
+				elif bot_right_point.y < g.upmost_chunk.y * g.sq_chunksize: position.y = ((g.downmost_chunk.y+1) * g.sq_chunksize) + camera_rect.size.y / 2 
+				elif top_left_point.x > ((g.rightmost_chunk.x + 1) * g.sq_chunksize): position.x = (g.leftmost_chunk.x * g.sq_chunksize) - camera_rect.size.x / 2 
+				elif top_left_point.y > ((g.downmost_chunk.y + 1) * g.sq_chunksize): position.y = (g.upmost_chunk.y * g.sq_chunksize) - camera_rect.size.y / 2 
 				
 				g.ant_camera.position = position
 

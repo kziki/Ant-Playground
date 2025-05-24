@@ -1,11 +1,12 @@
 extends Control
 
 func _ready():
+	pass
 	for c in g.colour_amt:
 		$Colour.add_item(str(int(c)),c)
-	
-	for s in g.state_amt[g.selected_ant]:
-		$State.add_item(str(int(s)),s)
+	#
+	#for s in g.state_amt[g.selected_ant]:
+		#$State.add_item(str(int(s)),s)
 
 
 func get_colour():
@@ -35,6 +36,7 @@ func set_rotate(index):
 
 
 func reload(x = null, y = null):
+	#print(x)
 	if x != null:
 		if x < 0:
 			if get_colour() > g.colour_amt-1: set_colour(g.colour_amt-1)
@@ -54,10 +56,10 @@ func reload(x = null, y = null):
 
 
 func _on_colour_item_selected(_index):
-	if !g.randomizing: g.world.update_ant(g.sidebar.ant_select.get_selected_id())
+	if !g.randomizing: g.world.update_ant(g.selected_ant)
 
 func _on_state_item_selected(_index):
-	if !g.randomizing: g.world.update_ant(g.sidebar.ant_select.get_selected_id())
+	if !g.randomizing: g.world.update_ant(g.selected_ant)
 
 func _on_rotation_item_selected(_index):
-	if !g.randomizing: g.world.update_ant(g.sidebar.ant_select.get_selected_id())
+	if !g.randomizing: g.world.update_ant(g.selected_ant)

@@ -13,7 +13,7 @@ var sq_move:Array = [
 
 # UI
 var play:bool = true
-var turns:int = 0
+var ticks:int = 0
 var wrap_around:bool = true
 var ant_states:int = 1
 var time_state:int = -2 #-2:clear, -1:reverse(unused for now?), 0:paused, 1:forward
@@ -23,6 +23,7 @@ var tps_goal:int = 100
 var tps_act:int = 0
 var previous_screen_size: Vector2i
 var previous_delta:float
+var smoothed:bool = false
 
 
 # MAIN
@@ -94,7 +95,7 @@ func _process(delta):
 		queue += delta * tps_goal
 	else:
 		queue = 0
-	$Canvas/HSplit/OnScreen/Turns.text = str(turns) + " turns"
+	$Canvas/HSplit/OnScreen/Ticks.text = str(ticks) + " ticks"
 	
 	mutex.lock()
 	update_frequency = max(delta * tps_act,1)
@@ -159,7 +160,7 @@ func new_ant() -> int:
 			for c in g.colour_amt - 2:
 				colour_state_rules[id][c][0] = [0,0,0]
 	
-	set_ant_colour(id,Color.RED)
+	set_ant_colour(id,Color(1,0,0,0.75))
 	ants[id][0] = ants[id][4]
 	ants[id][1] = ants[id][5]
 	
@@ -187,7 +188,7 @@ func ant_ticks():
 	var ant:Array
 	var which1d:int
 	var pos:Vector2i
-	var localupdate:Dictionary = {}
+	#var localupdate:Dictionary = {}
 	var chunk_data:PackedByteArray
 	
 	while time_state == 1:
@@ -207,14 +208,19 @@ func ant_ticks():
 						chunk = pos/cs
 						
 					else:
-						chunk = Vector2(pos/csf).floor()
-						pos = ant[0]
+						#chunk = Vector2(pos/csf).floor()
+						if chunk.x < g.leftmost_chunk.x: g.leftmost_chunk = chunk
+						elif chunk.x > g.rightmost_chunk.x: g.rightmost_chunk = chunk
+						elif chunk.y < g.upmost_chunk.y: g.upmost_chunk = chunk
+						elif chunk.y > g.downmost_chunk.y: g.downmost_chunk = chunk
+						#pos = ant[0]
 						new_chunk(chunk)
-						if chunks.keys().size() == 2000:
+						if chunks.keys().size() % 5000 == 0:
 							_on_stop_pressed.call_deferred()
 				
 				#get rules from grid state and ant state
 				which1d = (pos.x - chunk.x * cs) + (pos.y - chunk.y * cs) * cs
+				
 				chunk_data = chunks[chunk][2]
 				rules = colour_state_rules[a][chunk_data[which1d] >> 2][ant[2]]
 				
@@ -230,10 +236,10 @@ func ant_ticks():
 				ant[1] = (ant[1] + rules[2]) & 0x3
 				ant[0] = pos + sq_move[ant[1]]
 				
-				turns = turns + 1
+				ticks = ticks + 1
 				
 				#mutex.lock()
-				#if turns % update_frequency == 0:
+				#if ticks % update_frequency == 0:
 					#for i in localupdate.keys():
 						#updatequeue[i] = true
 					#localupdate.clear()
@@ -243,7 +249,11 @@ func ant_ticks():
 func update_ant(which):
 	mutex.lock()
 	print("ant updated")
-	colour_state_rules[which] = $Canvas/HSplit/Sidebar.make_ant_from_edits()
+	var updated = $Canvas/HSplit/Sidebar.make_ant_from_edits()
+	for c in updated.size():
+		for s in updated[c].size():
+			for r in 3:
+				colour_state_rules[which][c][s][r] = updated[c][s][r]
 	mutex.unlock()
 
 
@@ -265,12 +275,13 @@ func update_colour_amt(old_amt:int):
 			for c in g.colour_amt:
 				for s in g.state_amt[a]:
 					if colour_state_rules[a][c][s][0] > g.colour_amt-1: colour_state_rules[a][c][s][0] = g.colour_amt-1
-	colour_state_rules[g.selected_ant] = $Canvas/HSplit/Sidebar.make_ant_from_edits()
+	#colour_state_rules[g.selected_ant] = $Canvas/HSplit/Sidebar.make_ant_from_edits()
 	mutex.unlock()
 
 
 func update_state_amt(old_amt:int):
 	mutex.lock()
+	print(colour_state_rules[0].size())
 	var new_amt:int = g.state_amt[g.selected_ant]
 	var difference:int = new_amt - old_amt
 	if difference < 0:
@@ -278,9 +289,10 @@ func update_state_amt(old_amt:int):
 			for s in g.state_amt[g.selected_ant]:
 				if colour_state_rules[g.selected_ant][c][s][1] > new_amt-1: 
 					colour_state_rules[g.selected_ant][c][s][1] = new_amt-1
-	colour_state_rules[g.selected_ant] = $Canvas/HSplit/Sidebar.make_ant_from_edits()
+	#colour_state_rules[g.selected_ant] = $Canvas/HSplit/Sidebar.make_ant_from_edits()
 	if ants[g.selected_ant][2] > g.state_amt[g.selected_ant]-1: 
 		ants[g.selected_ant][2] = g.state_amt[g.selected_ant]-1
+	print(colour_state_rules[0].size())
 	mutex.unlock()
 
 
@@ -304,7 +316,7 @@ func update_colours(index,colour):
 
 func _on_stop_pressed():
 	mutex.lock()
-	set_process(false)
+	#set_process(false)
 	time_state = 0
 	queue = 0.0
 	set_physics_process(false)
@@ -360,7 +372,7 @@ func _on_h_slider_value_changed(value):
 
 func _on_clear_pressed():
 	mutex.lock()
-	set_process(false)
+	#set_process(false)
 	time_state = -2
 	queue = 0.0
 	set_physics_process(false)
@@ -374,8 +386,10 @@ func update_field():
 	for c in field.get_node("Chunks").get_children():
 		c.free()
 	
+	g.upmost_chunk = Vector2i(0,0)
 	g.downmost_chunk = Vector2i(0,g.field_y/g.sq_chunksize-1)
 	g.rightmost_chunk = Vector2i(g.field_x/g.sq_chunksize-1,0)
+	g.leftmost_chunk = Vector2i(0,0)
 	
 	for r in int(g.field_y / g.sq_chunksize): 
 		for c in int(g.field_x / g.sq_chunksize): 
@@ -385,8 +399,8 @@ func update_field():
 	$Canvas/HSplit/OnScreen/Sim/SimViewport/Camera.position = (Vector2(g.field_x,g.field_y))/2
 	$Canvas/HSplit/OnScreen/Sim/AntViewport/Camera.position = $Canvas/HSplit/OnScreen/Sim/SimViewport/Camera.position
 	
-	
-	ants[0][0] = Vector2i(g.field_x,g.field_y)/2
+	for a in ants.size():
+		ants[a][0] = Vector2i(g.field_x,g.field_y)/2
 
 
 func _input(event):
@@ -445,6 +459,8 @@ func new_chunk(pos:Vector2i):
 	chunks[pos] = [sprite,img,data]
 	chunk_parent.add_child.call_deferred(sprite)
 	
+	sprite.texture_filter = int(smoothed) + 1
+	
 	mutex.unlock()
 
 
@@ -491,9 +507,9 @@ func move_ant_index(index_from:int, intex_to:int):
 
 
 func _on_second_timer_timeout():
-	tps_act = int(turns - pq)
+	tps_act = int(ticks - pq)
 	$Canvas/HSplit/OnScreen/Info.text = str(tps_act) + " tps"
-	pq = turns
+	pq = ticks
 	if previous_screen_size != get_viewport().size: 
 		previous_screen_size = get_viewport().size
 		resize_UI($Canvas/HSplit.split_offset)
@@ -514,7 +530,7 @@ func clear2(): #part 2 of clearing the board. all the stuff thats call deferred
 	for ant in ants.size():
 		reset_ant(ant)
 	
-	turns = 0
+	ticks = 0
 	$Canvas/HSplit/Sidebar.enable_elements()
 	clear = true
 	
@@ -524,3 +540,13 @@ func clear2(): #part 2 of clearing the board. all the stuff thats call deferred
 	
 	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.min_value = 1
 	mutex.unlock() #i dont think i need this but just in case?
+
+
+func _on_smoothed_toggled(toggled_on):
+	smoothed = toggled_on
+	if toggled_on:
+		for i in chunk_parent.get_children():
+			i.texture_filter = 2
+	else:
+		for i in chunk_parent.get_children():
+			i.texture_filter = 1

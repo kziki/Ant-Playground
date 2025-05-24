@@ -12,6 +12,8 @@ var sq_chunksize:int = 64
 var selected_ant:int = 0
 var rightmost_chunk:Vector2i
 var downmost_chunk:Vector2i
+var upmost_chunk:Vector2i
+var leftmost_chunk:Vector2i
 var user_pallete:Image
 
 # instances
