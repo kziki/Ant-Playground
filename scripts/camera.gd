@@ -9,8 +9,8 @@ var ant_camera_tween_pos
 
 var can_move = true
 var default_validzooms = [0.03125,0.0625,0.125,0.25,0.5,1]
-var validzooms = [0.5,1,2,4,8,16]
-var zoomindex:int = 1
+var validzooms = [0.25,0.5,1,2,4,8,16]
+var zoomindex:int = 2
 var des_zoom = zoom
 var des_pos = position
 var camera_rect:Rect2

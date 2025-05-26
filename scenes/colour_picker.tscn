@@ -4,20 +4,40 @@
 [ext_resource type="Script" uid="uid://dvjlh6nleunjp" path="res://scripts/colour_picker.gd" id="2_fq6my"]
 [ext_resource type="LabelSettings" uid="uid://cak656pujdckl" path="res://misc/grid_label.tres" id="3_j6xyc"]
 
-[node name="ColourPicker" type="ColorPickerButton"]
-offset_right = 16.0
-offset_bottom = 16.0
-theme = ExtResource("1_o3r31")
+[node name="Control" type="Control"]
+custom_minimum_size = Vector2(32, 16)
+layout_mode = 3
+anchor_right = 0.0296296
+anchor_bottom = 0.0148148
 script = ExtResource("2_fq6my")
+metadata/_edit_use_anchors_ = true
+
+[node name="ColourPicker" type="ColorPickerButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("1_o3r31")
+metadata/_edit_use_anchors_ = true
 
 [node name="ColourNumber" type="Label" parent="."]
-layout_mode = 0
-offset_left = -36.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
 offset_top = -2.0
-offset_right = -4.0
-offset_bottom = 18.0
+offset_right = -20.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
 label_settings = ExtResource("3_j6xyc")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[connection signal="color_changed" from="." to="." method="_on_color_changed"]
+[connection signal="color_changed" from="ColourPicker" to="." method="_on_color_changed"]

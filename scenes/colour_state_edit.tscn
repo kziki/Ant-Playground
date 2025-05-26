@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://7ajkp07thh0e"]
+[gd_scene load_steps=8 format=3 uid="uid://7ajkp07thh0e"]
 
 [ext_resource type="Theme" uid="uid://dj3bmaqt1xsck" path="res://misc/rule_theme.tres" id="1_jn4e3"]
 [ext_resource type="Script" uid="uid://h8sle10i4al" path="res://scripts/colour_state_edit.gd" id="2_75kkj"]
+[ext_resource type="Texture2D" uid="uid://n01ir1hov0ip" path="res://resources/ui/nothing.png" id="3_75kkj"]
 [ext_resource type="Texture2D" uid="uid://bcg6i5vgrulrt" path="res://resources/ui/up18.png" id="3_gqdj2"]
 [ext_resource type="Texture2D" uid="uid://c0jf3lwycmlct" path="res://resources/ui/ri18.png" id="4_j424t"]
 [ext_resource type="Texture2D" uid="uid://gwikgpip264u" path="res://resources/ui/ba18.png" id="5_r4kas"]
@@ -24,6 +25,7 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.333333
 anchor_bottom = 1.0
+theme_override_icons/arrow = ExtResource("3_75kkj")
 alignment = 1
 text_overrun_behavior = 1
 metadata/_edit_use_anchors_ = true
@@ -34,6 +36,7 @@ anchors_preset = -1
 anchor_left = 0.333333
 anchor_right = 0.666667
 anchor_bottom = 1.0
+theme_override_icons/arrow = ExtResource("3_75kkj")
 alignment = 1
 metadata/_edit_use_anchors_ = true
 
@@ -55,6 +58,7 @@ theme_override_constants/align_to_largest_stylebox = 0
 theme_override_constants/line_spacing = 0
 theme_override_constants/arrow_margin = 0
 theme_override_constants/modulate_arrow = 0
+theme_override_icons/arrow = ExtResource("3_75kkj")
 selected = 0
 item_count = 4
 popup/item_0/icon = ExtResource("3_gqdj2")

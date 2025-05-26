@@ -24,6 +24,8 @@ var tps_act:int = 0
 var previous_screen_size: Vector2i
 var previous_delta:float
 var smoothed:bool = false
+var do_chunk_limit:bool = true
+var chunk_limit:int = 20000
 
 
 # MAIN
@@ -43,16 +45,10 @@ var update_frequency:int = 1
 var request_update:bool = false
 
 # RULES
-var l8_colours:PackedColorArray = []
 var colour_state_rules:Array = [] #[ant][col][state][rule (to_colour = 0, to_state = 1, rotation = 2)]
 var ants:Array = [] #2d array[ant][ant position, ant direction, ant state, colour on grid, start position, start direction, name]
 
 func _ready():
-	l8_colours.resize(64)
-	for i in 64:
-		var c = i*4
-		l8_colours[i] = Color.from_rgba8(c,c,c)
-	
 	RenderingServer.set_default_clear_color(g.user_pallete.get_pixel(0,0))
 	
 	g.ant_camera = $Canvas/HSplit/OnScreen/Sim/AntViewport/Camera
@@ -78,9 +74,12 @@ func _ready():
 	
 	$Canvas/HSplit/OnScreen/Sim/AntViewport/Ants.position = Vector2(0.5,0.5)
 	
-	#shader.set("user_pallete", g.user_pallete)
-	
 	$Canvas/HSplit/OnScreen/Sim/SimViewport/Layer/Shader.material.set_shader_parameter("user_pallete",ImageTexture.create_from_image(g.user_pallete))
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Limit/Label.modulate = Color.WHITE
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Limit/ChunkLimit.value = 20000
+	
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.max_value = g.max_colours
+	$Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/States/Num.max_value = g.max_states
 	
 	$CsNode.Start()
 
@@ -95,7 +94,7 @@ func _process(delta):
 		queue += delta * tps_goal
 	else:
 		queue = 0
-	$Canvas/HSplit/OnScreen/Ticks.text = str(ticks) + " ticks"
+	$Canvas/HSplit/OnScreen/TickInfo/TotalTicks.text = str(ticks) + " ticks"
 	
 	mutex.lock()
 	update_frequency = max(delta * tps_act,1)
@@ -106,15 +105,27 @@ func _process(delta):
 		set_ant_preview_pos(a,ants[a][0]) #+ Vector2(0.5,0.5))
 	for i in updatequeue.keys():
 		var data = chunks[i]
-		data[1].set_data(64,64,false,Image.FORMAT_L8,data[2])
+		data[1].set_data(g.sq_chunksize,g.sq_chunksize,false,Image.FORMAT_L8,data[2])
 		data[0].texture.update(data[1])
 	updatequeue.clear()
 	mutex.unlock()
 
 
-func _physics_process(_delta):
-	pass
+func _on_second_timer_timeout():
+	tps_act = int(ticks - pq)
+	$Canvas/HSplit/OnScreen/TickInfo/TPS.text = str(tps_act) + " tps"
+	pq = ticks
+	if previous_screen_size != get_viewport().size: 
+		previous_screen_size = get_viewport().size
+		resize_UI($Canvas/HSplit.split_offset)
+	if queue > tps_goal: queue = tps_goal
 	
+	mutex.lock()
+	if $Canvas/HSplit/Sidebar/TabCont.get_current_tab_control().name == "Grid":
+		$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Info/Label.text = "Current chunk count: " + str(chunks.keys().size()) + "\nMemory usage: " + str(OS.get_static_memory_usage() / 1000000) + "mb"
+	mutex.unlock()
+	#print(OS.get_static_memory_usage() / 1000000)
+
 
 func new_ant() -> int:
 	mutex.lock()
@@ -143,11 +154,11 @@ func new_ant() -> int:
 	x.position = ants[id][0]
 	
 	colour_state_rules[id] = []
-	colour_state_rules[id].resize(64)
-	for c in 64:
+	colour_state_rules[id].resize(g.max_colours)
+	for c in g.max_colours:
 		colour_state_rules[id][c] = []
-		colour_state_rules[id][c].resize(64)
-		for s in 64:
+		colour_state_rules[id][c].resize(g.max_states)
+		for s in g.max_states:
 			var z: PackedByteArray = [0,0,0]
 			colour_state_rules[id][c][s] = z
 	
@@ -215,8 +226,10 @@ func ant_ticks():
 						elif chunk.y > g.downmost_chunk.y: g.downmost_chunk = chunk
 						#pos = ant[0]
 						new_chunk(chunk)
-						if chunks.keys().size() % 5000 == 0:
+						mutex.lock()
+						if do_chunk_limit and chunks.keys().size() == chunk_limit:
 							_on_stop_pressed.call_deferred()
+						mutex.unlock()
 				
 				#get rules from grid state and ant state
 				which1d = (pos.x - chunk.x * cs) + (pos.y - chunk.y * cs) * cs
@@ -337,8 +350,10 @@ func _on_forward_pressed():
 	if !ant_thread.is_started(): 
 		ant_thread.start(ant_ticks)
 	
+	if !wrap_around and !$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround/CheckButton.disabled: $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround/CheckButton.disabled = true
 	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.min_value = $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.value
-
+	
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Size/ChunkSize.editable = false
 
 func _on_reverse_pressed():
 	time_state = -1
@@ -443,7 +458,6 @@ func _on_screenshot_pressed():
 
 
 func new_chunk(pos:Vector2i):
-	pass
 	mutex.lock()
 	
 	var sprite = Sprite2D.new()
@@ -472,6 +486,18 @@ func resize_UI(offset):
 	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 10
 	
 	$Canvas/HSplit/OnScreen/Sim/SimViewport.size_2d_override = $Canvas/HSplit/OnScreen/Sim.size
+	
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.columns = max(1,$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Grid.size.x / 48)
+	
+	var min_size = 20 * int(g.colour_amt / $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.columns)
+	if int(g.colour_amt) % $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.columns > 0: min_size += 16
+	else: min_size -= 4
+	
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.custom_minimum_size.y = min_size
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Grid.custom_minimum_size.y = min_size
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours.custom_minimum_size.y = 88 + min_size + 8
+	
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid.custom_minimum_size.y = $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks.position.y + $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks.size.y + 8
 
 
 func _on_h_split_dragged(offset):
@@ -506,14 +532,7 @@ func move_ant_index(index_from:int, intex_to:int):
 	pass
 
 
-func _on_second_timer_timeout():
-	tps_act = int(ticks - pq)
-	$Canvas/HSplit/OnScreen/Info.text = str(tps_act) + " tps"
-	pq = ticks
-	if previous_screen_size != get_viewport().size: 
-		previous_screen_size = get_viewport().size
-		resize_UI($Canvas/HSplit.split_offset)
-	if queue > tps_goal: queue = tps_goal
+
 
 func clear2(): #part 2 of clearing the board. all the stuff thats call deferred
 	if ant_thread.is_started(): ant_thread.wait_to_finish()
@@ -539,6 +558,8 @@ func clear2(): #part 2 of clearing the board. all the stuff thats call deferred
 		field_ants.get_child(a).position = ant[0]
 	
 	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours.min_value = 1
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround/CheckButton.disabled = false
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Size/ChunkSize.editable = true
 	mutex.unlock() #i dont think i need this but just in case?
 
 
@@ -550,3 +571,31 @@ func _on_smoothed_toggled(toggled_on):
 	else:
 		for i in chunk_parent.get_children():
 			i.texture_filter = 1
+
+
+func _on_check_button_toggled(toggled_on):
+	do_chunk_limit = toggled_on
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Limit/ChunkLimit.editable = toggled_on
+	if toggled_on: $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Limit/Label.modulate = Color.WHITE
+	else: $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Limit/Label.modulate = Color.DIM_GRAY
+
+
+func _on_chunk_limit_value_changed(value):
+	mutex.lock()
+	chunk_limit = int(value)
+	mutex.unlock()
+
+
+func _on_chunk_size_value_changed(value):
+	g.sq_chunksize = value
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.min_value = g.sq_chunksize
+	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.min_value = g.sq_chunksize
+	$Canvas/HSplit/Sidebar._on_x_value_changed($Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.value)
+	$Canvas/HSplit/Sidebar._on_y_value_changed($Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.value)
+	$Canvas/HSplit/OnScreen/Sim/SimViewport/Field/Chunks.position = Vector2.ONE * value / 2
+	$Canvas/HSplit/OnScreen/Sim/AntViewport/Ants.position = Vector2.ONE * value / 2
+	
+	#print("field_x " + str(g.field_x))
+	#print("value " + str($Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.value))
+	#$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.step = value
+	#$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.step = value

@@ -12,14 +12,14 @@
 [ext_resource type="Shader" uid="uid://cawaxctpgw8ue" path="res://scenes/colour_shader.gdshader" id="6_7t5mc"]
 [ext_resource type="LabelSettings" uid="uid://cywgm7vrsj63d" path="res://misc/top_label.tres" id="6_luhhm"]
 [ext_resource type="Texture2D" uid="uid://drpnqfhdv5qfl" path="res://resources/ui/stop.png" id="7_7iits"]
-[ext_resource type="PackedScene" uid="uid://ctxjb38j5ylif" path="res://scenes/colour_picker.tscn" id="7_fh13f"]
+[ext_resource type="Texture2D" uid="uid://bew582ofh7sqh" path="res://resources/ui/d2_0.png" id="7_munwf"]
+[ext_resource type="Texture2D" uid="uid://n01ir1hov0ip" path="res://resources/ui/nothing.png" id="7_ts3gi"]
 [ext_resource type="Texture2D" uid="uid://hmx0wn5wnt1e" path="res://resources/ui/forward.png" id="8_oo54l"]
-[ext_resource type="Texture2D" uid="uid://bcg6i5vgrulrt" path="res://resources/ui/up18.png" id="8_rup4s"]
-[ext_resource type="Texture2D" uid="uid://c0jf3lwycmlct" path="res://resources/ui/ri18.png" id="9_4kbfs"]
+[ext_resource type="Texture2D" uid="uid://cnrdchj21blfs" path="res://resources/ui/d2_90.png" id="8_ts3gi"]
+[ext_resource type="Texture2D" uid="uid://dk4x15vvuqqww" path="res://resources/ui/d2_180.png" id="9_0nbtd"]
 [ext_resource type="Texture2D" uid="uid://cbp4pbrwwmctg" path="res://resources/ui/grabber.png" id="9_kpybi"]
+[ext_resource type="Texture2D" uid="uid://yu34wx8seoa7" path="res://resources/ui/d2_270.png" id="10_37qwj"]
 [ext_resource type="Texture2D" uid="uid://dmtolp5cql5xi" path="res://resources/ui/ant.png" id="10_ctatt"]
-[ext_resource type="Texture2D" uid="uid://gwikgpip264u" path="res://resources/ui/ba18.png" id="10_f17e3"]
-[ext_resource type="Texture2D" uid="uid://54m4i7wrug84" path="res://resources/ui/le18.png" id="11_x2olw"]
 [ext_resource type="Texture2D" uid="uid://dujfgqv2ija7y" path="res://resources/ui/pencil_pixel.png" id="11_xgqkh"]
 [ext_resource type="Script" uid="uid://dxaknlbcfpvvn" path="res://scripts/current.gd" id="12_817gm"]
 [ext_resource type="Texture2D" uid="uid://cg36jnkom5ccw" path="res://resources/ui/camera.png" id="12_munwf"]
@@ -123,101 +123,13 @@ content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
-bg_color = Color(0, 0, 0, 0.764706)
+bg_color = Color(0, 0, 0, 0.85098)
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_xo05s")
+metadata/_edit_vertical_guides_ = [112.0]
 
 [node name="Canvas" type="CanvasLayer" parent="."]
-
-[node name="UI" type="Control" parent="Canvas"]
-visible = false
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="state_control" type="Control" parent="Canvas/UI"]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 256.0
-grow_vertical = 2
-
-[node name="bg" type="ColorRect" parent="Canvas/UI/state_control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-
-[node name="tab" type="TabContainer" parent="Canvas/UI/state_control"]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0625
-anchor_top = 0.0148148
-anchor_right = 0.9375
-anchor_bottom = 0.933333
-current_tab = 0
-metadata/_edit_use_anchors_ = true
-
-[node name="states" type="Control" parent="Canvas/UI/state_control/tab"]
-layout_mode = 2
-metadata/_tab_index = 0
-
-[node name="state_box" type="VBoxContainer" parent="Canvas/UI/state_control/tab/states"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0357143
-anchor_top = 0.0153846
-anchor_right = 0.964286
-anchor_bottom = 0.986325
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="Button" type="Button" parent="Canvas/UI/state_control/tab/states/state_box"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-theme = ExtResource("2_dss4m")
-text = "test"
-
-[node name="extra" type="Control" parent="Canvas/UI/state_control/tab"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 1
-
-[node name="LineEdit" type="LineEdit" parent="Canvas/UI/state_control/tab/extra"]
-layout_mode = 0
-anchor_left = 0.0357143
-anchor_top = 0.0153846
-anchor_right = 0.964286
-anchor_bottom = 0.0683761
-metadata/_edit_use_anchors_ = true
-
-[node name="Button" type="Button" parent="Canvas/UI/state_control"]
-layout_mode = 0
-anchor_left = 0.0625
-anchor_top = 0.940741
-anchor_right = 0.46875
-anchor_bottom = 0.985185
-text = "STOP"
-metadata/_edit_use_anchors_ = true
-
-[node name="Button2" type="Button" parent="Canvas/UI/state_control"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.53125
-anchor_top = 0.940741
-anchor_right = 0.9375
-anchor_bottom = 0.985185
-text = "RUN"
-metadata/_edit_use_anchors_ = true
 
 [node name="HSplit" type="HSplitContainer" parent="Canvas"]
 anchors_preset = 15
@@ -259,12 +171,13 @@ size_flags_vertical = 3
 current_tab = 0
 
 [node name="Grid" type="ScrollContainer" parent="Canvas/HSplit/Sidebar/TabCont"]
-custom_minimum_size = Vector2(0, 5.205)
 layout_mode = 2
 follow_focus = true
 script = ExtResource("4_37qwj")
 wheel_scroll_damper = SubResource("Resource_h3ujd")
 dragging_scroll_damper = SubResource("Resource_pfaoh")
+drag_with_mouse = false
+drag_with_touch = false
 metadata/_custom_type_script = "uid://e7p2n8vjytpk"
 metadata/_edit_use_anchors_ = true
 metadata/_tab_index = 0
@@ -377,10 +290,9 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-min_value = 50.0
+min_value = 1.0
 max_value = 10000.0
-step = 50.0
-value = 500.0
+value = 512.0
 rounded = true
 prefix = "x:"
 select_all_on_focus = true
@@ -389,10 +301,9 @@ select_all_on_focus = true
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-min_value = 50.0
+min_value = 1.0
 max_value = 10000.0
-step = 50.0
-value = 500.0
+value = 512.0
 rounded = true
 prefix = "y:"
 select_all_on_focus = true
@@ -403,8 +314,7 @@ layout_mode = 2
 tooltip_text = "If on, the ant(s) will wrap around to the other side 
 of the grid when leaving the bounds of the grid.
 
-If off, the ant(s) will generate new chunks. 
-Each chunk is 64x64 and roughly ~1.2mb."
+If off, the ant(s) will generate new chunks."
 mouse_filter = 1
 
 [node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround"]
@@ -416,7 +326,7 @@ offset_left = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-text = "Wrap Around"
+text = "Wrap around"
 vertical_alignment = 1
 
 [node name="CheckButton" type="CheckButton" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround"]
@@ -464,7 +374,6 @@ offset_right = -4.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 1
-alignment = 2
 selected = 0
 item_count = 3
 popup/item_0/text = "Square"
@@ -479,6 +388,8 @@ popup/item_2/disabled = true
 [node name="Rounded" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
+tooltip_text = "Rounded swaps the chunks filter mode to linear interpolation, 
+which looks neat with the shader that applies colours to the chunks."
 mouse_filter = 1
 
 [node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/Rounded"]
@@ -508,7 +419,7 @@ action_mode = 0
 flat = true
 
 [node name="Colours" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox"]
-custom_minimum_size = Vector2(0, 112)
+custom_minimum_size = Vector2(0, 104)
 layout_mode = 2
 mouse_filter = 1
 
@@ -561,6 +472,8 @@ vertical_alignment = 1
 [node name="Colours" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox"]
 custom_minimum_size = Vector2(224, 24)
 layout_mode = 2
+tooltip_text = "Amount of colours available to the ants in their rules.
+The colours are customizable."
 mouse_filter = 1
 
 [node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours"]
@@ -594,21 +507,265 @@ value = 2.0
 rounded = true
 select_all_on_focus = true
 
-[node name="GridContainer" type="GridContainer" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 1.16667
-anchor_right = 1.0
-anchor_bottom = 2.792
-offset_left = 20.0
-offset_right = -4.0
-offset_bottom = 0.991997
-metadata/_edit_use_anchors_ = true
+[node name="Rand" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+tooltip_text = "Randomizes the colours.
 
-[node name="ColourPicker" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/GridContainer" instance=ExtResource("7_fh13f")]
-custom_minimum_size = Vector2(16, 16)
+True = True random. Each rgb value is set to a random value.
+Range = Each rgb value is set to a random value near a random hue.
+Gradient = Colours are set from interpolations between two random colours."
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Rand"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Rand"
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Rand"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Type" type="OptionButton" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Rand"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -72.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+selected = 0
+item_count = 3
+popup/item_0/text = "True"
+popup/item_0/id = 0
+popup/item_1/text = "Range"
+popup/item_1/id = 1
+popup/item_2/text = "Gradient"
+popup/item_2/id = 2
+
+[node name="Grid" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox"]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 mouse_filter = 1
+
+[node name="GridContainer" type="GridContainer" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Grid"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 0
+columns = 10
+
+[node name="Chunks" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox"]
+custom_minimum_size = Vector2(0, 154)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3a1qm")
+
+[node name="VBox" type="VBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BG" type="Panel" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qf4u")
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Chunks"
+label_settings = ExtResource("6_luhhm")
+vertical_alignment = 1
+
+[node name="Size" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox"]
+custom_minimum_size = Vector2(224, 24)
+layout_mode = 2
+tooltip_text = "Chunk size sets the length of the chunks sides. 
+i.e 64 = 64x64 chunks.
+Start size is set to a multiple of this value."
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Size"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Chunk size"
+vertical_alignment = 1
+
+[node name="ChunkSize" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Size"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+min_value = 64.0
+max_value = 2048.0
+value = 256.0
+rounded = true
+suffix = "px"
+select_all_on_focus = true
+
+[node name="Check" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox"]
+custom_minimum_size = Vector2(224, 24)
+layout_mode = 2
+tooltip_text = "Whether the program should limit the amount of chunks generated."
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Check"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Limit"
+vertical_alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Check"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+button_pressed = true
+action_mode = 0
+flat = true
+
+[node name="Limit" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox"]
+custom_minimum_size = Vector2(224, 24)
+layout_mode = 2
+tooltip_text = "The program will automatically stop when this many 
+chunks are generated.
+
+You can press forward again afterwards.
+
+If the value is set to a value that is less than the 
+amount of chunks currently, it will do nothing.
+
+For me the program would start to lag at around 
+~20,000 chunks."
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Limit"]
+modulate = Color(0.47788, 0.47788, 0.47788, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Chunk limit"
+vertical_alignment = 1
+
+[node name="ChunkLimit" type="SpinBox" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Limit"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -136.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+max_value = 0.0
+value = 20000.0
+rounded = true
+allow_greater = true
+suffix = "chunks"
+select_all_on_focus = true
+
+[node name="Info" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Info"]
+modulate = Color(0.60933, 0.60933, 0.60933, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Current chunk count: 0
+Memory usage: 0mb"
 
 [node name="Ants" type="Control" parent="Canvas/HSplit/Sidebar/TabCont"]
 visible = false
@@ -630,6 +787,8 @@ grow_vertical = 2
 script = ExtResource("4_37qwj")
 wheel_scroll_damper = SubResource("Resource_3a1qm")
 dragging_scroll_damper = SubResource("Resource_7qf4u")
+drag_with_mouse = false
+drag_with_touch = false
 metadata/_custom_type_script = "uid://e7p2n8vjytpk"
 
 [node name="VBox" type="VBoxContainer" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants"]
@@ -926,16 +1085,18 @@ grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
 mouse_filter = 1
+theme_override_constants/arrow_margin = 0
+theme_override_icons/arrow = ExtResource("7_ts3gi")
 alignment = 1
 selected = 0
 item_count = 4
-popup/item_0/icon = ExtResource("8_rup4s")
+popup/item_0/icon = ExtResource("7_munwf")
 popup/item_0/id = 0
-popup/item_1/icon = ExtResource("9_4kbfs")
+popup/item_1/icon = ExtResource("8_ts3gi")
 popup/item_1/id = 1
-popup/item_2/icon = ExtResource("10_f17e3")
+popup/item_2/icon = ExtResource("9_0nbtd")
 popup/item_2/id = 2
-popup/item_3/icon = ExtResource("11_x2olw")
+popup/item_3/icon = ExtResource("10_37qwj")
 popup/item_3/id = 3
 
 [node name="Current" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox"]
@@ -1077,16 +1238,18 @@ grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
 mouse_filter = 1
+theme_override_constants/arrow_margin = 0
+theme_override_icons/arrow = ExtResource("7_ts3gi")
 alignment = 1
 selected = 0
 item_count = 4
-popup/item_0/icon = ExtResource("8_rup4s")
+popup/item_0/icon = ExtResource("7_munwf")
 popup/item_0/id = 0
-popup/item_1/icon = ExtResource("9_4kbfs")
+popup/item_1/icon = ExtResource("8_ts3gi")
 popup/item_1/id = 1
-popup/item_2/icon = ExtResource("10_f17e3")
+popup/item_2/icon = ExtResource("9_0nbtd")
 popup/item_2/id = 2
-popup/item_3/icon = ExtResource("11_x2olw")
+popup/item_3/icon = ExtResource("10_37qwj")
 popup/item_3/id = 3
 
 [node name="State" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Current/VBox"]
@@ -1495,32 +1658,6 @@ render_target_update_mode = 4
 
 [node name="Ants" type="Node2D" parent="Canvas/HSplit/OnScreen/Sim/AntViewport"]
 
-[node name="Info" type="Label" parent="Canvas/HSplit/OnScreen"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -45.0
-offset_right = -5.0
-offset_bottom = 23.0
-grow_horizontal = 0
-label_settings = ExtResource("17_ts3gi")
-horizontal_alignment = 2
-script = ExtResource("4_lakw3")
-
-[node name="Ticks" type="Label" parent="Canvas/HSplit/OnScreen"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -44.0
-offset_top = 12.0
-offset_right = -4.0
-offset_bottom = 35.0
-grow_horizontal = 0
-label_settings = ExtResource("17_ts3gi")
-horizontal_alignment = 2
-
 [node name="Tools" type="Control" parent="Canvas/HSplit/OnScreen"]
 anchors_preset = 0
 offset_right = 40.0
@@ -1654,6 +1791,32 @@ size_flags_horizontal = 0
 size_flags_vertical = 8
 label_settings = ExtResource("17_ts3gi")
 
+[node name="TickInfo" type="PanelContainer" parent="Canvas/HSplit/OnScreen"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 24.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_lakw3")
+
+[node name="TPS" type="Label" parent="Canvas/HSplit/OnScreen/TickInfo"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "asdasd"
+label_settings = ExtResource("17_ts3gi")
+horizontal_alignment = 2
+script = ExtResource("4_lakw3")
+
+[node name="TotalTicks" type="Label" parent="Canvas/HSplit/OnScreen/TickInfo"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "asdasd"
+label_settings = ExtResource("17_ts3gi")
+horizontal_alignment = 2
+
 [node name="CsNode" type="Node" parent="."]
 script = ExtResource("15_37qwj")
 
@@ -1667,6 +1830,9 @@ autostart = true
 [connection signal="toggled" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround/CheckButton" to="Canvas/HSplit/Sidebar" method="_on_check_button_toggled"]
 [connection signal="toggled" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/Rounded/Smoothed" to="." method="_on_smoothed_toggled"]
 [connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Colours/Colours" to="Canvas/HSplit/Sidebar" method="_on_amt_c_value_changed"]
+[connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Size/ChunkSize" to="." method="_on_chunk_size_value_changed"]
+[connection signal="toggled" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Check/CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Limit/ChunkLimit" to="." method="_on_chunk_limit_value_changed"]
 [connection signal="text_submitted" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Name/LineEdit" to="Canvas/HSplit/Sidebar" method="_on_line_edit_text_submitted"]
 [connection signal="color_changed" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Colour/ColorPickerButton" to="Canvas/HSplit/Sidebar" method="_on_color_picker_button_color_changed"]
 [connection signal="toggled" from="Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Info/VBox/Visibility/ShowAnt" to="Canvas/HSplit/Sidebar" method="_on_show_ant_toggled"]

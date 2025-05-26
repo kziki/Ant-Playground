@@ -23,8 +23,10 @@ func _ready():
 	main_colours.mouse_filter = MOUSE_FILTER_IGNORE
 	init_grid.call_deferred()
 	
-	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.set_deferred("step",g.sq_chunksize)
-	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.set_deferred("step",g.sq_chunksize)
+	#$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.set_deferred("step",g.sq_chunksize)
+	#$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.set_deferred("step",g.sq_chunksize)
+	_on_x_value_changed.call_deferred($TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.value)
+	_on_y_value_changed.call_deferred($TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.value)
 	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.set_deferred("min_value",g.sq_chunksize)
 	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.set_deferred("min_value",g.sq_chunksize)
 	
@@ -32,7 +34,18 @@ func _ready():
 	
 	select_ant.call_deferred(0)
 	
-	$TabCont/Grid/Grid/VBox/Colours/VBox/Colours/GridContainer/ColourPicker.get_child(0).text = "0"
+	#$TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.get_child(0).text = "0"
+	for c in g.max_colours:
+		var new = colour_picker.instantiate()
+		new.get_child(0).color = g.user_pallete.get_pixel(0,c)
+		new.get_child(1).text = str(int(c))
+		new.size_flags_horizontal = 3
+		$TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.add_child(new)
+		new.hide()
+	
+	$TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.get_child(0).show()
+	$TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.get_child(1).show()
+	
 
 
 func add_ant(index,ant_name):
@@ -42,27 +55,25 @@ func add_ant(index,ant_name):
 func init_grid():
 	#instancing the max colours and states possible!! 
 	#later you just adjust which ones are visible to avoid instancing and queueing constantly
-	var pre_x = 24
-	var pre_y = 24
 	visible_x = 0
 	visible_y = 0
 	main.custom_minimum_size = Vector2((2)*GRID_SPACE.x, (1)*GRID_SPACE.y)
 	
-	for c in pre_x:
-		for s in pre_y:
+	for c in g.max_colours:
+		for s in g.max_states:
 			new_edit(Vector2i(c,s))
 	
-	for s in pre_y:
+	for s in g.max_states:
 		var new = label_scene.instantiate()
 		new.position = Vector2(0,s*GRID_SPACE.y+32)
 		new.text = str(s)
 		main_labels.add_child(new)
 	
-	for c in pre_x:
+	for c in g.max_colours:
 		var new = colour_picker.instantiate()
-		new.position = Vector2(c * GRID_SPACE.x + GRID_SPACE.x -12, 8)
-		new.color = g.user_pallete.get_pixel(0,c)
-		new.get_child(0).text = str(int(c))
+		new.position = Vector2(c * GRID_SPACE.x + GRID_SPACE.x -30, 8)
+		new.get_child(0).color = g.user_pallete.get_pixel(0,c)
+		new.get_child(1).text = str(int(c))
 		main_colours.add_child(new)
 		new.hide()
 	
@@ -240,14 +251,19 @@ func randomize_colours():
 	pass
 
 
-func _on_x_value_changed(value):
-	g.field_x = value
+func _on_x_value_changed(value:int):
+	var x = value - value % g.sq_chunksize
+	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.set_value_no_signal(max(x,g.sq_chunksize))
+	print("aaaaa" + str($TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.step))
+	g.field_x = x
 	g.world.update_field()
 	update_field()
 
 
-func _on_y_value_changed(value):
-	g.field_y = value
+func _on_y_value_changed(value:int):
+	var y = value - value % g.sq_chunksize
+	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.set_value_no_signal(max(y,g.sq_chunksize))
+	g.field_y = y
 	g.world.update_field()
 	update_field()
 
@@ -264,7 +280,25 @@ func _on_amt_c_value_changed(value):
 	g.colour_amt = value
 	resize_grid(value-x)
 	g.world.update_colour_amt(x)
-
+	
+	if value - x > 0:
+		for i in value - x:
+			$TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.get_child(x + i).show()
+	elif value - x < 0:
+		for i in abs(value - x):
+			$TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.get_child(x - i - 1).hide()
+	
+	var min_size = 20 * int(value / $TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.columns)
+	if int(value) % $TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.columns > 0: min_size += 16
+	else: min_size -= 4
+	
+	$TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.custom_minimum_size.y = min_size
+	$TabCont/Grid/Grid/VBox/Colours/VBox/Grid.custom_minimum_size.y = min_size
+	$TabCont/Grid/Grid/VBox/Colours.custom_minimum_size.y = 88 + min_size + 8
+	
+	await get_tree().create_timer(0.05).timeout
+	
+	$TabCont/Grid/Grid.custom_minimum_size.y = $TabCont/Grid/Grid/VBox/Chunks.position.y + $TabCont/Grid/Grid/VBox/Chunks.size.y + 8
 
 func get_colours():
 	var x:Dictionary = {}
@@ -421,6 +455,7 @@ func _on_show_ant_toggled(toggled_on):
 
 func _on_check_button_toggled(toggled_on):
 	g.world.wrap_around = toggled_on
+	if g.world.time_state == 1: $TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround/CheckButton.disabled = true 
 
 
 func _on_delete_ant_pressed():

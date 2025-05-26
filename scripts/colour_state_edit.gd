@@ -1,17 +1,11 @@
 extends Control
 
 func _ready():
-	pass
 	for c in g.colour_amt:
 		$Colour.add_item(str(int(c)),c)
-	#
-	#for s in g.state_amt[g.selected_ant]:
-		#$State.add_item(str(int(s)),s)
 
 
 func get_colour():
-	#var x = $Colour.selected
-	#x = x << 2
 	return $Colour.selected
 
 
