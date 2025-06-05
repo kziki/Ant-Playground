@@ -17,6 +17,7 @@ var downmost_chunk:Vector2i
 var upmost_chunk:Vector2i
 var leftmost_chunk:Vector2i
 var user_pallete:Image
+var user_pallete_prev:Image
 
 # instances
 var sidebar:Control
@@ -28,10 +29,13 @@ func _ready():
 	state_amt.resize(64)
 	
 	#set colour 0 to black, 1 to white, and the rest are random!
-	user_pallete = Image.create_empty(1,64,false,Image.FORMAT_RGB8)
+	user_pallete = Image.create_empty(1,256,false,Image.FORMAT_RGB8)
+	user_pallete_prev = Image.create_empty(1,256,false,Image.FORMAT_RGB8)
 	for i in 62:
 		user_pallete.set_pixel(0,i+2,Color(randf(),randf(),randf()))
 	user_pallete.set_pixel(0,1,Color.WHITE)
+	for i in 63:
+		user_pallete_prev.set_pixel(0,i+1,user_pallete.get_pixel(0,i+1).darkened(0.3))
 
 func calc_pppp():
 	if get_viewport().size.x > get_viewport().size.y:

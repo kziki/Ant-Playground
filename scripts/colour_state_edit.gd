@@ -30,7 +30,7 @@ func set_rotate(index):
 
 
 func reload(x = null, y = null):
-	#print(x)
+	#print(y)
 	if x != null:
 		if x < 0:
 			if get_colour() > g.colour_amt-1: set_colour(g.colour_amt-1)

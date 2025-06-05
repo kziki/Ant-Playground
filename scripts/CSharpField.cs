@@ -45,7 +45,7 @@ public partial class CSharpField : Node
 		
 		thread = new Thread(AntTicks);
 		thread.Name = "AntTicksThread";
-		chunkParent = (Node2D) GetNode("../Canvas/HSplit/OnScreen/Sim/SimViewport/Field/Chunks");
+		chunkParent = (Node2D) GetNode("../Canvas/HSplit/OnScreen/Sim/SimViewport/Field/SimChunks");
 		
 		AddAnt((256,256),0,0);
 		
@@ -109,7 +109,7 @@ public partial class CSharpField : Node
 				}
 				//get local position to chunk
 				which = ( antPositions[ant].x - chunk.x * chunkSize, antPositions[ant].y - chunk.y * chunkSize );
-				// todo: replace ^ with gdscript version! this doesnt need to be a (x,y)
+				// todo: replace ^ with gdscript version! this doesnt need to be a (x,y). its only used as a 1d index
 				
 				//get image data and rules
 				var chunkdata = chunks[chunk];
@@ -129,7 +129,7 @@ public partial class CSharpField : Node
 				
 				turns++;
 				}
-			if ((i & 0x3FF) == 0) {
+			if ((i & 0x3FF) == 0) { //TODO: change frequency of updating depending on tps
 				mutex.WaitOne();
 				foreach (var c in localQueue) {
 					updateQueue.Add(c);

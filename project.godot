@@ -14,6 +14,10 @@ config/name="Ant Playground"
 config/description="Langton's Ant / Turmite playground."
 run/main_scene="res://scenes/world.tscn"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+boot_splash/image="uid://dmtolp5cql5xi"
 config/icon="uid://dmtolp5cql5xi"
 
 [autoload]
@@ -49,6 +53,14 @@ folder_colors={
 [gui]
 
 theme/custom="uid://bx3jvtk8472ag"
+
+[input]
+
+center_on_grid={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":32,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
 
 [physics]
 

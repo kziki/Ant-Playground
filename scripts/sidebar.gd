@@ -50,6 +50,8 @@ func _ready():
 
 func add_ant(index,ant_name):
 	$TabCont/Ants/Select/HBox/AntChoose.add_item(ant_name,index)
+	$TabCont/Rand/Rand/VBox/Randomize/VBox/Which/WhichAnt.add_item(ant_name)
+	
 
 
 func init_grid():
@@ -83,8 +85,12 @@ func init_grid():
 
 
 func resize_grid(x=null,y=null):
-	for i in state_edits:
-		state_edits[i].reload(x,y)
+	if y != null:
+		for i in state_edits:
+			state_edits[i].reload(x,y - visible_y)
+	else:
+		for i in state_edits:
+			state_edits[i].reload(x,y)
 	if x != null:
 		visible_x = visible_x + x
 		if x > 0: #add colours to grid
@@ -106,10 +112,11 @@ func resize_grid(x=null,y=null):
 				main_colours.get_child(g.colour_amt-x-c-1).hide()
 			#g.world.colours = get_colours()
 	elif y != null:
-		visible_y = visible_y + y
-		if y > 0: #add states to grid
+		var dif = y - visible_y
+		visible_y = y
+		if dif > 0: #add states to grid
 			for c in g.colour_amt:
-				for s in y:
+				for s in dif:
 					var a = Vector2i(c,g.state_amt[g.selected_ant]-s-1)
 					var r = g.world.colour_state_rules[g.selected_ant][c][a.y]
 					state_edits[a].show()
@@ -121,10 +128,10 @@ func resize_grid(x=null,y=null):
 			
 		else: #remove states from grid
 			for c in g.colour_amt:
-				for s in -y:
+				for s in -dif:
 					state_edits[Vector2i(c,(g.state_amt[g.selected_ant]+s))].hide()
-			for s in -y:
-				main_labels.get_child(g.state_amt[g.selected_ant]-y-s-1).hide()
+			for s in -dif:
+				main_labels.get_child(g.state_amt[g.selected_ant]-dif-s-1).hide()
 	
 	main.custom_minimum_size = Vector2((visible_x)*GRID_SPACE.x, (visible_y)*GRID_SPACE.y)
 	print('aad2')
@@ -251,28 +258,31 @@ func randomize_colours():
 	pass
 
 
-func _on_x_value_changed(value:int):
+func _on_x_value_changed(value:int, update:bool = true):
 	var x = value - value % g.sq_chunksize
 	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.set_value_no_signal(max(x,g.sq_chunksize))
-	print("aaaaa" + str($TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/X.step))
 	g.field_x = x
-	g.world.update_field()
-	update_field()
+	if update: 
+		update_field()
+		g.world.update_field(true)
+		print("x change")
+		#if g.world.time_state != 0 and g.world.time_state != 1 and !g.world.loading: g.world.show_preview.call_deferred()
 
 
-func _on_y_value_changed(value:int):
+func _on_y_value_changed(value:int, update:bool = true):
 	var y = value - value % g.sq_chunksize
 	$TabCont/Grid/Grid/VBox/Basic/VBox/FieldSize/HBox/Y.set_value_no_signal(max(y,g.sq_chunksize))
 	g.field_y = y
-	g.world.update_field()
-	update_field()
+	if update: 
+		update_field()
+		g.world.update_field(true)
+		print("y change")
+		#if g.world.time_state != 0 and g.world.time_state != 1 and !g.world.loading: g.world.show_preview.call_deferred()
 
 
 func _on_amt_s_value_changed(value):
-	var x = g.state_amt[g.selected_ant]
-	g.state_amt[g.selected_ant] = value
-	resize_grid(null,value-x)
-	g.world.update_state_amt(x)
+	g.world.update_state_amt(g.selected_ant,value)
+	resize_grid(null,value)
 
 
 func _on_amt_c_value_changed(value):
@@ -298,7 +308,7 @@ func _on_amt_c_value_changed(value):
 	
 	await get_tree().create_timer(0.05).timeout
 	
-	$TabCont/Grid/Grid.custom_minimum_size.y = $TabCont/Grid/Grid/VBox/Chunks.position.y + $TabCont/Grid/Grid/VBox/Chunks.size.y + 8
+	$TabCont/Grid/Grid/VBox.custom_minimum_size.y = $TabCont/Grid/Grid/VBox/Chunks.position.y + $TabCont/Grid/Grid/VBox/Chunks.size.y + 4
 
 func get_colours():
 	var x:Dictionary = {}
@@ -320,11 +330,11 @@ func _on_to_all_pressed():
 	randomize_edits()
 
 
-func _on_to_states_pressed():
+func _on_to_ant_states_pressed():
 	randomize_to_states()
 
 
-func _on_to_colour_pressed():
+func _on_to_grid_states_pressed():
 	randomize_to_colours()
 
 
@@ -338,10 +348,6 @@ func get_selected_ant_id() -> int:
 
 func _on_tab_cont_tab_changed(tab):
 	pass
-	#if tab == 0:
-		#$TabCont/Ants/Ants/VBox/Current.set_process(false)
-	#elif tab == 1:
-		#$TabCont/Ants/Ants/VBox/Current.set_process(true)
 
 
 func _on_ant_choose_item_selected(index):
@@ -374,9 +380,9 @@ func select_ant(index):
 		
 		$TabCont/Ants/Ants/VBox/Rules/VBox/States/Num.editable = true
 		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox/ToAll.disabled = false
-		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox/ToStates.disabled = false
+		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox/ToGStates.disabled = false
 		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox/Rotation.disabled = false
-		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox/ToColour.disabled = false
+		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox/ToAStates.disabled = false
 		
 		swap_grid(index)
 	else:
@@ -401,9 +407,9 @@ func select_ant(index):
 		
 		$TabCont/Ants/Ants/VBox/Rules/VBox/States/Num.editable = false
 		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox/ToAll.disabled = true
-		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox/ToStates.disabled = true
+		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow1/HBox/ToGStates.disabled = true
 		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox/Rotation.disabled = true
-		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox/ToColour.disabled = true
+		$TabCont/Ants/Ants/VBox/Rules/VBox/RandRow2/HBox/ToAStates.disabled = true
 
 
 func update_field():
@@ -412,10 +418,6 @@ func update_field():
 	$TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/Y.max_value = g.field_y - 1
 	$TabCont/Ants/Ants/VBox/Current/VBox/Position/HBox/X.max_value = g.field_x - 1
 	$TabCont/Ants/Ants/VBox/Current/VBox/Position/HBox/Y.max_value = g.field_y - 1
-	
-	var ant = g.world.ants[$TabCont/Ants/Select/HBox/AntChoose.selected]
-	ant[4].x = min(g.field_x-1, ant[4].x)
-	ant[4].y = min(g.field_y-1, ant[4].y)
 
 
 func _on_new_ant_pressed():
@@ -428,16 +430,22 @@ func _on_new_ant_pressed():
 func _on_start_x_value_changed(value):
 	g.world.ants[g.selected_ant][4].x = value
 	g.world.reset_ant(g.selected_ant)
+	print("start x")
+	#if g.world.time_state != 0 and g.world.time_state != 1: g.world.show_preview()
 
 
 func _on_start_y_value_changed(value):
 	g.world.ants[g.selected_ant][4].y = value
 	g.world.reset_ant(g.selected_ant)
+	print("start y")
+	#if g.world.time_state != 0 and g.world.time_state != 1: g.world.show_preview()
 
 
 func _on_start_direction_changed(direction):
 	g.world.ants[g.selected_ant][5] = direction
 	g.world.reset_ant(g.selected_ant)
+	print("start dir")
+	if g.world.time_state != 0 and g.world.time_state != 1: g.world.show_preview()
 
 
 func _on_color_picker_button_color_changed(color):
@@ -446,7 +454,8 @@ func _on_color_picker_button_color_changed(color):
 
 func _on_line_edit_text_submitted(new_text):
 	g.world.ants[g.selected_ant][6] = new_text
-	$TabCont/Ants/Select/HBox/AntChoose.set_item_text(g.selected_ant,"["+str(g.selected_ant)+"] - "+new_text)
+	$TabCont/Ants/Select/HBox/AntChoose.set_item_text(g.selected_ant,new_text)
+	$TabCont/Rand/Rand/VBox/Randomize/VBox/Which/WhichAnt.set_item_text(g.selected_ant+4,new_text)
 
 
 func _on_show_ant_toggled(toggled_on):
@@ -463,7 +472,9 @@ func _on_delete_ant_pressed():
 		var index:int = g.selected_ant
 		print("asdasdasd" + str(index) + str(index))
 		$TabCont/Ants/Select/HBox/AntChoose.remove_item(index)
+		$TabCont/Rand/Rand/VBox/Randomize/VBox/Which/WhichAnt.remove_item(index+4)
 		g.world.delete_ant(index)
+		$TabCont/Rand/Rand/VBox/Randomize/VBox/Which/WhichAnt.selected = 0
 		
 		if index > 0: 
 			$TabCont/Ants/Select/HBox/AntChoose.select(index-1)

@@ -143,7 +143,7 @@ func _ready() -> void:
 	scrollbar_hide_timer.timeout.connect(_scrollbar_hide_timer_timeout)
 	if hide_scrollbar_over_time:
 		scrollbar_hide_timer.start(scrollbar_hide_time)
-	#get_tree().node_added.connect(_on_node_added)
+	get_tree().node_added.connect(_on_node_added)
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
