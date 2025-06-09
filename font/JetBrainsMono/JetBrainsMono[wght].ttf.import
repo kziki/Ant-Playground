@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://b7qpy2hpmwuve"
-path="res://.godot/imported/Karla-Italic.ttf-467b3505f42f983f614947ccd6d93d10.fontdata"
+uid="uid://bixh6redaff4e"
+path="res://.godot/imported/JetBrainsMono[wght].ttf-b2a16ee80ecf336e847cb45fa7921b74.fontdata"
 
 [deps]
 
-source_file="res://font/Karla-Italic.ttf"
-dest_files=["res://.godot/imported/Karla-Italic.ttf-467b3505f42f983f614947ccd6d93d10.fontdata"]
+source_file="res://font/JetBrainsMono/JetBrainsMono[wght].ttf"
+dest_files=["res://.godot/imported/JetBrainsMono[wght].ttf-b2a16ee80ecf336e847cb45fa7921b74.fontdata"]
 
 [params]
 

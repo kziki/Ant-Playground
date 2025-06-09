@@ -1,10 +1,10 @@
 [gd_resource type="Theme" load_steps=50 format=3 uid="uid://bx3jvtk8472ag"]
 
-[ext_resource type="FontFile" uid="uid://bixh6redaff4e" path="res://font/JetBrainsMono[wght].ttf" id="1_gwh2h"]
+[ext_resource type="FontFile" uid="uid://bixh6redaff4e" path="res://font/JetBrainsMono/JetBrainsMono[wght].ttf" id="1_gwh2h"]
 [ext_resource type="Texture2D" uid="uid://n01ir1hov0ip" path="res://resources/ui/nothing.png" id="2_kfyo1"]
-[ext_resource type="FontFile" uid="uid://do7isgoggolve" path="res://font/Karla-Bold.ttf" id="3_f70oy"]
-[ext_resource type="FontFile" uid="uid://b7qpy2hpmwuve" path="res://font/Karla-Italic.ttf" id="4_gwsko"]
-[ext_resource type="FontFile" uid="uid://dcf7elnmh0xhg" path="res://font/Karla-Regular.ttf" id="5_kpe3a"]
+[ext_resource type="FontFile" uid="uid://do7isgoggolve" path="res://font/Karla/Karla-Bold.ttf" id="3_f70oy"]
+[ext_resource type="FontFile" uid="uid://b7qpy2hpmwuve" path="res://font/Karla/Karla-Italic.ttf" id="4_gwsko"]
+[ext_resource type="FontFile" uid="uid://dcf7elnmh0xhg" path="res://font/Karla/Karla-Regular.ttf" id="5_kpe3a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_110ce"]
 content_margin_left = 1.0

@@ -3,13 +3,13 @@
 [ext_resource type="Script" uid="uid://bantfaxh1o1hc" path="res://scripts/world.gd" id="1_xo05s"]
 [ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://misc/theme.tres" id="2_dss4m"]
 [ext_resource type="Script" uid="uid://oxxt34r7spnd" path="res://scripts/sidebar.gd" id="3_0nbtd"]
-[ext_resource type="Script" uid="uid://cij655m0vvwrn" path="res://scenes/on_screen.gd" id="4_7t5mc"]
+[ext_resource type="Script" uid="uid://cij655m0vvwrn" path="res://scripts/on_screen.gd" id="4_7t5mc"]
 [ext_resource type="Script" uid="uid://e7p2n8vjytpk" path="res://misc/SmoothScroll-5aba7cfe17f49b75987c65abab0d7b14bfc42603/addons/SmoothScroll/SmoothScrollContainer.gd" id="4_37qwj"]
 [ext_resource type="Script" uid="uid://moiaaowbxk07" path="res://scripts/fps.gd" id="4_lakw3"]
 [ext_resource type="Script" uid="uid://yt40awsagswl" path="res://misc/SmoothScroll-5aba7cfe17f49b75987c65abab0d7b14bfc42603/addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="5_navra"]
 [ext_resource type="Texture2D" uid="uid://bs8erks0flsvk" path="res://resources/ui/clear.png" id="5_pm21f"]
 [ext_resource type="Texture2D" uid="uid://cyl0cn4i4dfrr" path="res://resources/ui/reverse.png" id="6_2lf6f"]
-[ext_resource type="Shader" uid="uid://cawaxctpgw8ue" path="res://scenes/colour_shader.gdshader" id="6_7t5mc"]
+[ext_resource type="Shader" uid="uid://cawaxctpgw8ue" path="res://misc/colour_shader.gdshader" id="6_7t5mc"]
 [ext_resource type="LabelSettings" uid="uid://cywgm7vrsj63d" path="res://misc/top_label.tres" id="6_luhhm"]
 [ext_resource type="Texture2D" uid="uid://drpnqfhdv5qfl" path="res://resources/ui/stop.png" id="7_7iits"]
 [ext_resource type="Texture2D" uid="uid://bew582ofh7sqh" path="res://resources/ui/d2_0.png" id="7_munwf"]
@@ -23,10 +23,10 @@
 [ext_resource type="Texture2D" uid="uid://dujfgqv2ija7y" path="res://resources/ui/pencil_pixel.png" id="11_xgqkh"]
 [ext_resource type="Script" uid="uid://dxaknlbcfpvvn" path="res://scripts/current.gd" id="12_817gm"]
 [ext_resource type="Texture2D" uid="uid://cg36jnkom5ccw" path="res://resources/ui/camera.png" id="12_munwf"]
-[ext_resource type="Script" uid="uid://dylx54umyv4wa" path="res://scenes/rule_edit.gd" id="13_ggc52"]
+[ext_resource type="Script" uid="uid://dylx54umyv4wa" path="res://scripts/rule_edit.gd" id="13_ggc52"]
 [ext_resource type="Script" uid="uid://btn2vdum3tw65" path="res://scripts/camera.gd" id="13_ts3gi"]
 [ext_resource type="Script" uid="uid://e4g3ecm5xd1w" path="res://scripts/CSharpField.cs" id="15_37qwj"]
-[ext_resource type="LabelSettings" uid="uid://c4u7pvq0bxhq" path="res://scenes/small_text.tres" id="17_ts3gi"]
+[ext_resource type="LabelSettings" uid="uid://c4u7pvq0bxhq" path="res://misc/small_text.tres" id="17_ts3gi"]
 
 [sub_resource type="Gradient" id="Gradient_ts3gi"]
 
@@ -2412,14 +2412,16 @@ If 'show preview' is enabled in the grid tab and the simulation isnt running, ch
 - '-' = Delete ant.
 
 [/indent][font_size=16][b]Other[/b][/font_size]
-Thanks to Spyrex's 'Smooth Scroll' plugin !!
+Thanks to Spyrex's '[url=https://github.com/SpyrexDE/SmoothScroll]Smooth Scroll[/url].' plugin !!
 Fonts are Karla and JetBrainsMono.
 
 This project was mostly an excercize in finishing something. I also wrote 2 logs about this project ([url=https://kziki.xyz/logs/misc/langtons-ant/]log1[/url], [url=https://kziki.xyz/logs/misc/ant-playground/]log2[/url].).
 
 If this program crashes, has bugs, or you just want to give me feedback, feel free to let me know !!
 
-In the future id like to add the hexagon and triangle grids, some options for screenshots and the ability to save and load grid and ants."
+In the future id like to add the hexagon and triangle grids, some options for screenshots and the ability to save and load grid / ants and c#.
+
+:3"
 fit_content = true
 threaded = true
 

@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dcf7elnmh0xhg"
-path="res://.godot/imported/Karla-Regular.ttf-df4a19ee570c28f82f656af6b66c51c4.fontdata"
+uid="uid://do7isgoggolve"
+path="res://.godot/imported/Karla-Bold.ttf-4c2f2e89342b60bbfdc659f650cd5876.fontdata"
 
 [deps]
 
-source_file="res://font/Karla-Regular.ttf"
-dest_files=["res://.godot/imported/Karla-Regular.ttf-df4a19ee570c28f82f656af6b66c51c4.fontdata"]
+source_file="res://font/Karla/Karla-Bold.ttf"
+dest_files=["res://.godot/imported/Karla-Bold.ttf-4c2f2e89342b60bbfdc659f650cd5876.fontdata"]
 
 [params]
 
