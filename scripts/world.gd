@@ -53,7 +53,6 @@ var ants:Array = [] #2d array[ant][ant position, ant direction, ant state, colou
 
 
 func _ready():
-	print(ants)
 	RenderingServer.set_default_clear_color(g.user_pallete.get_pixel(0,0))
 	
 	g.ant_camera = $Canvas/HSplit/OnScreen/Sim/AntViewport/Camera
@@ -94,9 +93,7 @@ func _ready():
 	$CsNode.Start()
 	
 	set_deferred("loading",false)
-	print(ants)
 	show_preview.call_deferred()
-	print(ants)
 
 
 func resize():
@@ -125,8 +122,6 @@ func _process(delta):
 
 
 func _on_second_timer_timeout():
-	#print($Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.columns)
-	#print($Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Grid.size.x)
 	tps_act = int(ticks - pq)
 	$Canvas/HSplit/OnScreen/TickInfo/TPS.text = " " + str(tps_act) + " tps   "
 	pq = ticks
@@ -139,7 +134,6 @@ func _on_second_timer_timeout():
 	if $Canvas/HSplit/Sidebar/TabCont.get_current_tab_control().name == "Grid":
 		$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Info/Label.text = "Current chunk count: " + str(chunks.keys().size()) + "\nMemory usage: " + str(OS.get_static_memory_usage() / 1000000) + "mb"
 	mutex.unlock()
-	#print(OS.get_static_memory_usage() / 1000000)
 
 
 func new_ant() -> int:
@@ -199,7 +193,6 @@ func new_ant() -> int:
 
 
 func ant_ticks():
-	print("ticking!!")
 	var cs:int = g.sq_chunksize
 	var csf:float = g.sq_chunksize
 	var field_x:int = g.field_x
@@ -258,26 +251,23 @@ func ant_ticks():
 func update_ant(which):
 	mutex.lock()
 	
-	print("ant updated")
 	var updated = $Canvas/HSplit/Sidebar.make_ant_from_edits()
 	for c in updated.size():
 		for s in updated[c].size():
 			for r in 3:
 				colour_state_rules[which][c][s][r] = updated[c][s][r]
 	
-	print("update ant")
 	if time_state != 0 and time_state != 1: show_preview()
 	
 	mutex.unlock()
 
 
-func show_preview():
-	print("okay ill preview")
+func show_preview(from_clear:bool = false):
 	if $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Preview/VBox/ShowPreview/ShowPreviewCheck.button_pressed:
 		$PreviewCooldown.start()
 		mutex.lock()
 		ticks = 0
-		update_field()
+		if !from_clear: update_field()
 		sim_chunk_parent.modulate = Color(1,1,1,1)
 		time_state = 2
 		queue = $Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Preview/VBox/PreviewTicks/PreciewTicksAmt.value
@@ -295,6 +285,8 @@ func show_preview():
 			data[0].texture.update(data[1])
 		for ant in ants.size():
 			reset_ant(ant)
+		
+		print("sp")
 
 
 func update_colour_amt(old_amt:int):
@@ -311,15 +303,13 @@ func update_colour_amt(old_amt:int):
 				if colour_state_rules[a][c][s][0] > g.colour_amt-1: colour_state_rules[a][c][s][0] = g.colour_amt-1
 	#colour_state_rules[g.selected_ant] = $Canvas/HSplit/Sidebar.make_ant_from_edits()
 	mutex.unlock()
+	if !loading: show_preview.call_deferred()
+	
 
 
-func update_state_amt(which:int, amt:int):
+func update_state_amt(which:int, amt:int, from_rand:bool = false):
 	mutex.lock()
 	g.state_amt[which] = amt
-	
-	
-	var old_amt:int = g.state_amt[which]
-	var difference:int = amt - old_amt
 	for c in g.colour_amt:
 		for s in g.state_amt[g.selected_ant]:
 			if colour_state_rules[which][c][s][1] > amt-1: 
@@ -327,6 +317,7 @@ func update_state_amt(which:int, amt:int):
 	if ants[which][2] > g.state_amt[which]-1: 
 		ants[which][2] = g.state_amt[which]-1
 	mutex.unlock()
+	if !loading and !from_rand: show_preview.call_deferred()
 
 
 func reset_ant(which:int):
@@ -342,7 +333,6 @@ func set_ant_colour(which:int, colour:Color):
 
 func update_colours(index,colour):
 	g.user_pallete.set_pixel(0,index,colour)
-	#print("index = " + str(index) + ", col = " + str(colour))
 	var texture = ImageTexture.create_from_image(g.user_pallete)
 	shader_node.material.set_shader_parameter("user_pallete",texture)
 
@@ -379,36 +369,49 @@ func update_field(edited:bool = false):
 		ants[a][0] = ants[a][4]
 		ants[a][1] = ants[a][5]
 	mutex.unlock()
+	print("uf")
 	if edited and !loading: show_preview.call_deferred()
 
 
 func _unhandled_input(event):
 	if event is InputEventKey and event.pressed:
-		if !event.is_echo():
-			if !$KeyPressCooldown.time_left > 0:
-				# pressing two keys at the same time (clear and forward) the game would crash!! so theres a timer now
-				match event.keycode:
-					KEY_J: _on_clear_pressed()
-					KEY_K: _on_stop_pressed()
-					KEY_L: _on_forward_pressed()
-					KEY_R: _on_randomize_button_pressed()
-					KEY_EQUAL: $Canvas/HSplit/Sidebar._on_new_ant_pressed()
-					KEY_MINUS: $Canvas/HSplit/Sidebar._on_delete_ant_pressed()
-				
-				$KeyPressCooldown.start.call_deferred()
 		if Input.is_action_just_pressed("center_on_grid"):
-			var middle = Vector2( (g.rightmost_chunk.x + g.leftmost_chunk.x + 1)/2 * g.sq_chunksize, (g.upmost_chunk.y + g.downmost_chunk.y) * g.sq_chunksize)
-			#middle += Vector2.ONE * g.sq_chunksize
-			print(middle)
-			print(g.leftmost_chunk)
-			print(g.rightmost_chunk)
+			var middle = Vector2( 
+				(g.rightmost_chunk.x + g.leftmost_chunk.x + 1)/2.0 * g.sq_chunksize, (g.upmost_chunk.y + g.downmost_chunk.y + 1)/2.0 * g.sq_chunksize)
 			$Canvas/HSplit/OnScreen/Sim/AntViewport/Camera.position = middle
 			$Canvas/HSplit/OnScreen/Sim/SimViewport/Camera.position = middle
 		elif event.keycode == KEY_SPACE:
 			$Canvas/HSplit/OnScreen/Sim/AntViewport/Camera.position = ants[g.selected_ant][0]
 			$Canvas/HSplit/OnScreen/Sim/SimViewport/Camera.position = ants[g.selected_ant][0]
+		elif Input.is_action_just_pressed("tps_up"):
+			var value:int = max($Canvas/HSplit/OnScreen/Tools/HBox/Speed/SpeedSlider.value * 1.25, $Canvas/HSplit/OnScreen/Tools/HBox/Speed/SpeedSlider.value + 1)
+			if value > $Canvas/HSplit/OnScreen/Tools/HBox/Speed/SpeedSlider.max_value: value = $Canvas/HSplit/OnScreen/Tools/HBox/Speed/SpeedSlider.max_value
+			_on_h_slider_value_changed(value)
+		elif Input.is_action_just_pressed("tps_down"):
+			var value:int = min($Canvas/HSplit/OnScreen/Tools/HBox/Speed/SpeedSlider.value * 0.75, $Canvas/HSplit/OnScreen/Tools/HBox/Speed/SpeedSlider.value - 1)
+			if value <= 0: value = 1
+			_on_h_slider_value_changed(value)
 		
-
+		if !$KeyPressCooldown.time_left > 0:
+			# pressing two keys at the same time (clear and forward) the game would crash!! so theres a timer now
+			if Input.is_action_just_pressed("clear"): 
+				_on_clear_pressed()
+				$KeyPressCooldown.start.call_deferred()
+			elif Input.is_action_just_pressed("stop"): 
+				_on_stop_pressed()
+				$KeyPressCooldown.start.call_deferred()
+			elif Input.is_action_just_pressed("forward"): 
+				_on_forward_pressed()
+				$KeyPressCooldown.start.call_deferred()
+			elif Input.is_action_just_pressed("randomize"): 
+				_on_randomize_button_pressed()
+				$KeyPressCooldown.start.call_deferred()
+			elif Input.is_action_just_pressed("new_ant"): 
+				$Canvas/HSplit/Sidebar._on_new_ant_pressed()
+				$KeyPressCooldown.start.call_deferred()
+			elif Input.is_action_just_pressed("del_ant"): 
+				$Canvas/HSplit/Sidebar._on_delete_ant_pressed()
+				$KeyPressCooldown.start.call_deferred()
 
 func get_screenshot_rect() -> Rect2i:
 	var bounds = [0,0,0,0] #-x +x -y +y
@@ -449,7 +452,6 @@ func delete_ant(id:int):
 	colour_state_rules.remove_at(id)
 	$Canvas/HSplit/OnScreen/Sim/AntViewport/Ants.remove_child($Canvas/HSplit/OnScreen/Sim/AntViewport/Ants.get_children(false)[id])
 	mutex.unlock()
-	print("delete")
 	if time_state != 0 and time_state != 1: show_preview()
 
 
@@ -489,7 +491,6 @@ func _on_stop_pressed(preview:bool = false):
 
 func _on_forward_pressed():
 	mutex.lock()
-	print($PreviewCooldown.time_left)
 	if !$PreviewCooldown.time_left > 0:
 		if time_state == 2 or time_state == -2: 
 			update_field()
@@ -514,11 +515,12 @@ func _on_forward_pressed():
 
 
 func _on_h_slider_value_changed(value):
+	mutex.lock()
+	$Canvas/HSplit/OnScreen/Tools/HBox/Speed/SpeedSlider.value = value
 	update_frequency = max(previous_delta * value,1)
 	tps_act = value
 	tps_goal = value
 	$Canvas/HSplit/OnScreen/Tools/HBox/TPS.text = str(int(value))
-	mutex.lock()
 	queue = 0
 	mutex.unlock()
 
@@ -546,11 +548,10 @@ func _on_screenshot_pressed():
 			for y in g.sq_chunksize:
 				pos = Vector2i(x,y)
 				image.set_pixelv((c-offset)*g.sq_chunksize + pos,g.user_pallete.get_pixel(0,chunks[c][1].get_pixelv(pos).r8))
-	var rand = str(randi())
-	#images[chunk].get_pixelv(which).r8 >> 2,ant[2]
-	
-	image.save_png("user://"+rand+".png")
-	OS.shell_show_in_file_manager.call_deferred(ProjectSettings.globalize_path("user://"+rand+".png"))
+	var time = Time.get_datetime_dict_from_system()
+	var filename = "%d-%02d-%02d-%02d_%02d_%02d.png" % [time["year"],time["month"],time["day"],time["hour"],time["minute"],time["second"]]
+	image.save_png("user://"+filename)
+	OS.shell_show_in_file_manager.call_deferred(ProjectSettings.globalize_path("user://"+filename))
 
 
 func resize_UI(offset):
@@ -564,8 +565,8 @@ func resize_UI(offset):
 	$Canvas/HSplit/Sidebar/TabCont/Rand/Rand.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 10
 	$Canvas/HSplit/Sidebar/TabCont/Rand/Rand.size.y = $Canvas/HSplit.size.y - 40
 	
-	$Canvas/HSplit/Sidebar/TabCont/Misc/Misc.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 10
-	$Canvas/HSplit/Sidebar/TabCont/Misc/Misc.size.y = $Canvas/HSplit.size.y - 40
+	$Canvas/HSplit/Sidebar/TabCont/Help/Help.size.x = int(($Canvas/HSplit.size.x / 2) + offset) - 10
+	$Canvas/HSplit/Sidebar/TabCont/Help/Help.size.y = $Canvas/HSplit.size.y - 40
 	
 	$Canvas/HSplit/OnScreen/Sim/SimViewport.size_2d_override = $Canvas/HSplit/OnScreen/Sim.size
 	
@@ -590,7 +591,6 @@ func stop2():
 	if ant_thread.is_started(): ant_thread.wait_to_finish()
 	if preview_thread.is_started(): preview_thread.wait_to_finish()
 	$Canvas/HSplit/Sidebar.enable_elements()
-	print("stopped")
 
 
 func clear2(): #part 2 of clearing the board. all the stuff thats call deferred
@@ -598,7 +598,7 @@ func clear2(): #part 2 of clearing the board. all the stuff thats call deferred
 	
 	chunks.clear()
 	updatequeue.clear()
-	update_field()
+	
 	
 	if prev_state == -1:
 		prev_state = 1
@@ -619,9 +619,8 @@ func clear2(): #part 2 of clearing the board. all the stuff thats call deferred
 	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Basic/VBox/WrapAround/CheckButton.disabled = false
 	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Size/ChunkSize.editable = true
 	
-	print("clear")
-	#print(time_state)
-	if time_state != 0 and time_state != 1: show_preview()
+	update_field()
+	if time_state != 0 and time_state != 1: show_preview(true)
 
 
 func _on_smoothed_toggled(toggled_on):
@@ -748,11 +747,12 @@ func _on_randomize_button_pressed():
 	for a in whichants:
 		if a_state_amt:
 			var x = (randi()%24) + 1
-			update_state_amt(a,x)
 			if a == g.selected_ant: 
-				update_state_amt(a,x)
+				update_state_amt(a,x,true)
 				$Canvas/HSplit/Sidebar.resize_grid(null,x)
 				$Canvas/HSplit/Sidebar/TabCont/Ants/Ants/VBox/Rules/VBox/States/Num.set_value_no_signal(x)
+			else:
+				update_state_amt(a,x,true)
 		
 		var col_range = Vector2i(0,g.colour_amt-1)
 		if g.colour_amt > 2 and g_state_rang:
@@ -770,7 +770,7 @@ func _on_randomize_button_pressed():
 			ants[a][4] = Vector2i(randi() % g.field_x, randi() % g.field_y)
 		if start_dir_rand:
 			ants[a][5] = randi() % 4
-		reset_ant(a)
+		if time_state != 1: reset_ant(a)
 		
 		for c in col_range.y - col_range.x + 1:
 			for s in g.state_amt[a]:
@@ -780,7 +780,6 @@ func _on_randomize_button_pressed():
 				randi() % g.state_amt[a],
 				rot_range[randi() % rot_range.size()]
 				]
-				#print(str(Vector2i(c+col_range.x,s)) + " got rule " + str(newrules))
 				if g_state_rand: rulepointer[0] = newrules[0]
 				if a_state_rand: rulepointer[1] = newrules[1]
 				if a_rot_rand: rulepointer[2] = newrules[2]
@@ -824,7 +823,6 @@ func _on_randomize_button_pressed():
 						state_edit.set_rotate(rulepointer[2])
 	
 	mutex.unlock()
-	print("randomized")
 	if time_state != 0 and time_state != 1: show_preview()
 
 
@@ -834,3 +832,7 @@ func _on_preview_cooldown_timeout():
 
 func _on_key_press_cooldown_timeout():
 	pass # Replace with function body.
+
+
+func _on_label_meta_clicked(meta):
+	OS.shell_open(str(meta))

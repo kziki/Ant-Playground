@@ -134,7 +134,6 @@ func resize_grid(x=null,y=null):
 				main_labels.get_child(g.state_amt[g.selected_ant]-dif-s-1).hide()
 	
 	main.custom_minimum_size = Vector2((visible_x)*GRID_SPACE.x, (visible_y)*GRID_SPACE.y)
-	print('aad2')
 
 
 func swap_grid(index:int):
@@ -265,7 +264,6 @@ func _on_x_value_changed(value:int, update:bool = true):
 	if update: 
 		update_field()
 		g.world.update_field(true)
-		print("x change")
 		#if g.world.time_state != 0 and g.world.time_state != 1 and !g.world.loading: g.world.show_preview.call_deferred()
 
 
@@ -276,7 +274,6 @@ func _on_y_value_changed(value:int, update:bool = true):
 	if update: 
 		update_field()
 		g.world.update_field(true)
-		print("y change")
 		#if g.world.time_state != 0 and g.world.time_state != 1 and !g.world.loading: g.world.show_preview.call_deferred()
 
 
@@ -413,7 +410,6 @@ func select_ant(index):
 
 
 func update_field():
-	print("updated field")
 	$TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/X.max_value = g.field_x - 1
 	$TabCont/Ants/Ants/VBox/Start/VBox/Position/HBox/Y.max_value = g.field_y - 1
 	$TabCont/Ants/Ants/VBox/Current/VBox/Position/HBox/X.max_value = g.field_x - 1
@@ -430,21 +426,16 @@ func _on_new_ant_pressed():
 func _on_start_x_value_changed(value):
 	g.world.ants[g.selected_ant][4].x = value
 	g.world.reset_ant(g.selected_ant)
-	print("start x")
-	#if g.world.time_state != 0 and g.world.time_state != 1: g.world.show_preview()
 
 
 func _on_start_y_value_changed(value):
 	g.world.ants[g.selected_ant][4].y = value
 	g.world.reset_ant(g.selected_ant)
-	print("start y")
-	#if g.world.time_state != 0 and g.world.time_state != 1: g.world.show_preview()
 
 
 func _on_start_direction_changed(direction):
 	g.world.ants[g.selected_ant][5] = direction
 	g.world.reset_ant(g.selected_ant)
-	print("start dir")
 	if g.world.time_state != 0 and g.world.time_state != 1: g.world.show_preview()
 
 
@@ -470,7 +461,6 @@ func _on_check_button_toggled(toggled_on):
 func _on_delete_ant_pressed():
 	if g.world.ants.size() > 0:
 		var index:int = g.selected_ant
-		print("asdasdasd" + str(index) + str(index))
 		$TabCont/Ants/Select/HBox/AntChoose.remove_item(index)
 		$TabCont/Rand/Rand/VBox/Randomize/VBox/Which/WhichAnt.remove_item(index+4)
 		g.world.delete_ant(index)

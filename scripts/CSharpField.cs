@@ -3,6 +3,10 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 
+//this csharp code is wip!! for now the software uses the gdscript version found in the world script. will eventually use this which is much faster
+//gdscript ~1.6m tps
+//csharp should be ~20m tps. havent tested exported executable tps yet
+
 public partial class CSharpField : Node
 {
 	private Thread thread;
@@ -49,7 +53,7 @@ public partial class CSharpField : Node
 		
 		AddAnt((256,256),0,0);
 		
-		byte[,,] defaultRules = new byte[2,1,3];
+		byte[,,] defaultRules = new byte[24,24,3];
 		defaultRules[0,0,0] = 1;
 		defaultRules[0,0,1] = 0;
 		defaultRules[0,0,2] = 1;
@@ -66,12 +70,10 @@ public partial class CSharpField : Node
 		}
 	}
 	
-	
 	public void Start(){
 		//thread.Start();
-		GD.Print("ant start");
+		//GD.Print("ant start");
 	}
-	
 	
 	public override void _Process(double delta) {
 		mutex.WaitOne();
@@ -90,7 +92,7 @@ public partial class CSharpField : Node
 		int fieldX = GlobalCS.Instance.FieldX;
 		int fieldY = GlobalCS.Instance.FieldY;
 		(int x, int y) chunk;
-		(int x, int y) which; //chunk local pos
+		int which1d; //chunk local pos
 		HashSet<(int x, int y)> localQueue = new();
 		byte gState; //grid state
 		
@@ -102,24 +104,21 @@ public partial class CSharpField : Node
 					else if (antPositions[ant].y >= GlobalCS.Instance.FieldY) { antPositions[ant].y = 0; }
 					else if (antPositions[ant].x < 0) { antPositions[ant].x = GlobalCS.Instance.FieldX - 1; }
 					else if (antPositions[ant].y < 0) { antPositions[ant].y = GlobalCS.Instance.FieldY - 1; }
-					chunk = ( antPositions[ant].x >> 6, antPositions[ant].y >> 6 );
+					chunk = ( antPositions[ant].x >> 6, antPositions[ant].y >> 6 ); //TODO: replcae >> 6 with chunksize division or something fancy that works with non powers of two.
 				} else {
 					//TODO: new chunk if out of bounds.
 					chunk = ( (int)Math.Floor((float)antPositions[ant].x / chunkSizeF) , (int)Math.Floor((float)antPositions[ant].y / chunkSizeF) );
 				}
 				//get local position to chunk
-				which = ( antPositions[ant].x - chunk.x * chunkSize, antPositions[ant].y - chunk.y * chunkSize );
-				// todo: replace ^ with gdscript version! this doesnt need to be a (x,y). its only used as a 1d index
+				which1d = ( antPositions[ant].x - chunk.x * chunkSize) + (antPositions[ant].y - chunk.y * chunkSize) * chunkSize;
 				
-				//get image data and rules
+				//get image data and rules and state of the tile the ant is on
 				var chunkdata = chunks[chunk];
 				var rules = antRules[ant];
-				
-				//state of the tile the ant is on
-				gState = (byte)(chunkdata.ImgData[which.y * chunkSize + which.x] >> 2);
+				gState = (byte)(chunkdata.ImgData[which1d]);
 				
 				// change tile state according to rule and add to local update queue
-				chunkdata.ImgData[which.y * chunkSize + which.x] = (byte)(rules[ gState, antStates[ant], 0] << 2);
+				chunkdata.ImgData[which1d] = (byte)(rules[ gState, antStates[ant], 0]);
 				localQueue.Add(chunk);
 				
 				//rotate ant, move ant, and set ant state
@@ -182,4 +181,6 @@ public partial class CSharpField : Node
 	public void AddAntRules(int ant, byte[,,] rules) {
 		antRules[ant] = rules;
 	}
+	
+	//TODO: rest of the code. probably will have to move anything that has mutex.lock in the gdscript version. everything else should be fine if it stays there
 }

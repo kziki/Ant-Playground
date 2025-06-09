@@ -1,6 +1,5 @@
-[gd_scene load_steps=4 format=3 uid="uid://ctxjb38j5ylif"]
+[gd_scene load_steps=3 format=3 uid="uid://ctxjb38j5ylif"]
 
-[ext_resource type="Theme" uid="uid://bx3jvtk8472ag" path="res://misc/theme.tres" id="1_o3r31"]
 [ext_resource type="Script" uid="uid://dvjlh6nleunjp" path="res://scripts/colour_picker.gd" id="2_fq6my"]
 [ext_resource type="LabelSettings" uid="uid://cak656pujdckl" path="res://misc/grid_label.tres" id="3_j6xyc"]
 
@@ -21,7 +20,7 @@ anchor_bottom = 1.0
 offset_left = -16.0
 grow_horizontal = 0
 grow_vertical = 2
-theme = ExtResource("1_o3r31")
+edit_intensity = false
 metadata/_edit_use_anchors_ = true
 
 [node name="ColourNumber" type="Label" parent="."]
@@ -41,3 +40,4 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [connection signal="color_changed" from="ColourPicker" to="." method="_on_color_changed"]
+[connection signal="picker_created" from="ColourPicker" to="." method="_on_colour_picker_picker_created"]
