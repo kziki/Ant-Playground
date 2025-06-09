@@ -186,7 +186,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 3
+current_tab = 1
 
 [node name="Grid" type="Control" parent="Canvas/HSplit/Sidebar/TabCont"]
 visible = false
@@ -920,7 +920,6 @@ suffix = "ticks"
 select_all_on_focus = true
 
 [node name="Ants" type="Control" parent="Canvas/HSplit/Sidebar/TabCont"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -2288,6 +2287,7 @@ keep_pressed_outside = true
 text = "Randomize"
 
 [node name="Help" type="Control" parent="Canvas/HSplit/Sidebar/TabCont"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 metadata/_tab_index = 3
