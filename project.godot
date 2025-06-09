@@ -31,8 +31,8 @@ gdscript/warnings/integer_division=0
 
 [display]
 
-window/size/viewport_width=1080
-window/size/viewport_height=1080
+window/size/viewport_width=1000
+window/size/viewport_height=640
 window/stretch/aspect="expand"
 
 [dotnet]

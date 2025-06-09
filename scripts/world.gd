@@ -58,13 +58,6 @@ func _ready():
 	g.ant_camera = $Canvas/HSplit/OnScreen/Sim/AntViewport/Camera
 	g.world = self
 	set_physics_process(false)
-	#set_process(false)
-	
-	Engine.physics_ticks_per_second = 1
-	Engine.max_physics_steps_per_frame = 100
-	
-	get_window().size = Vector2i(1000,640)
-	get_window().position = Vector2(2000,200)
 	
 	get_tree().get_root().size_changed.connect(resize)
 	
@@ -88,9 +81,11 @@ func _ready():
 	
 	$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Colours/VBox/Grid/GridContainer.set_deferred("columns",2)
 	
-	$Canvas/HSplit.set_deferred("split_offset",-200)
+	$Canvas/HSplit.set_deferred("split_offset", (-get_viewport_rect().size.x / 2) + 264)
 	
 	$CsNode.Start()
+	
+	$Canvas/HSplit/Sidebar/TabCont.current_tab = 3
 	
 	set_deferred("loading",false)
 	show_preview.call_deferred()
@@ -132,7 +127,7 @@ func _on_second_timer_timeout():
 	
 	mutex.lock()
 	if $Canvas/HSplit/Sidebar/TabCont.get_current_tab_control().name == "Grid":
-		$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Info/Label.text = "Current chunk count: " + str(chunks.keys().size()) + "\nMemory usage: " + str(OS.get_static_memory_usage() / 1000000) + "mb"
+		$Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox/Info/Label.text = "Current chunk count: " + str(chunks.keys().size())
 	mutex.unlock()
 
 
@@ -393,22 +388,22 @@ func _unhandled_input(event):
 			# pressing two keys at the same time (clear and forward) the game would crash!! so theres a timer now
 			if Input.is_action_just_pressed("clear"): 
 				_on_clear_pressed()
-				$KeyPressCooldown.start.call_deferred()
+				$KeyPressCooldown.start()
 			elif Input.is_action_just_pressed("stop"): 
 				_on_stop_pressed()
-				$KeyPressCooldown.start.call_deferred()
+				$KeyPressCooldown.start()
 			elif Input.is_action_just_pressed("forward"): 
 				_on_forward_pressed()
-				$KeyPressCooldown.start.call_deferred()
+				$KeyPressCooldown.start()
 			elif Input.is_action_just_pressed("randomize"): 
 				_on_randomize_button_pressed()
-				$KeyPressCooldown.start.call_deferred()
+				$KeyPressCooldown.start()
 			elif Input.is_action_just_pressed("new_ant"): 
 				$Canvas/HSplit/Sidebar._on_new_ant_pressed()
-				$KeyPressCooldown.start.call_deferred()
+				$KeyPressCooldown.start()
 			elif Input.is_action_just_pressed("del_ant"): 
 				$Canvas/HSplit/Sidebar._on_delete_ant_pressed()
-				$KeyPressCooldown.start.call_deferred()
+				$KeyPressCooldown.start()
 
 func get_screenshot_rect() -> Rect2i:
 	var bounds = [0,0,0,0] #-x +x -y +y

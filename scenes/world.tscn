@@ -607,7 +607,7 @@ theme_override_constants/h_separation = 0
 columns = 10
 
 [node name="Chunks" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox"]
-custom_minimum_size = Vector2(0, 154)
+custom_minimum_size = Vector2(0, 136)
 layout_mode = 2
 mouse_filter = 1
 
@@ -772,7 +772,7 @@ suffix = "chunks"
 select_all_on_focus = true
 
 [node name="Info" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox/Chunks/VBox"]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 mouse_filter = 1
 
@@ -786,8 +786,7 @@ offset_left = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-text = "Current chunk count: 0
-Memory usage: 0mb"
+text = "Current chunk count: 0"
 
 [node name="Preview" type="Control" parent="Canvas/HSplit/Sidebar/TabCont/Grid/Grid/VBox"]
 custom_minimum_size = Vector2(0, 84)
@@ -2442,7 +2441,7 @@ stretch = true
 [node name="SimViewport" type="SubViewport" parent="Canvas/HSplit/OnScreen/Sim"]
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(739, 1080)
+size = Vector2i(699, 640)
 render_target_update_mode = 4
 
 [node name="Camera" type="Camera2D" parent="Canvas/HSplit/OnScreen/Sim/SimViewport"]
@@ -2482,7 +2481,7 @@ color = Color(0.44, 0.44, 0.44, 0.188235)
 [node name="AntViewport" type="SubViewport" parent="Canvas/HSplit/OnScreen/Sim"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(739, 1080)
+size = Vector2i(699, 640)
 render_target_update_mode = 4
 
 [node name="Camera" type="Camera2D" parent="Canvas/HSplit/OnScreen/Sim/AntViewport"]
