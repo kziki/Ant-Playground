@@ -7,8 +7,7 @@ you can play with the web version [here](https://ant-playground.kziki.xyz/) or d
 
 # Ant Gallery
 some cool ants!
-<p align="center">
-![309793132](https://github.com/user-attachments/assets/4ed77180-0416-4af1-8c66-118049ccb3f5)
+<p align="center">![309793132](https://github.com/user-attachments/assets/4ed77180-0416-4af1-8c66-118049ccb3f5)</p>
 
 ![4286331105](https://github.com/user-attachments/assets/7ab2f92a-c72b-437c-a3b1-5780a1a242b6)
 
@@ -17,4 +16,4 @@ some cool ants!
 ![704720393](https://github.com/user-attachments/assets/6246732f-3389-4d4c-ba66-c590a7a19d68)
 
 ![1659090303](https://github.com/user-attachments/assets/51f5ffdc-4a5c-4e7d-ab05-a6cebf610a94)
-</p>
+
