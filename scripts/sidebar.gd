@@ -343,10 +343,6 @@ func get_selected_ant_id() -> int:
 	return $TabCont/Ants/Select/HBox/AntChoose.get_selected_index()
 
 
-func _on_tab_cont_tab_changed(tab):
-	pass
-
-
 func _on_ant_choose_item_selected(index):
 	select_ant(index)
 

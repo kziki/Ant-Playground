@@ -285,8 +285,6 @@ func show_preview(from_clear:bool = false):
 			data[0].texture.update(data[1])
 		for ant in ants.size():
 			reset_ant(ant)
-		
-		print("sp")
 
 
 func update_colour_amt(old_amt:int):
@@ -369,7 +367,6 @@ func update_field(edited:bool = false):
 		ants[a][0] = ants[a][4]
 		ants[a][1] = ants[a][5]
 	mutex.unlock()
-	print("uf")
 	if edited and !loading: show_preview.call_deferred()
 
 

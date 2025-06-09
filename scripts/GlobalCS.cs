@@ -19,8 +19,6 @@ public partial class GlobalCS : Node {
 	}
 	
 	public override void _Ready() {
-		GD.Print("CS Global loaded");
-		ChunkSize = 64;
-		GD.Print(ChunkSize);
+		//GD.Print("CS Global loaded");
 	}
 }
