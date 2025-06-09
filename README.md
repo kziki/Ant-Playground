@@ -5,7 +5,7 @@ currently runs on gdscript at ~1.4 million ticks per second.
 
 will eventually port over to csharp which would be a lot faster !!
 
-you can play with the web version [here](https://ant-playground.kziki.xyz/) or download the releases. the executable runs a bit faster so i would recommend that one.
+you can play with the web version [here](https://ant-playground.kziki.xyz/) or download the [releases](https://github.com/kziki/Ant-Playground/releases/). the executable runs a bit faster so i would recommend that one.
 
 # Ant Gallery
 some cool ants!
